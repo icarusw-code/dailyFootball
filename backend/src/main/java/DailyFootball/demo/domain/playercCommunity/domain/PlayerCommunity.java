@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
+@Table(name = "PLAYER_COMMUNITY")
 public class PlayerCommunity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package DailyFootball.demo.domain.match.domain;
 
+import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.team.domain.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,16 +29,23 @@ public class Match {
     private LocalDateTime date;
 
     @Column(name = "local_team_score")
-    private int localTeamScore;
+    private Integer localTeamScore;
+
+    @Column(name = "visitor_team_score")
+    private Integer visitorTeamScore;
+
+    @Column(name = "win_team_id")
+    private Integer winTeamId;
+
+
+    @Column(name = "lose_team_id")
+    private Integer loseTeamId;
+
+    private boolean draw;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Team> visitorTeamScores = new ArrayList<>();
 
-    @Column(name = "win_team_id")
-    private int winTeamId;
-
-    @Column(name = "lose_team_id")
-    private int loseTeamId;
-
-    private boolean draw;
+    @OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Community> communities = new ArrayList<>();
 }

@@ -22,24 +22,27 @@ public class Community {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(nullable = false, length = 20)
     private String title;
 
     private String content;
 
     @Column(name = "like_count" )
-    private int likeCount;
+    private Integer likeCount;
 
     @Column(name = "register_date")
     private LocalDateTime registerDate;
 
+    @Column(name = "player_id")
+    private Integer playerId;
+
+    @ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    User user;
+
     @ManyToOne(targetEntity = Match.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "match_id")
-    private Match match;
+    Match match;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<PlayerCommunity> playerCommunities = new ArrayList<>();

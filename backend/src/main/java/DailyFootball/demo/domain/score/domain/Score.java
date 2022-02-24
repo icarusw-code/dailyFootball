@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "SCORE")
 public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,14 +1,18 @@
 package DailyFootball.demo.domain.team.domain;
 
 import DailyFootball.demo.domain.match.domain.Match;
+import DailyFootball.demo.domain.player.domain.Player;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "TEAM")
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +30,10 @@ public class Team {
     @Column(nullable = false, length = 20)
     private String formation;
 
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Player> players = new ArrayList<>();
+
     @ManyToOne(targetEntity = Match.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "match_id")
     Match match;
 }

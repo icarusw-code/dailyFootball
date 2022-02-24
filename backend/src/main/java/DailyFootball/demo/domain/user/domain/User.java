@@ -1,6 +1,7 @@
 package DailyFootball.demo.domain.user.domain;
 
 
+import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.score.domain.Score;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "USER")
 public class User {
 
     @Id
@@ -43,5 +45,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Score> scores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Community> communities = new ArrayList<>();
 
 }

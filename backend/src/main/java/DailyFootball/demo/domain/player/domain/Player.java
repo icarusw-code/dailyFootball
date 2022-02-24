@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "PLAYER")
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,6 @@ public class Player {
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
     Team team;
-
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Score> scores = new ArrayList<>();
