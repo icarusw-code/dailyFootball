@@ -22,7 +22,7 @@ public class Community {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -37,7 +37,7 @@ public class Community {
     @Column(name = "register_date")
     private LocalDateTime registerDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Match.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "match_id")
     private Match match;
 
