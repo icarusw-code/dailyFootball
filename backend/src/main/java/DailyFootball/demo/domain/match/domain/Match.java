@@ -3,7 +3,7 @@ package DailyFootball.demo.domain.match.domain;
 import DailyFootball.demo.domain.team.domain.Team;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -13,26 +13,30 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "MATCH")
 public class Match {
 
     @Id @GeneratedValue
-    private int id;
+    private Long id;
 
-    @Size(max = 40)
+    @Column(nullable = false, length = 40)
     private String name;
 
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime date;
 
+    @Column(name = "local_team_score")
     private int localTeamScore;
 
-    @OneToMany(mappedBy = "id")
-    private List<Team> visitorTeamScore = new ArrayList<>();
+    @OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Team> visitorTeamScores = new ArrayList<>();
 
+    @Column(name = "win_team_id")
     private int winTeamId;
 
+    @Column(name = "lose_team_id")
     private int loseTeamId;
 
     private boolean draw;

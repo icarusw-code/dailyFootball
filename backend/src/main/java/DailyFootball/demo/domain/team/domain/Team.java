@@ -25,4 +25,7 @@ public class Team {
 
     @Column(nullable = false, length = 20)
     private String formation;
+
+    @ManyToOne(targetEntity = Match.class, fetch = FetchType.LAZY)
+    Match match;
 }

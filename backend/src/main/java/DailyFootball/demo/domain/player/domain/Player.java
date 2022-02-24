@@ -1,8 +1,8 @@
 package DailyFootball.demo.domain.player.domain;
 
+import DailyFootball.demo.domain.playercCommunity.domain.PlayerCommunity;
 import DailyFootball.demo.domain.score.domain.Score;
 import DailyFootball.demo.domain.team.domain.Team;
-import DailyFootball.demo.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +35,10 @@ public class Player {
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Score> scores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<PlayerCommunity> playerCommunities = new ArrayList<>();
+
 
 
 

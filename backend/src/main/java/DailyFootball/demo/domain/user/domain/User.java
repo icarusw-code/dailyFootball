@@ -19,7 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 40)
     private String email;
@@ -31,7 +31,7 @@ public class User {
     private String nickname;
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(name = "register_date", updatable = false)
     private LocalDateTime registerDate;
 
     @Builder
