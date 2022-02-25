@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +40,7 @@ public class Match {
     @Column(name = "lose_team_id")
     private Integer loseTeamId;
 
+    @Column
     private boolean draw;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
