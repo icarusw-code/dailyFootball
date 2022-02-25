@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.match.domain;
+package DailyFootball.demo.domain.game.domain;
 
 import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.team.domain.Team;

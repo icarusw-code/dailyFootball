@@ -1,6 +1,6 @@
 package DailyFootball.demo.domain.community.domain;
 
-import DailyFootball.demo.domain.match.domain.Game;
+import DailyFootball.demo.domain.game.domain.Game;
 import DailyFootball.demo.domain.playercCommunity.domain.PlayerCommunity;
 import DailyFootball.demo.domain.user.domain.User;
 import lombok.Getter;
