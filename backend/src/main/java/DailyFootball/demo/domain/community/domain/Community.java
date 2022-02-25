@@ -1,13 +1,12 @@
 package DailyFootball.demo.domain.community.domain;
 
-import DailyFootball.demo.domain.match.domain.Match;
+import DailyFootball.demo.domain.match.domain.Game;
 import DailyFootball.demo.domain.playercCommunity.domain.PlayerCommunity;
 import DailyFootball.demo.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +39,9 @@ public class Community {
     @JoinColumn(name = "user_id")
     User user;
 
-    @ManyToOne(targetEntity = Match.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "match_id")
-    Match match;
+    @ManyToOne(targetEntity = Game.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id")
+    Game game;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<PlayerCommunity> playerCommunities = new ArrayList<>();

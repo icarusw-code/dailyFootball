@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "MATCH")
-public class Match {
+@Table(name = "GAME")
+public class Game {
 
     @Id @GeneratedValue
     private Long id;
@@ -43,9 +43,9 @@ public class Match {
     @Column
     private boolean draw;
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Team> visitorTeamScores = new ArrayList<>();
 
-    @OneToMany(mappedBy = "match", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Community> communities = new ArrayList<>();
 }
