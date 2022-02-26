@@ -1,6 +1,8 @@
 package DailyFootball.demo.domain.user.controller;
 
 import DailyFootball.demo.domain.error.ErrorResponse;
+import DailyFootball.demo.domain.user.DTO.UserInfoDto;
+import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.dto.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -61,5 +66,16 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 
+    // 회원 정보 조회
+    @GetMapping("/{userId}")
+    public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("userId") Long userId){
+        Map<String, Object> responseMap = new HashMap<>();
+        Optional<User> userInfos = userService.findUserInfo(userId);
+        List<UserInfoDto> userInfoDtoList = userInfos.stream()
+                .map(m -> new UserInfoDto(m.getEmail(), m.getNickname()))
+                .collect(Collectors.toList());
+        responseMap.put("userInfo", userInfoDtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
 
+    }
 }
