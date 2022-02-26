@@ -18,11 +18,4 @@ public class UserInfoDto {
         this.email = email;
         this.nickname = nickname;
     }
-
-    public User toEntity(){
-        return User.builder()
-                .email(email)
-                .nickname(nickname)
-                .build();
-    }
 }

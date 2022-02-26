@@ -1,13 +1,11 @@
 package DailyFootball.demo.domain.user.controller;
 
-import DailyFootball.demo.domain.error.ErrorResponse;
 import DailyFootball.demo.domain.user.DTO.UserInfoDto;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.dto.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
