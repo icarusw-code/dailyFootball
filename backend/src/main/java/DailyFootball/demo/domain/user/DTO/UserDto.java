@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.user.DTO;
+package DailyFootball.demo.domain.user.dto;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

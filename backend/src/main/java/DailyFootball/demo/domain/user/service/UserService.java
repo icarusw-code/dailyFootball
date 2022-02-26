@@ -1,6 +1,7 @@
 package DailyFootball.demo.domain.user.service;
 
 import DailyFootball.demo.domain.user.domain.User;
+import DailyFootball.demo.domain.user.dto.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,18 +20,22 @@ public class UserService {
      *  회원 가입
      */
     @Transactional
-    public Long join(User user){
-
-        validateDuplicateMember(user); // 중복 검증
-        userRepository.save(user);
-        return user.getId();
+    public Long saveUserInfo(UserSignupRequestDto userSignupRequestDto){
+        return userRepository.save(userSignupRequestDto.toEntity()).getId();
     }
 
-    private void validateDuplicateMember(User user) {
-        List<User> findUsers = userRepository.findByEmail(user.getEmail());
-        if(!findUsers.isEmpty()){
-            throw new IllegalStateException("동일한 아이디가 존재합니다.");
-        }
+    // 이메일 중복검사
+    @Transactional
+    public boolean findExistEmail(String email){
+        return userRepository.existsByEmail(email);
     }
+
+    // 닉네임 중복검사
+    @Transactional
+    public boolean findExistNickname(String nickname){
+        return userRepository.existsByNickname(nickname);
+    }
+
+
 
 }
