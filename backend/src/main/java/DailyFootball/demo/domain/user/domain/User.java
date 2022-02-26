@@ -6,15 +6,17 @@ import DailyFootball.demo.domain.score.domain.Score;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 @Table(name = "USER")
 public class User {
@@ -32,8 +34,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private String nickname;
 
-    @CreatedDate
-    @Column(name = "register_date", updatable = false)
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE", name = "register_date", updatable = false)
     private LocalDateTime registerDate;
 
     @Builder
