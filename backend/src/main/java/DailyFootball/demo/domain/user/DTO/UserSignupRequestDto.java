@@ -1,9 +1,12 @@
-package DailyFootball.demo.domain.user.dto;
+package DailyFootball.demo.domain.user.DTO;
 
 import DailyFootball.demo.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

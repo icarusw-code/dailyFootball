@@ -1,6 +1,7 @@
 package DailyFootball.demo.domain.user.domain;
 
 
+import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
 import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.score.domain.Score;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import java.util.TimeZone;
 @Getter @Setter
 @NoArgsConstructor
 @Table(name = "USER")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +34,6 @@ public class User {
 
     @Column(nullable = false, length = 20)
     private String nickname;
-
-    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE", name = "register_date", updatable = false)
-    private LocalDateTime registerDate;
 
     @Builder
     public User(String email, String password, String nickname, String role) {

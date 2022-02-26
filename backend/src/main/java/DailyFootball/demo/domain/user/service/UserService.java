@@ -1,7 +1,7 @@
 package DailyFootball.demo.domain.user.service;
 
+import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.domain.User;
-import DailyFootball.demo.domain.user.dto.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
