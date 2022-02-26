@@ -1,16 +1,14 @@
 package DailyFootball.demo.domain.user.service;
 
-import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.dto.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 
 public class UserService {
@@ -36,6 +34,10 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-
+    // 회원 탈퇴
+    @Transactional
+    public void deleteById(Long userId){
+        userRepository.deleteById(userId);
+    }
 
 }

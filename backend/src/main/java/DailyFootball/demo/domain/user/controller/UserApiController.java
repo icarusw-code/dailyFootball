@@ -6,6 +6,7 @@ import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,20 @@ public class UserApiController {
     public ResponseEntity<Map<String, Object>> isExistNickname(@RequestParam String nickname){
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("isExist", userService.findExistNickname(nickname));
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
+
+    // 회원탈퇴
+    @DeleteMapping("/{userId}")
+    public ResponseEntity deleteUser(@PathVariable("userId") Long userId){
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            userService.deleteById(userId);
+        }catch(EmptyResultDataAccessException e){
+            responseMap.put("ErrorMsg", "해당하는 아이디가 존재하지 않습니다 : " + userId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
+        }
+        responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 
