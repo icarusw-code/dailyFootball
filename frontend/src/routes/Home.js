@@ -1,19 +1,11 @@
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
-
+import HomeLeft from "../components/Home/HomeLeft/HomeLeft";
+import HomeRight from "../components/Home/HomeRight/HomeRight";
 const HomeMain = styled.div`
   min-height: 110vh;
   background-color: #272a36;
   color: white;
-`;
-
-const HomeLeft = styled.div`
-  background-color: blue;
-  height: 500px;
-`;
-const HomeRight = styled.div`
-  background-color: red;
-  height: 500px;
 `;
 
 const styles = {
@@ -37,10 +29,10 @@ function Home() {
       <Container>
         <Row>
           <Col xs={7}>
-            <HomeLeft></HomeLeft>
+            <HomeLeft />
           </Col>
           <Col xs={5}>
-            <HomeRight></HomeRight>
+            <HomeRight />
           </Col>
         </Row>
       </Container>

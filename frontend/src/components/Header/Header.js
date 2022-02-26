@@ -35,13 +35,15 @@ const HeaderSearch = styled.input`
 
 const CustomLink = styled(Link)`
   text-decoration: none;
-  color: white;
+  color: #aba9e9;
 `;
 
 function Header() {
   return (
     <HeaderMain>
-      <HeaderTitle>Daily Football</HeaderTitle>
+      <HeaderTitle>
+        <CustomLink to="/">Daily Football</CustomLink>
+      </HeaderTitle>
       <HeaderItems>
         <HeaderSearch placeholder="선수, 리그 검색" />
         <HeaderItem>

@@ -4,11 +4,11 @@ import styled from "styled-components";
 const FooterMain = styled.footer`
   width: 100%;
   background-color: #33363f;
-  display: flex;
+  display: fixed;
+  bottom: 0;
   align-items: center;
   justify-content: space-evenly;
   flex-wrap: nowrap;
-  bottom: 0;
 `;
 
 const FooterContentForm = styled.div`
