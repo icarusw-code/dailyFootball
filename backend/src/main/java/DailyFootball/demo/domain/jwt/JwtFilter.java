@@ -35,6 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
             // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        filterChain.doFilter(request, response);
     }
 
     // Request Header 에서 토큰 정보 꺼내오기
