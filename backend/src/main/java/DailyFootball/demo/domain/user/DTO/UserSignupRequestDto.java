@@ -25,11 +25,20 @@ public class UserSignupRequestDto {
         this.password = password;
     }
 
-    public User toEntity(PasswordEncoder passwordEncoder){
+    public User toUser(PasswordEncoder passwordEncoder){
         return User.builder()
                 .email(email)
                 .nickname(nickname)
                 .password(passwordEncoder.encode(password))
+                .authority(Authority.ROLE_USER)
+                .build();
+    }
+
+    public User toEntity(){
+        return User.builder()
+                .email(email)
+                .nickname(nickname)
+                .password(password)
                 .authority(Authority.ROLE_USER)
                 .build();
     }

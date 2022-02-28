@@ -3,7 +3,7 @@ package DailyFootball.demo.domain.user.service;
 import DailyFootball.demo.domain.jwt.DTO.TokenDto;
 import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.domain.jwt.TokenProvider;
-import DailyFootball.demo.domain.jwt.domain.RefreshToken;
+import DailyFootball.demo.domain.user.domain.RefreshToken;
 import DailyFootball.demo.domain.jwt.repository.RefreshTokenRepository;
 import DailyFootball.demo.domain.jwt.util.SecurityUtil;
 import DailyFootball.demo.domain.user.DTO.UserRequestDto;
@@ -36,12 +36,17 @@ public class UserService {
     /**
      *  회원 가입
      */
-    @Transactional
-    public UserResponseDto saveUserInfo(UserSignupRequestDto userSignupRequestDto){
-        User user = userSignupRequestDto.toEntity(passwordEncoder);
-        return UserResponseDto.of(userRepository.save(user));
+//    @Transactional
+//    public Long saveUserInfo(UserSignupRequestDto userSignupRequestDto){
 //        return userRepository.save(userSignupRequestDto.toEntity()).getId();
+//    }
+
+    @Transactional
+    public UserResponseDto signup(UserSignupRequestDto userSignupRequestDto){
+        User user = userSignupRequestDto.toUser(passwordEncoder);
+        return UserResponseDto.of(userRepository.save(user));
     }
+
 
     // 이메일 중복검사
     @Transactional
@@ -93,8 +98,8 @@ public class UserService {
 
         // 4. RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
+                .tokenKey(authentication.getName())
+                .tokenValue(tokenDto.getRefreshToken())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
@@ -118,11 +123,11 @@ public class UserService {
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         // 3. 저장소에서 User ID를 기반으로 Refresh Token 값 가져오기
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenKey(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
         // 4. Refresh Token 일치하는지 검사
-        if (! refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())){
+        if (! refreshToken.getTokenValue().equals(tokenRequestDto.getRefreshToken())){
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
 

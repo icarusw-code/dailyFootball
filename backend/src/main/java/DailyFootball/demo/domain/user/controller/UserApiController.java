@@ -32,10 +32,19 @@ public class UserApiController {
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
         Map<String, Object> responseMap = new HashMap<>();
-        UserResponseDto userId = userService.saveUserInfo(userSignupRequestDto);
+        UserResponseDto userId = userService.signup(userSignupRequestDto);
         responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
+
+//    // 회원가입
+//    @PostMapping("/signup")
+//    public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
+//        Map<String, Object> responseMap = new HashMap<>();
+//        Long userId = userService.saveUserInfo(userSignupRequestDto);
+//        responseMap.put("userId", userId);
+//        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+//    }
 
     // 이메일 중복검사
     @GetMapping("/email/duplicate")
