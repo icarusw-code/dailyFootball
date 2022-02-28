@@ -3,7 +3,7 @@ package DailyFootball.demo.domain.user.service;
 import DailyFootball.demo.domain.jwt.DTO.TokenDto;
 import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.domain.jwt.TokenProvider;
-import DailyFootball.demo.domain.user.domain.RefreshToken;
+import DailyFootball.demo.domain.jwt.domain.RefreshToken;
 import DailyFootball.demo.domain.jwt.repository.RefreshTokenRepository;
 import DailyFootball.demo.domain.jwt.util.SecurityUtil;
 import DailyFootball.demo.domain.user.DTO.UserRequestDto;
@@ -42,9 +42,9 @@ public class UserService {
 //    }
 
     @Transactional
-    public UserResponseDto signup(UserSignupRequestDto userSignupRequestDto){
+    public Long signup(UserSignupRequestDto userSignupRequestDto){
         User user = userSignupRequestDto.toUser(passwordEncoder);
-        return UserResponseDto.of(userRepository.save(user));
+        return UserResponseDto.of(userRepository.save(user)).getId();
     }
 
 

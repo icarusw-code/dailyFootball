@@ -32,8 +32,8 @@ public class UserApiController {
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
         Map<String, Object> responseMap = new HashMap<>();
-        UserResponseDto userId = userService.signup(userSignupRequestDto);
-//        Long userId = userService.signup()
+//        UserResponseDto userId = userService.signup(userSignupRequestDto);
+        Long userId = userService.signup(userSignupRequestDto);
         responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }

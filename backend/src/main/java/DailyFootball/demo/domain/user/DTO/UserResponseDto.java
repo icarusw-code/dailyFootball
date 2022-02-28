@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+// 바디에 반환할 값을 정해줌
 public class UserResponseDto {
-    private String email;
+//    private String email;
+    private Long id;
 
     public static UserResponseDto of(User user){
-        return new UserResponseDto(user.getEmail());
+        return new UserResponseDto(user.getId());
     }
 }

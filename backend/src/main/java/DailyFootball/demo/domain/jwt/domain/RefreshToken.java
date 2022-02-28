@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.user.domain;
+package DailyFootball.demo.domain.jwt.domain;
 
 /**
  * RDB 방식으로 구현 -> 배치 작업을 통해 만료된 토큰 삭제 필요
