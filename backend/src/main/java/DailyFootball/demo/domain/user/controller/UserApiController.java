@@ -1,6 +1,10 @@
 package DailyFootball.demo.domain.user.controller;
 
+import DailyFootball.demo.domain.jwt.DTO.TokenDto;
+import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.domain.user.DTO.UserInfoDto;
+import DailyFootball.demo.domain.user.DTO.UserRequestDto;
+import DailyFootball.demo.domain.user.DTO.UserResponseDto;
 import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.service.UserService;
@@ -28,7 +32,7 @@ public class UserApiController {
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
         Map<String, Object> responseMap = new HashMap<>();
-        Long userId = userService.saveUserInfo(userSignupRequestDto);
+        UserResponseDto userId = userService.saveUserInfo(userSignupRequestDto);
         responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
@@ -73,6 +77,16 @@ public class UserApiController {
                 .collect(Collectors.toList());
         responseMap.put("userInfo", userInfoDtoList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
-
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody UserRequestDto userRequestDto){
+        return ResponseEntity.ok(userService.login(userRequestDto));
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto){
+        return ResponseEntity.ok(userService.reissue(tokenRequestDto));
+    }
+
 }

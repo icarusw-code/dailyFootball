@@ -35,11 +35,15 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     @Builder
-    public User(String email, String password, String nickname, String role) {
+    public User(String email, String password, String nickname, Authority authority, String role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.authority = authority;
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
