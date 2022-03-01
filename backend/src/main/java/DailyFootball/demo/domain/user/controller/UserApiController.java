@@ -36,7 +36,7 @@ public class UserApiController {
 
 
     // 이메일 중복검사
-    @GetMapping("/email/duplicate")
+    @GetMapping("/account/email/duplicate")
     public ResponseEntity<Map<String, Object>> isExistEmail(@RequestParam String email){
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("isExist", userService.findExistEmail(email));
@@ -44,7 +44,7 @@ public class UserApiController {
     }
 
     // 닉네임 중복검사
-    @GetMapping("/nickname/duplicate")
+    @GetMapping("/account/nickname/duplicate")
     public ResponseEntity<Map<String, Object>> isExistNickname(@RequestParam String nickname){
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("isExist", userService.findExistNickname(nickname));
