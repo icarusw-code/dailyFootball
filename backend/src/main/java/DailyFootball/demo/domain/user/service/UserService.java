@@ -9,6 +9,7 @@ import DailyFootball.demo.domain.jwt.util.SecurityUtil;
 import DailyFootball.demo.domain.user.DTO.UserRequestDto;
 import DailyFootball.demo.domain.user.DTO.UserResponseDto;
 import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
+import DailyFootball.demo.domain.user.DTO.UserUpdateDto;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -142,4 +143,15 @@ public class UserService {
         return tokenDto;
     }
 
+    /**
+     * 회원 정보 수정
+     * !!이미지 추가 필요!!
+     */
+    @Transactional
+    public Long updateProfile(Long userId, UserUpdateDto userUpdateDto){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId = " + userId));
+        user.update(userUpdateDto.getNickname());
+        return userId;
+    }
 }

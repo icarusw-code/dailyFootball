@@ -2,10 +2,7 @@ package DailyFootball.demo.domain.user.controller;
 
 import DailyFootball.demo.domain.jwt.DTO.TokenDto;
 import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserInfoDto;
-import DailyFootball.demo.domain.user.DTO.UserRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserResponseDto;
-import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
+import DailyFootball.demo.domain.user.DTO.*;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -99,4 +96,13 @@ public class UserApiController {
         return ResponseEntity.ok(userService.reissue(tokenRequestDto));
     }
 
+    /**
+     * 회원 정보 수정
+     */
+    @PutMapping("/edit/{userId}")
+    public ResponseEntity updateProfile(@PathVariable Long userId, @RequestBody UserUpdateDto userUpdateDto){
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("userId", userService.updateProfile(userId, userUpdateDto));
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
 }
