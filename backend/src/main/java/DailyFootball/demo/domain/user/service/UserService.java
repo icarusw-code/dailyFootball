@@ -154,4 +154,8 @@ public class UserService {
         user.update(userUpdateDto.getNickname());
         return userId;
     }
+
+    /**
+     * 비밀번호 변경
+     */
 }
