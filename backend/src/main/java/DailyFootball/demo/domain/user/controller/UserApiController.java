@@ -2,10 +2,7 @@ package DailyFootball.demo.domain.user.controller;
 
 import DailyFootball.demo.domain.jwt.DTO.TokenDto;
 import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserInfoDto;
-import DailyFootball.demo.domain.user.DTO.UserRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserUpdateDto;
+import DailyFootball.demo.domain.user.DTO.*;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -100,4 +97,17 @@ public class UserApiController {
         responseMap.put("userId", userService.updateProfile(userId, userUpdateDto));
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
+
+    /**
+     * 비밀 번호 변경
+     */
+    @PutMapping("/account/change/password/{userId}")
+    public ResponseEntity updatePassword(@PathVariable Long userId, @RequestBody UserPasswordUpdateDto userPasswordUpdateDto){
+        Map<String, Object> responseMap = new HashMap<>();
+        userService.updatePassword(userId, userPasswordUpdateDto);
+        responseMap.put("비밀번호 변경 성공", true);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
+
 }
+

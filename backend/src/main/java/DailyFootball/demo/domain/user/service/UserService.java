@@ -6,16 +6,14 @@ import DailyFootball.demo.domain.jwt.TokenProvider;
 import DailyFootball.demo.domain.jwt.domain.RefreshToken;
 import DailyFootball.demo.domain.jwt.repository.RefreshTokenRepository;
 import DailyFootball.demo.domain.jwt.util.SecurityUtil;
-import DailyFootball.demo.domain.user.DTO.UserRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserResponseDto;
-import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
-import DailyFootball.demo.domain.user.DTO.UserUpdateDto;
+import DailyFootball.demo.domain.user.DTO.*;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,4 +151,12 @@ public class UserService {
     /**
      * 비밀번호 변경
      */
+    @Transactional
+    public void updatePassword(Long userId, UserPasswordUpdateDto userPasswordUpdateDto){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId= " + userId));
+
+        user.passwordUpdate(userPasswordUpdateDto.toUser(userPasswordUpdateDto, passwordEncoder).getPassword());
+    }
+
 }
