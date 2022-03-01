@@ -7,7 +7,7 @@ import Column from "./routes/Column";
 import News from "./routes/News";
 import Signup from "./routes/Signup";
 
-export const baseUrlNoApi = "http://localhost:3000";
+export const baseUrlNoApi = "http://localhost:8080";
 
 function App() {
   return (

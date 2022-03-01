@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-
+import { baseUrlNoApi } from "../App";
+import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 const SignupBackGround = styled.div`
   display: flex;
   justify-content: center;
@@ -116,6 +118,7 @@ const styles = {
 };
 
 function Signup() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -154,6 +157,7 @@ function Signup() {
         { shouldFocus: true }
       );
     } else {
+      signup(data);
       console.log(data);
       setValue("email", "");
       setValue("nickname", "");
@@ -161,6 +165,87 @@ function Signup() {
       setValue("passwordCheck", "");
     }
   };
+  /////////////////////////////////////////////////////////////////////
+  function checkEmail() {
+    const checkEmail = async () => {
+      await axios({
+        url: `/account/email/duplicate?email=${checkEmailValue}`,
+        method: "get",
+        baseURL: baseUrlNoApi,
+      })
+        .then((response) => {
+          setEmailShow(true);
+          console.log(response.data);
+          if (response.data.isExist) {
+            setEmailResult(false);
+          } else {
+            setEmailResult(true);
+          }
+        })
+        .catch((error) => {
+          console.log("에러발생");
+          console.log(error);
+        });
+    };
+    checkEmail();
+  }
+
+  function checkNickname() {
+    const checkNickname = async () => {
+      await axios({
+        url: `/account/nickname/duplicate?nickname=${checkNicknameValue}`,
+        method: "get",
+        baseURL: baseUrlNoApi,
+      })
+        .then((response) => {
+          setNicknameShow(true);
+          console.log(response.data);
+          if (response.data.isExist) {
+            return;
+          } else {
+            setNicknameResult(true);
+          }
+        })
+        .catch((error) => {
+          console.log("에러발생");
+          console.log(error);
+        });
+    };
+    checkNickname();
+  }
+
+  function signup(data) {
+    const signup = async () => {
+      await axios({
+        url: "/signup",
+        method: "post",
+        data: {
+          email: data.email,
+          nickname: data.nickname,
+          password: data.password,
+        },
+        baseURL: baseUrlNoApi,
+      })
+        .then((response) => {
+          swal(
+            `${data.nickname}님 환영합니다!`,
+            `새로운 아이디로 로그인 해주세요`,
+            "success",
+            {
+              button: true,
+            }
+          );
+          console.log(response.data);
+        })
+        .then(() => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    signup();
+  }
 
   /////////////////////////////////////////////////////////////////////
   const [checkEmailValue, setCheckEmailValue] = useState("");
@@ -205,7 +290,9 @@ function Signup() {
                   <ErrorMsg>{errors?.email?.message}</ErrorMsg>
                 </Col>
                 <Col style={styles.col} xs={2}>
-                  <CheckBtns type={"button"}>중복확인</CheckBtns>
+                  <CheckBtns type={"button"} onClick={checkEmail}>
+                    중복확인
+                  </CheckBtns>
                 </Col>
                 {emailShow ? (
                   emailResult ? (
@@ -231,7 +318,9 @@ function Signup() {
                   <ErrorMsg>{errors?.nickname?.message}</ErrorMsg>
                 </Col>
                 <Col style={styles.col} xs={2}>
-                  <CheckBtns type={"button"}>중복확인</CheckBtns>
+                  <CheckBtns type={"button"} onClick={checkNickname}>
+                    중복확인
+                  </CheckBtns>
                 </Col>
                 {nicknameShow ? (
                   nicknameResult ? (
