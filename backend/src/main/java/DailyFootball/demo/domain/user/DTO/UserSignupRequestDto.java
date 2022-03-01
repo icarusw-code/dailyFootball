@@ -34,14 +34,5 @@ public class UserSignupRequestDto {
                 .build();
     }
 
-    public User toEntity(){
-        return User.builder()
-                .email(email)
-                .nickname(nickname)
-                .password(password)
-                .authority(Authority.ROLE_USER)
-                .build();
-    }
-
 
 }

@@ -37,15 +37,10 @@ public class UserService {
     /**
      *  회원 가입
      */
-//    @Transactional
-//    public Long saveUserInfo(UserSignupRequestDto userSignupRequestDto){
-//        return userRepository.save(userSignupRequestDto.toEntity()).getId();
-//    }
-
     @Transactional
     public Long signup(UserSignupRequestDto userSignupRequestDto){
         User user = userSignupRequestDto.toUser(passwordEncoder);
-        return UserResponseDto.of(userRepository.save(user)).getId();
+        return userRepository.save(user).getId();
     }
 
 

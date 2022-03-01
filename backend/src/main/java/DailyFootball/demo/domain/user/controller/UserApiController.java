@@ -2,7 +2,10 @@ package DailyFootball.demo.domain.user.controller;
 
 import DailyFootball.demo.domain.jwt.DTO.TokenDto;
 import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
-import DailyFootball.demo.domain.user.DTO.*;
+import DailyFootball.demo.domain.user.DTO.UserInfoDto;
+import DailyFootball.demo.domain.user.DTO.UserRequestDto;
+import DailyFootball.demo.domain.user.DTO.UserSignupRequestDto;
+import DailyFootball.demo.domain.user.DTO.UserUpdateDto;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,20 +32,11 @@ public class UserApiController {
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
         Map<String, Object> responseMap = new HashMap<>();
-//        UserResponseDto userId = userService.signup(userSignupRequestDto);
         Long userId = userService.signup(userSignupRequestDto);
         responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 
-//    // 회원가입
-//    @PostMapping("/signup")
-//    public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
-//        Map<String, Object> responseMap = new HashMap<>();
-//        Long userId = userService.saveUserInfo(userSignupRequestDto);
-//        responseMap.put("userId", userId);
-//        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
-//    }
 
     // 이메일 중복검사
     @GetMapping("/email/duplicate")
@@ -61,7 +55,7 @@ public class UserApiController {
     }
 
     // 회원탈퇴
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/account/delete/{userId}")
     public ResponseEntity deleteUser(@PathVariable("userId") Long userId){
         Map<String, Object> responseMap = new HashMap<>();
         try {
@@ -75,13 +69,14 @@ public class UserApiController {
     }
 
     // 회원 정보 조회
-    @GetMapping("/{userId}")
+    @GetMapping("/account/{userId}")
     public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("userId") Long userId){
         Map<String, Object> responseMap = new HashMap<>();
         Optional<User> userInfos = userService.findUserInfo(userId);
         List<UserInfoDto> userInfoDtoList = userInfos.stream()
                 .map(m -> new UserInfoDto(m.getEmail(), m.getNickname()))
                 .collect(Collectors.toList());
+
         responseMap.put("userInfo", userInfoDtoList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
@@ -99,7 +94,7 @@ public class UserApiController {
     /**
      * 회원 정보 수정
      */
-    @PutMapping("/edit/{userId}")
+    @PutMapping("/account/{userId}")
     public ResponseEntity updateProfile(@PathVariable Long userId, @RequestBody UserUpdateDto userUpdateDto){
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("userId", userService.updateProfile(userId, userUpdateDto));
