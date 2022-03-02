@@ -2,6 +2,7 @@ package DailyFootball.demo.domain.user.domain;
 
 
 import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
+import DailyFootball.demo.domain.column.domain.Columns;
 import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.score.domain.Score;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @Table(name = "USER")
 public class User extends BaseTimeEntity {
@@ -54,6 +55,10 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Community> communities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Columns> columns = new ArrayList<>();
+
 
 
     // 회원 정보 업데이트
