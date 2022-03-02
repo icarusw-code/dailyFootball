@@ -103,6 +103,13 @@ public class UserService {
 
         refreshTokenRepository.save(refreshToken);
 
+        // 4.5 (임시) 넘겨줄때 회원 아이디랑 닉네임 추가!
+        Optional<User> findUser = userRepository.findByEmail(userRequestDto.getEmail());
+        Long userId = findUser.get().getId();
+        String nickname = findUser.get().getNickname();
+
+        tokenDto.setId(userId);
+        tokenDto.setNickname(nickname);
         // 5. 토큰 발급
         return tokenDto;
     }

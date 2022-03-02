@@ -1,16 +1,16 @@
 package DailyFootball.demo.domain.jwt.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class TokenDto {
 
+    private Long id;
+    private String nickname;
     private String grantType;
     private String accessToken;
     private String refreshToken;

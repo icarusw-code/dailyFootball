@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import LoginButton from "./LoginButton";
 
 const HeaderMain = styled.div`
   display: flex;
@@ -58,7 +59,9 @@ function Header() {
         <HeaderItem>
           <CustomLink to="/signup">회원가입</CustomLink>
         </HeaderItem>
-        <HeaderItem>로그인</HeaderItem>
+        <HeaderItem>
+          <LoginButton />
+        </HeaderItem>
       </HeaderItems>
     </HeaderMain>
   );

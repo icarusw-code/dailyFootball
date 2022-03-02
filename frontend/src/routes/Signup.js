@@ -6,17 +6,18 @@ import { useForm } from "react-hook-form";
 import { baseUrlNoApi } from "../App";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
-const SignupBackGround = styled.div`
+const SignupBackMain = styled.div`
   display: flex;
   justify-content: center;
-  min-height: 110vh;
+  min-height: 80vh;
   background-color: #272a36;
 `;
 
 const SignupMainForm = styled.div`
-  width: 600px;
-  min-height: 800px;
-  background-color: whitesmoke;
+  width: 700px;
+  margin-top: 50px;
+  /* min-height: 600px; */
+  background-color: #272a36;
   border-radius: 10px;
 `;
 
@@ -24,14 +25,16 @@ const SignupForm = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 100px;
 `;
 
 const SignupTitle = styled.label`
   display: block;
-  align-self: flex-start;
+  text-align: center;
   font-size: 30px;
-  margin: 20px 0px;
-  margin-left: 20px;
+  font-weight: bold;
+  margin: 50px;
+  color: white;
 `;
 
 const SignupInputDiv = styled.div`
@@ -39,7 +42,7 @@ const SignupInputDiv = styled.div`
   box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   input:focus {
     outline: 1px solid #6667ab;
   }
@@ -48,6 +51,7 @@ const SignupInputDiv = styled.div`
 const SignupInputsLabel = styled.label`
   font-size: 15px;
   margin-bottom: 5px;
+  color: white;
 `;
 
 const SignupInputs = styled.div`
@@ -68,10 +72,11 @@ const CheckBtns = styled.button`
   height: 40px;
   border-radius: 5px;
   border-color: transparent;
-  background-color: #b0e0e6;
+  background-color: #c2cec9;
   color: black;
   &:hover {
-    background-color: #8bdae3;
+    background-color: gray;
+    color: white;
   }
 `;
 
@@ -87,13 +92,15 @@ const CheckBox = styled.div`
 
 const CheckBoxLabel = styled.label`
   margin-left: 10px;
+  color: white;
 `;
 
 const SignupBtn = styled(SignupInputs)`
-  background-color: #6667ab;
-  color: white;
+  background-color: #c2cec9;
+  color: black;
   &:hover {
-    background-color: #3c3d8b;
+    background-color: gray;
+    color: white;
   }
 `;
 
@@ -268,7 +275,7 @@ function Signup() {
   /////////////////////////////////////////////////////////////////////
 
   return (
-    <SignupBackGround>
+    <SignupBackMain>
       <SignupMainForm>
         <SignupForm onSubmit={handleSubmit(onValid)}>
           <SignupTitle>회원가입</SignupTitle>
@@ -384,7 +391,7 @@ function Signup() {
           </Container>
         </SignupForm>
       </SignupMainForm>
-    </SignupBackGround>
+    </SignupBackMain>
   );
 }
 
