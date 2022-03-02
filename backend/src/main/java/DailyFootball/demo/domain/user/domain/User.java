@@ -38,12 +38,15 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    private String profileImg;
+
     @Builder
-    public User(String email, String password, String nickname, Authority authority, String role) {
+    public User(String email, String password, String nickname, Authority authority, String profileImg) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.authority = authority;
+        this.profileImg = profileImg;
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
@@ -57,11 +60,18 @@ public class User extends BaseTimeEntity {
     // !!이미지 필요
     public void update(String nickname){
         this.nickname = nickname;
+//        this.profileImg = profileImg;
     }
 
     public String passwordUpdate(String password){
         this.password = password;
         return password;
     }
+
+    public void profileUrl(String profileImg){
+        this.profileImg = profileImg;
+    }
+
+
 
 }

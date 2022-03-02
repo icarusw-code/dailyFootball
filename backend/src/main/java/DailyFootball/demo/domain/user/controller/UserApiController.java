@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,15 +89,28 @@ public class UserApiController {
         return ResponseEntity.ok(userService.reissue(tokenRequestDto));
     }
 
+//    /**
+//     * 회원 정보 수정
+//     */
+//    @PutMapping("/account/{userId}")
+//    public ResponseEntity updateProfile(@PathVariable Long userId, @RequestBody UserUpdateDto userUpdateDto){
+//        Map<String, Object> responseMap = new HashMap<>();
+//        responseMap.put("userId", userService.updateProfile(userId, userUpdateDto));
+//        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+//    }
     /**
      * 회원 정보 수정
      */
     @PutMapping("/account/{userId}")
-    public ResponseEntity updateProfile(@PathVariable Long userId, @RequestBody UserUpdateDto userUpdateDto){
+    public ResponseEntity updateProfile(@PathVariable Long userId,
+                                        @RequestPart(value = "file") MultipartFile multipartFile,
+                                        @RequestPart(value = "userUpdateDto") UserUpdateDto userUpdateDto
+){
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("userId", userService.updateProfile(userId, userUpdateDto));
+        responseMap.put("userId", userService.updateProfile(userId, multipartFile, userUpdateDto, new UserUpdateResponseDto()));
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
+
 
     /**
      * 비밀 번호 변경

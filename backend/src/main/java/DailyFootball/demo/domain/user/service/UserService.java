@@ -10,17 +10,22 @@ import DailyFootball.demo.domain.user.DTO.*;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
-
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -140,12 +145,55 @@ public class UserService {
      * 회원 정보 수정
      * !!이미지 추가 필요!!
      */
+//    @Transactional
+//    public Long updateProfile(Long userId, UserUpdateDto userUpdateDto){
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId = " + userId));
+//        user.update(userUpdateDto.getNickname());
+//        return userId;
+//    }
+
+    /**
+     * 회원 정보 수정
+     * !!이미지 추가 필요!!
+     * @return
+     */
     @Transactional
-    public Long updateProfile(Long userId, UserUpdateDto userUpdateDto){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId = " + userId));
-        user.update(userUpdateDto.getNickname());
-        return userId;
+    public Long updateProfile(Long userId, MultipartFile multipartFile, UserUpdateDto userUpdateDto, UserUpdateResponseDto userUpdateResponseDto){
+        try{
+            String sep = File.separator;
+            String today = new SimpleDateFormat("yyMMdd").format(new Date());
+
+            File file = new File("");
+            String rootPath = file.getAbsolutePath().split("src")[0];
+
+            String savePath = rootPath + sep + "profileImg" + sep + today;
+            if(!new File(savePath).exists()){
+                try{
+                    new File(savePath).mkdirs();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            // 파일 이름 정하기
+            String originFileName = multipartFile.getOriginalFilename();
+            String saveFileName = UUID.randomUUID().toString() + originFileName.substring(originFileName.lastIndexOf("."));
+
+            String filePath = savePath + sep + saveFileName;
+            multipartFile.transferTo(new File(filePath));
+            // 닉네임 저장
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId = " + userId));
+            user.update(userUpdateDto.getNickname());
+            user.profileUrl(userUpdateResponseDto.toUpdateProfile(filePath).getProfileImg());
+
+            return userId;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
