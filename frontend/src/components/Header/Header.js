@@ -59,9 +59,7 @@ function Header() {
         <HeaderItem>
           <CustomLink to="/signup">회원가입</CustomLink>
         </HeaderItem>
-        <HeaderItem>
-          <LoginButton />
-        </HeaderItem>
+        <HeaderItem>{/* <LoginButton /> */}</HeaderItem>
       </HeaderItems>
     </HeaderMain>
   );
