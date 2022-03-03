@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.jwt;
+package DailyFootball.demo.global.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

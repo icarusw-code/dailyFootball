@@ -1,7 +1,7 @@
-package DailyFootball.demo.domain.jwt.config;
+package DailyFootball.demo.global.jwt.config;
 
-import DailyFootball.demo.domain.jwt.JwtFilter;
-import DailyFootball.demo.domain.jwt.TokenProvider;
+import DailyFootball.demo.global.jwt.JwtFilter;
+import DailyFootball.demo.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,7 +1,7 @@
 package DailyFootball.demo.domain.user.controller;
 
-import DailyFootball.demo.domain.jwt.DTO.TokenDto;
-import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
+import DailyFootball.demo.global.jwt.DTO.TokenDto;
+import DailyFootball.demo.global.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.domain.user.DTO.*;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.service.UserService;

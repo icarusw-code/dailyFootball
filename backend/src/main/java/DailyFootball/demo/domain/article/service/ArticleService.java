@@ -24,13 +24,11 @@ public class ArticleService {
     public Long createArticle(ArticleWriteResponseDto articleWriteResponseDto){
         User user = userRepository.findById(articleWriteResponseDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다. UserId = " + articleWriteResponseDto.getUserId()));
-        Article article = articleWriteResponseDto.toEntity();
-        article.mapUser(user);
         // title, content 저장
+        Article article = articleWriteResponseDto.toEntity();
+        // user 저장
+        article.mapUser(user);
         return articleRepository.save(article).getId();
 
-
-//        User user = userRepository.findById(userId).get();
-//        return articleRepository.save(articleWriteDto.toWrite(user)).getId();
     }
 }

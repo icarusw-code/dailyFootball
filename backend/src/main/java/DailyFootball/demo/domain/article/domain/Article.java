@@ -60,9 +60,4 @@ public class Article extends BaseTimeEntity {
         this.likesCount = likesCount;
     }
 
-    public void userSave(Long userId){
-
-
-    }
-
 }

@@ -1,11 +1,11 @@
 package DailyFootball.demo.domain.user.service;
 
-import DailyFootball.demo.domain.jwt.DTO.TokenDto;
-import DailyFootball.demo.domain.jwt.DTO.TokenRequestDto;
-import DailyFootball.demo.domain.jwt.TokenProvider;
-import DailyFootball.demo.domain.jwt.domain.RefreshToken;
-import DailyFootball.demo.domain.jwt.repository.RefreshTokenRepository;
-import DailyFootball.demo.domain.jwt.util.SecurityUtil;
+import DailyFootball.demo.global.jwt.DTO.TokenDto;
+import DailyFootball.demo.global.jwt.DTO.TokenRequestDto;
+import DailyFootball.demo.global.jwt.TokenProvider;
+import DailyFootball.demo.global.jwt.domain.RefreshToken;
+import DailyFootball.demo.global.jwt.repository.RefreshTokenRepository;
+import DailyFootball.demo.global.jwt.util.SecurityUtil;
 import DailyFootball.demo.domain.user.DTO.*;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;

@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.jwt.util;
+package DailyFootball.demo.global.jwt.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

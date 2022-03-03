@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.jwt;
+package DailyFootball.demo.global.jwt;
 
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;

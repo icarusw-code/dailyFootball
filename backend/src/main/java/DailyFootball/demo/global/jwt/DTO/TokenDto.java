@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.jwt.DTO;
+package DailyFootball.demo.global.jwt.DTO;
 
 import lombok.*;
 
