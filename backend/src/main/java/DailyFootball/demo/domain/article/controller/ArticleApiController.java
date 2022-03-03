@@ -20,12 +20,10 @@ public class ArticleApiController {
     private final UserService userService;
 
     // 글 생성
-    @PostMapping("/article/{userId}/write")
-    public ResponseEntity write(@PathVariable("userId") Long userId,
-                                @RequestBody ArticleWriteRequestDto articleWriteRequestDto,
-                                ArticleWriteResponseDto articleWriteResponseDto){
+    @PostMapping("/article/write")
+    public ResponseEntity createArticle(@RequestBody ArticleWriteResponseDto articleWriteResponseDto){
         Map<String, Object> responseMap = new HashMap<>();
-        Long articleId = articleService.write(articleWriteResponseDto, userId);
+        Long articleId = articleService.createArticle(articleWriteResponseDto);
         responseMap.put("articleId", articleId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
 //        Long articleId = articleService.write(articleWriteDto, userId);

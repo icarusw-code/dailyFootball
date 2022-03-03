@@ -28,10 +28,17 @@ public class Article extends BaseTimeEntity {
     private String content;
 
     @Column(name = "read_count")
-    private int readCount;
+    private Long readCount;
 
     @Column(name = "likes_count")
-    private int likesCount;
+    private Long likesCount;
+
+    @PrePersist
+    public void initializer() {
+        readCount = 0L;
+        likesCount = 0L;
+    }
+
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ArticleImg> articleImgs = new ArrayList<>();
@@ -40,10 +47,17 @@ public class Article extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     User user;
 
+    public void mapUser(User user) {
+        this.user = user;
+    }
+
     @Builder
-    public Article(String title, String content, Long userId) {
+    public Article(User user, String title, String content, Long readCount, Long likesCount) {
+        this.user = user;
         this.title = title;
         this.content = content;
+        this.readCount = readCount;
+        this.likesCount = likesCount;
     }
 
     public void userSave(Long userId){
