@@ -25,6 +25,5 @@ public class ArticleApiController {
         Long articleId = articleService.createArticle(articleWriteResponseDto);
         responseMap.put("articleId", articleId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
-
     }
 }

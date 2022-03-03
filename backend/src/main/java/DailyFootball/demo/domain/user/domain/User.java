@@ -23,13 +23,13 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 40)
+    @Column(nullable = false, length = 40)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
