@@ -23,13 +23,13 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 40)
+    @Column(length = 40)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity {
     List<Community> communities = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    List<Article> columns = new ArrayList<>();
+    List<Article> articles = new ArrayList<>();
 
 
 
