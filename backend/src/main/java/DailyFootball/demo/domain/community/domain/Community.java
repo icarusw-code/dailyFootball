@@ -1,5 +1,6 @@
 package DailyFootball.demo.domain.community.domain;
 
+import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
 import DailyFootball.demo.domain.game.domain.Game;
 import DailyFootball.demo.domain.playercCommunity.domain.PlayerCommunity;
 import DailyFootball.demo.domain.user.domain.User;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "COMMUNITY")
-public class Community {
+public class Community extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +29,6 @@ public class Community {
 
     @Column(name = "like_count" )
     private Integer likeCount;
-
-    @Column(name = "register_date")
-    private LocalDateTime registerDate;
 
     @Column(name = "player_id")
     private Integer playerId;
