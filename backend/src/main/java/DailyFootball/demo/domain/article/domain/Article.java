@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.column.domain;
+package DailyFootball.demo.domain.article.domain;
 
 import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
 import DailyFootball.demo.domain.user.domain.User;
@@ -13,8 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "COLUMN")
-public class Columns extends BaseTimeEntity {
+@Table(name = "ARTICLE")
+public class Article extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +32,8 @@ public class Columns extends BaseTimeEntity {
     @Column(name = "likes_count")
     private int likesCount;
 
-    @OneToMany(mappedBy = "columns", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<ColumnsImg> columnsImgs = new ArrayList<>();
+    @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<ArticleImg> articleImgs = new ArrayList<>();
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

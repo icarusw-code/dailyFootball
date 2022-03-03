@@ -1,21 +1,17 @@
 package DailyFootball.demo.domain.user.domain;
 
 
+import DailyFootball.demo.domain.article.domain.Article;
 import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
-import DailyFootball.demo.domain.column.domain.Columns;
 import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.score.domain.Score;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 @Entity
 @Getter
@@ -57,7 +53,7 @@ public class User extends BaseTimeEntity {
     List<Community> communities = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    List<Columns> columns = new ArrayList<>();
+    List<Article> columns = new ArrayList<>();
 
 
 
