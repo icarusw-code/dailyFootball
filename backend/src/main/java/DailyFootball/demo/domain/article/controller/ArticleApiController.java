@@ -2,6 +2,8 @@ package DailyFootball.demo.domain.article.controller;
 
 import DailyFootball.demo.domain.article.DTO.ArticleFindDto;
 import DailyFootball.demo.domain.article.DTO.ArticleWriteResponseDto;
+import DailyFootball.demo.domain.article.domain.Article;
+import DailyFootball.demo.domain.article.repository.ArticleRepository;
 import DailyFootball.demo.domain.article.service.ArticleService;
 import DailyFootball.demo.global.util.PageUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +43,8 @@ public class ArticleApiController {
     public ResponseEntity getArticle(@RequestParam("page") int page, ModelMap model){
         Page<ArticleFindDto> articles = articleService.findAllArticle(page);
         Pageable pageable = articles.getPageable();
-//        List<ArticleFindDto> articleFindDtoList =
-
         model.addAttribute("page", PageUtils.getPages(pageable, articles.getTotalPages()));
         model.addAttribute("articles", articles);
-        model.addAttribute("nowTime", LocalDate.now());
-        model.addAttribute("message", "success");
         return ResponseEntity.status(HttpStatus.OK).body(model);
     }
 }

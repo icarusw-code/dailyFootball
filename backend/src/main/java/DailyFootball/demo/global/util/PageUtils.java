@@ -11,8 +11,8 @@ public class PageUtils {
 
     public static Map<String, Object> getPages(Pageable page, int totalPage){
         Map<String, Object> pageMap = new HashMap<String, Object>();
-        int size = page.getPageSize();
-        int pageNumber = page.getPageNumber() + 1;
+        int size = page.getPageSize(); // ArticleService에서 정해준 size를 가져옴 (10)
+        int pageNumber = page.getPageNumber() + 1; // pageNumber 시작은 0부터
         int startPage = ((pageNumber - 1) / pageScale) * pageScale;
         int endPage = startPage + pageScale - 1;
 

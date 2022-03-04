@@ -46,7 +46,7 @@ public class ArticleService {
         // Pageable의 page는 0부터 시작하기 때문에 화면에서 올라온 값에서 1을 뺀다.
         // 화면의 Pagenation은 1부터 시작
         int pageNumber = page - 1;
-        Pageable pageable = PageRequest.of(pageNumber, 10);
+        Pageable pageable = PageRequest.of(pageNumber, 10); // 한화면 사이즈 10
         Page<Article> article = articleRepository.findAll(pageable);
 
         Page<ArticleFindDto> articleFindDto = article.map(new Function<Article, ArticleFindDto>() {

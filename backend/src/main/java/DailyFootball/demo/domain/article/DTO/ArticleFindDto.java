@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class ArticleFindDto {
@@ -15,6 +18,7 @@ public class ArticleFindDto {
     private Long readCount;
     private Long likesCount;
     private Long userId;
+    private LocalDateTime modifiedDateTime;
 
     @Builder
     public ArticleFindDto(String title, String content, Long readCount, Long likesCount, Long userId) {
@@ -27,12 +31,12 @@ public class ArticleFindDto {
     }
 
     public void convertEntityToDto(Article article) {
-        Article.builder()
-                .title(title)
-                .content(content)
-                .readCount(readCount)
-                .likesCount(likesCount)
-                .build();
-
+        this.id = article.getId();
+        this.title = article.getTitle();
+        this.content = article.getContent();
+        this.readCount = article.getReadCount();
+        this.likesCount = article.getLikesCount();
+        this.userId = article.getUser().getId();
+        this.modifiedDateTime = article.getModifiedDate();
     }
 }
