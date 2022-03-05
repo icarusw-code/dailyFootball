@@ -9,6 +9,7 @@ public class PageUtils {
 
     static int pageScale = 5;
 
+
     public static Map<String, Object> getPages(Pageable page, int totalPage){
         Map<String, Object> pageMap = new HashMap<String, Object>();
         int size = page.getPageSize(); // ArticleService에서 정해준 size를 가져옴 (10)
