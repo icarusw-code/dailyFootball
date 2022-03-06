@@ -41,7 +41,7 @@ public class Article extends BaseTimeEntity {
 
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<ArticleImg> articleImgs = new ArrayList<>();
+    private List<ArticleImg> articleImg = new ArrayList<>();
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -49,6 +49,10 @@ public class Article extends BaseTimeEntity {
 
     public void mapUser(User user) {
         this.user = user;
+    }
+
+    public void addArticleImg(ArticleImg articleImg){
+        this.articleImg.add(articleImg);
     }
 
     @Builder

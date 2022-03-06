@@ -3,19 +3,25 @@ package DailyFootball.demo.domain.article.service;
 import DailyFootball.demo.domain.article.DTO.ArticleFindDto;
 import DailyFootball.demo.domain.article.DTO.ArticleWriteResponseDto;
 import DailyFootball.demo.domain.article.domain.Article;
+import DailyFootball.demo.domain.article.domain.ArticleImg;
+import DailyFootball.demo.domain.article.repository.ArticleImgRepository;
 import DailyFootball.demo.domain.article.repository.ArticleRepository;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -23,18 +29,30 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
+    private final FileHandler fileHandler;
+    private final ArticleImgRepository articleImgRepository;
 
     /**
      * 글 생성
      */
     @Transactional
-    public Long createArticle(ArticleWriteResponseDto articleWriteResponseDto){
+    public Long createArticle(ArticleWriteResponseDto articleWriteResponseDto, List<MultipartFile> files) throws Exception {
         User user = userRepository.findById(articleWriteResponseDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다. UserId = " + articleWriteResponseDto.getUserId()));
         // title, content 저장
         Article article = articleWriteResponseDto.toEntity();
         // user 저장
         article.mapUser(user);
+        // 이미지 처리
+        List<ArticleImg> articleImgList = fileHandler.parseFileInfo(files);
+        if(!articleImgList.isEmpty()){
+            for (ArticleImg articleImg : articleImgList) {
+                article.addArticleImg(articleImgRepository.save(articleImg));
+                // article_id 저장
+                articleImg.mapArticle(article);
+            }
+        }
+
         return articleRepository.save(article).getId();
 
     }

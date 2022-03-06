@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -31,9 +32,11 @@ public class ArticleApiController {
      * 글 생성
      */
     @PostMapping("/article/write")
-    public ResponseEntity createArticle(@RequestBody ArticleWriteResponseDto articleWriteResponseDto){
+    public ResponseEntity createArticle(@RequestPart ArticleWriteResponseDto articleWriteResponseDto,
+                                        @RequestPart(value = "file") List<MultipartFile> files
+                                        ) throws Exception {
         Map<String, Object> responseMap = new HashMap<>();
-        Long articleId = articleService.createArticle(articleWriteResponseDto);
+        Long articleId = articleService.createArticle(articleWriteResponseDto, files);
         responseMap.put("articleId", articleId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
