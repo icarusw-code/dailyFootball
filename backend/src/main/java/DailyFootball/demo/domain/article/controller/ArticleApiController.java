@@ -57,6 +57,7 @@ public class ArticleApiController {
     @GetMapping("article/{articleId}")
     public ResponseEntity<Map<String, Object>> viewArticle(@PathVariable("articleId") Long articleId){
         Map<String, Object> responseMap = new HashMap<>();
+        articleService.updateReadCount(articleId);
         Optional<Article> articleInfos = articleService.findArticleInfo(articleId);
         List<ArticleFindDto> articleFindDtoList = articleInfos.stream()
                 .map(m -> new ArticleFindDto(m.getTitle(), m.getContent(), m.getReadCount(), m.getLikesCount(), m.getUser().getId(), m.getModifiedDate()))

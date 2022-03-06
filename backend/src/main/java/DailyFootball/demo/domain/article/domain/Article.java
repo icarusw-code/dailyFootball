@@ -28,15 +28,15 @@ public class Article extends BaseTimeEntity {
     private String content;
 
     @Column(name = "read_count")
-    private Long readCount;
+    private int readCount;
 
     @Column(name = "likes_count")
-    private Long likesCount;
+    private int likesCount;
 
     @PrePersist
     public void initializer() {
-        readCount = 0L;
-        likesCount = 0L;
+        readCount = 0;
+        likesCount = 0;
     }
 
 
@@ -52,7 +52,7 @@ public class Article extends BaseTimeEntity {
     }
 
     @Builder
-    public Article(User user, String title, String content, Long readCount, Long likesCount) {
+    public Article(User user, String title, String content, int readCount, int likesCount) {
         this.user = user;
         this.title = title;
         this.content = content;

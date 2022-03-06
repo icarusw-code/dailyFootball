@@ -15,13 +15,13 @@ public class ArticleFindDto {
     private Long id;
     private String title;
     private String content;
-    private Long readCount;
-    private Long likesCount;
+    private int readCount;
+    private int likesCount;
     private Long userId;
     private LocalDateTime modifiedDateTime;
 
     @Builder
-    public ArticleFindDto(String title, String content, Long readCount, Long likesCount, Long userId, LocalDateTime modifiedDateTime) {
+    public ArticleFindDto(String title, String content, int readCount, int likesCount, Long userId, LocalDateTime modifiedDateTime) {
 
         this.title = title;
         this.content = content;

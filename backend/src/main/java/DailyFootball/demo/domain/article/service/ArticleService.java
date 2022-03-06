@@ -68,4 +68,9 @@ public class ArticleService {
     public Optional<Article> findArticleInfo(Long articleId) {
         return articleRepository.findById(articleId);
     }
+
+    @Transactional
+    public int updateReadCount(Long articleId) {
+        return articleRepository.updateReadCount(articleId);
+    }
 }
