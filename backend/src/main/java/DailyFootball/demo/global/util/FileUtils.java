@@ -1,4 +1,4 @@
-package DailyFootball.demo.domain.article.service;
+package DailyFootball.demo.global.util;
 
 import DailyFootball.demo.domain.article.DTO.ArticleImgDto;
 import DailyFootball.demo.domain.article.domain.ArticleImg;
@@ -8,15 +8,13 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
-public class FileHandler {
+public class FileUtils {
 
     public List<ArticleImg> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception{
 
@@ -28,7 +26,7 @@ public class FileHandler {
             // 파일명을 업로드 한 날짜로 변환해서 저장
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter dateTimeFormatter =
-                    DateTimeFormatter.ofPattern("yyyyMMdd");
+                    DateTimeFormatter.ofPattern("yyMMdd");
             String current_date = now.format(dateTimeFormatter);
 
             // 프로젝트 디렉터리 내의 저장을 위한 절대 경로 설정
@@ -36,7 +34,7 @@ public class FileHandler {
             String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
             // 파일을 저장할 세부 경로 지정
-            String path = "images" + File.separator + current_date;
+            String path = "articleImage" + File.separator + current_date;
             File file = new File(path);
 
             // 디렉터리가 존재하지 않을 경우

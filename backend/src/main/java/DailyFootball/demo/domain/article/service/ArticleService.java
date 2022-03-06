@@ -8,6 +8,7 @@ import DailyFootball.demo.domain.article.repository.ArticleImgRepository;
 import DailyFootball.demo.domain.article.repository.ArticleRepository;
 import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;
+import DailyFootball.demo.global.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
-    private final FileHandler fileHandler;
+    private final FileUtils fileUtils;
     private final ArticleImgRepository articleImgRepository;
 
     /**
@@ -44,7 +45,7 @@ public class ArticleService {
         // user 저장
         article.mapUser(user);
         // 이미지 처리
-        List<ArticleImg> articleImgList = fileHandler.parseFileInfo(files);
+        List<ArticleImg> articleImgList = fileUtils.parseFileInfo(files);
         if(!articleImgList.isEmpty()){
             for (ArticleImg articleImg : articleImgList) {
                 article.addArticleImg(articleImgRepository.save(articleImg));
