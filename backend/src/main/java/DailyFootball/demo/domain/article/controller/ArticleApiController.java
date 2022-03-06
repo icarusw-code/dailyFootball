@@ -18,6 +18,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,4 +49,22 @@ public class ArticleApiController {
         model.addAttribute("articles", articles);
         return ResponseEntity.status(HttpStatus.OK).body(model);
     }
+
+    /**
+     * 글 상세보기
+     * articleFindDto를 재활용 했는데, id값이 같이 넘어오는거 따로 Dto를 만들어서 해결할지, 그대로 둘지 결정 필요
+     */
+    @GetMapping("article/{articleId}")
+    public ResponseEntity<Map<String, Object>> viewArticle(@PathVariable("articleId") Long articleId){
+        Map<String, Object> responseMap = new HashMap<>();
+        Optional<Article> articleInfos = articleService.findArticleInfo(articleId);
+        List<ArticleFindDto> articleFindDtoList = articleInfos.stream()
+                .map(m -> new ArticleFindDto(m.getTitle(), m.getContent(), m.getReadCount(), m.getLikesCount(), m.getUser().getId(), m.getModifiedDate()))
+                .collect(Collectors.toList());
+
+        responseMap.put("articleInfo", articleFindDtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    }
+
+
 }

@@ -79,11 +79,13 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 
+    //로그인
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody UserRequestDto userRequestDto){
         return ResponseEntity.ok(userService.login(userRequestDto));
     }
 
+    //재발급
     @PostMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto){
         return ResponseEntity.ok(userService.reissue(tokenRequestDto));

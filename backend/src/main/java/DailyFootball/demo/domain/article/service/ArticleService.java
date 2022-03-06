@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -58,5 +59,13 @@ public class ArticleService {
             }
         });
         return articleFindDto;
+    }
+
+    /**
+     * 글 상세 조회
+     */
+    @Transactional
+    public Optional<Article> findArticleInfo(Long articleId) {
+        return articleRepository.findById(articleId);
     }
 }

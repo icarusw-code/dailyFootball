@@ -21,13 +21,14 @@ public class ArticleFindDto {
     private LocalDateTime modifiedDateTime;
 
     @Builder
-    public ArticleFindDto(String title, String content, Long readCount, Long likesCount, Long userId) {
+    public ArticleFindDto(String title, String content, Long readCount, Long likesCount, Long userId, LocalDateTime modifiedDateTime) {
 
         this.title = title;
         this.content = content;
         this.readCount = readCount;
         this.likesCount = likesCount;
         this.userId = userId;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     public void convertEntityToDto(Article article) {
@@ -39,4 +40,5 @@ public class ArticleFindDto {
         this.userId = article.getUser().getId();
         this.modifiedDateTime = article.getModifiedDate();
     }
+
 }
