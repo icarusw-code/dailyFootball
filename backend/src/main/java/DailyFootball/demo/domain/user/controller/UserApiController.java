@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,15 +70,12 @@ public class UserApiController {
 
     // 회원 정보 조회
     @GetMapping("/account/{userId}")
-    public ResponseEntity<Map<String, Object>> userInfo(@PathVariable("userId") Long userId){
-        Map<String, Object> responseMap = new HashMap<>();
-        Optional<User> userInfos = userService.findUserInfo(userId);
-        List<UserInfoDto> userInfoDtoList = userInfos.stream()
-                .map(m -> new UserInfoDto(m.getEmail(), m.getNickname(), m.getProfileImg()))
-                .collect(Collectors.toList());
-
-        responseMap.put("userInfo", userInfoDtoList);
-        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+    public ResponseEntity userInfo(Model model,
+                                   @PathVariable("userId") Long userId,
+                                   @RequestParam Long sessionId){
+        UserInfoDto userInfoDto = userService.findUserInfo(userId, sessionId);
+        model.addAttribute("userInfo", userInfoDto);
+        return ResponseEntity.status(HttpStatus.OK).body(model);
     }
 
     //로그인
