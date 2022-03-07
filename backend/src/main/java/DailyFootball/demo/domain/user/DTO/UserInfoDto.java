@@ -12,10 +12,12 @@ public class UserInfoDto {
     // 추후 내용 추가 예정
     private String email;
     private String nickname;
+    private String profileImg;
 
     @Builder
-    public UserInfoDto(String email, String nickname){
+    public UserInfoDto(String email, String nickname, String profileImg){
         this.email = email;
         this.nickname = nickname;
+        this.profileImg = profileImg;
     }
 }

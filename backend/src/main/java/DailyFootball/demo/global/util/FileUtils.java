@@ -71,7 +71,6 @@ public class FileUtils {
 
                 ArticleImgDto articleImgDto = ArticleImgDto.builder()
                         .articleImg(path + File.separator + newFileName)
-
                         .build();
 
                 ArticleImg articleImg = new ArticleImg(articleImgDto.getArticleImg());

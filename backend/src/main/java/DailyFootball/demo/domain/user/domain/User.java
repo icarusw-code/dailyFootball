@@ -46,22 +46,25 @@ public class User extends BaseTimeEntity {
         this.profileImg = profileImg;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     List<Score> scores = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     List<Community> communities = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     List<Article> articles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.REMOVE)
+    List<Follow> fromFollows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.REMOVE)
+    List<Follow> toFollows = new ArrayList<>();
 
 
     // 회원 정보 업데이트
-    // !!이미지 필요
     public void update(String nickname){
         this.nickname = nickname;
-//        this.profileImg = profileImg;
     }
 
     public String passwordUpdate(String password){

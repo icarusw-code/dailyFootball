@@ -14,7 +14,6 @@ public class ArticleImgDto {
 
     private String articleImg;
 
-    private Article article;
 
 
     @Builder

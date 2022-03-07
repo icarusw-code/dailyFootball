@@ -88,6 +88,9 @@ public class ArticleService {
         return articleRepository.findById(articleId);
     }
 
+    /**
+     * 조회수
+     */
     @Transactional
     public int updateReadCount(Long articleId) {
         return articleRepository.updateReadCount(articleId);

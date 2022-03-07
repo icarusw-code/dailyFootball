@@ -72,7 +72,7 @@ public class UserApiController {
         Map<String, Object> responseMap = new HashMap<>();
         Optional<User> userInfos = userService.findUserInfo(userId);
         List<UserInfoDto> userInfoDtoList = userInfos.stream()
-                .map(m -> new UserInfoDto(m.getEmail(), m.getNickname()))
+                .map(m -> new UserInfoDto(m.getEmail(), m.getNickname(), m.getProfileImg()))
                 .collect(Collectors.toList());
 
         responseMap.put("userInfo", userInfoDtoList);
