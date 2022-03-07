@@ -1,5 +1,6 @@
 package DailyFootball.demo.domain.user.service;
 
+import DailyFootball.demo.domain.user.repository.FollowRepository;
 import DailyFootball.demo.global.jwt.DTO.TokenDto;
 import DailyFootball.demo.global.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.global.jwt.TokenProvider;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ValidationException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,6 +38,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final FollowRepository followRepository;
 
     /**
      *  회원 가입
@@ -65,10 +68,23 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    // 회원 정보 조회
+    /**
+     * 회원 정보 조회
+     */
     @Transactional
-    public Optional<User> findUserInfo(Long userId) {
-        return userRepository.findById(userId);
+    public UserInfoDto findUserInfo(Long userId, Long sessionId){
+        UserInfoDto userInfoDto = new UserInfoDto();
+        User user = userRepository.findById(userId).orElseThrow(() -> {return new ValidationException("찾을 수 없는 user 입니다.");});
+        // 기본 정보 저장
+        userInfoDto.toUserInfo(user.getEmail(), user.getNickname(), user.getProfileImg());
+
+        // userId를 가진 user가 현재 사용자를 follow 했는지 확인
+        userInfoDto.isFollow(followRepository.findFollowByFromUserIdAndToUserId(sessionId,userId) != null);
+
+        // userId의 팔로워, 팔로잉 수를 확인
+        userInfoDto.toFollowCount(followRepository.findFollowerCountById(userId), followRepository.findFollowingCountById(userId));
+
+        return userInfoDto;
     }
 
     // 현재 SecurityContext 에 있는 유저 정보 가져오기
@@ -150,20 +166,6 @@ public class UserService {
 
     /**
      * 회원 정보 수정
-     * !!이미지 추가 필요!!
-     */
-//    @Transactional
-//    public Long updateProfile(Long userId, UserUpdateDto userUpdateDto){
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId = " + userId));
-//        user.update(userUpdateDto.getNickname());
-//        return userId;
-//    }
-
-    /**
-     * 회원 정보 수정
-     * !!이미지 추가 필요!!
-     * @return
      */
     @Transactional
     public Long updateProfile(Long userId, MultipartFile multipartFile, UserUpdateDto userUpdateDto, UserUpdateResponseDto userUpdateResponseDto){
