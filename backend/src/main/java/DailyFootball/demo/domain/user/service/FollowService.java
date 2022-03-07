@@ -22,4 +22,12 @@ public class FollowService {
         if(followRepository.findFollowByFromUserIdAndToUserId(fromUserId, toUserId) != null) throw new CustomApiException("이미 팔로우 하셨습니다.");
         followRepository.follow(fromUserId, toUserId);
     }
+
+    /**
+     * 팔로우 정보 삭제
+     */
+    @Transactional
+    public void unFollow(Long fromUserId, Long toUserId) {
+        followRepository.unFollow(fromUserId, toUserId);
+    }
 }

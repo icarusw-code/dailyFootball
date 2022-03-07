@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -21,11 +18,19 @@ public class FollowApiController {
     /**
      * 팔로우
      */
-    @PostMapping("/follow/{fromUserId}follow{toUserId}")
-    public ResponseEntity followUser(@PathVariable("toUserId") Long toUserId, @PathVariable("fromUserId") Long fromUserId){
+    @PostMapping("/follow/{toUserId}")
+    public ResponseEntity followUser(@PathVariable("toUserId") Long toUserId, @RequestParam Long fromUserId){
         followService.follow(fromUserId, toUserId);
         return ResponseEntity.status(HttpStatus.OK).body("팔로우 성공");
+    }
 
+    /**
+     * 언팔로우
+     */
+    @DeleteMapping("/follow/{toUserId}")
+    public ResponseEntity unFollowUser(@PathVariable("toUserId") Long toUserId, @RequestParam Long fromUserId){
+        followService.unFollow(fromUserId, toUserId);
+        return ResponseEntity.status(HttpStatus.OK).body("팔로우 취소 성공");
     }
 
 }
