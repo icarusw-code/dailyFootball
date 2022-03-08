@@ -1,13 +1,13 @@
 version: "3"
 services:
-  # frontend:
-  #   build:
-  #     dockerfile: Dockerfile
-  #     context: ./frontend
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./frontend:/app
-  #   stdin_open: true
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    stdin_open: true
 
   nginx:
     restart: always
@@ -17,14 +17,14 @@ services:
     ports:
       - "3000:80"
 
-  backend:
-    build:
-      dockerfile: Dockerfile
-      context: ./backend
-    container_name: app_backend
-    volumes:
-      - /app/node_modules
-      - ./backend:/app
+  # backend:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./backend
+  #   container_name: app_backend
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./backend:/app
 
   # mysql:
   #   build: ./mysql
