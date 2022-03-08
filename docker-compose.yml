@@ -1,13 +1,13 @@
 version: "3"
 services:
-  frontend:
-    build:
-      dockerfile: Dockerfile
-      context: ./frontend
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app
-    stdin_open: true
+  # frontend:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./frontend
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./frontend:/app
+  #   stdin_open: true
 
   nginx:
     restart: always
