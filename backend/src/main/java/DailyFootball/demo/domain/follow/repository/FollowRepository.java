@@ -1,10 +1,12 @@
-package DailyFootball.demo.domain.user.repository;
+package DailyFootball.demo.domain.follow.repository;
 
-import DailyFootball.demo.domain.user.domain.Follow;
+import DailyFootball.demo.domain.follow.domain.Follow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
@@ -35,4 +37,9 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      */
     @Query(value = "SELECT count(*) from follow where from_user_id =:userId", nativeQuery = true)
     int findFollowingCountById(@Param("userId") Long userId);
+
+    /**
+     * 팔로워 리스트 확인
+     */
+    void findByToUserId(Long userId);
 }

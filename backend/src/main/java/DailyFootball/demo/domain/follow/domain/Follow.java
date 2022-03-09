@@ -1,5 +1,6 @@
-package DailyFootball.demo.domain.user.domain;
+package DailyFootball.demo.domain.follow.domain;
 
+import DailyFootball.demo.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

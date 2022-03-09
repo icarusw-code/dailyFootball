@@ -1,6 +1,6 @@
 package DailyFootball.demo.domain.user.service;
 
-import DailyFootball.demo.domain.user.repository.FollowRepository;
+import DailyFootball.demo.domain.follow.repository.FollowRepository;
 import DailyFootball.demo.global.jwt.DTO.TokenDto;
 import DailyFootball.demo.global.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.global.jwt.TokenProvider;

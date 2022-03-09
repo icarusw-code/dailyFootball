@@ -1,12 +1,19 @@
-package DailyFootball.demo.domain.user.controller;
+package DailyFootball.demo.domain.follow.controller;
 
 
-import DailyFootball.demo.domain.user.service.FollowService;
+import DailyFootball.demo.domain.follow.DTO.FollowDto;
+import DailyFootball.demo.domain.follow.repository.FollowRepository;
+import DailyFootball.demo.domain.follow.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -32,5 +39,16 @@ public class FollowApiController {
         followService.unFollow(fromUserId, toUserId);
         return ResponseEntity.status(HttpStatus.OK).body("팔로우 취소 성공");
     }
+
+    /**
+     * 팔로워 정보
+     * userId를 toUser로 가지는 팔로워의 정보
+     */
+    @GetMapping("/account/{userId}/follower")
+    public ResponseEntity getFollower(Model model, @PathVariable("userId") Long userId, @RequestParam Long loginId) {
+        model.addAttribute(followService.getFollower(userId, loginId));
+        return ResponseEntity.status(HttpStatus.OK).body(model);
+    }
+
 
 }

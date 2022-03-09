@@ -4,6 +4,7 @@ package DailyFootball.demo.domain.user.domain;
 import DailyFootball.demo.domain.article.domain.Article;
 import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
 import DailyFootball.demo.domain.community.domain.Community;
+import DailyFootball.demo.domain.follow.domain.Follow;
 import DailyFootball.demo.domain.score.domain.Score;
 import lombok.Builder;
 import lombok.Getter;
