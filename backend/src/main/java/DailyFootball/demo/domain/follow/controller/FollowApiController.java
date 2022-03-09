@@ -42,11 +42,21 @@ public class FollowApiController {
 
     /**
      * 팔로워 정보
-     * userId를 toUser로 가지는 팔로워의 정보
+     * userId를 toUser 로 가지는 팔로워의 정보
      */
     @GetMapping("/account/{userId}/follower")
     public ResponseEntity getFollower(Model model, @PathVariable("userId") Long userId, @RequestParam Long loginId) {
         model.addAttribute(followService.getFollower(userId, loginId));
+        return ResponseEntity.status(HttpStatus.OK).body(model);
+    }
+
+    /**
+     * 팔로잉 정보
+     * userId가 fromUser 인 팔로잉 정보
+     */
+    @GetMapping("account/{userId}/following")
+    public ResponseEntity getFolloing(Model model, @PathVariable("userId") Long userId, @RequestParam Long loginId){
+        model.addAttribute(followService.getFollowing(userId, loginId));
         return ResponseEntity.status(HttpStatus.OK).body(model);
     }
 

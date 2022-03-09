@@ -1,26 +1,27 @@
 package DailyFootball.demo.domain.follow.service;
 
 import DailyFootball.demo.domain.follow.DTO.FollowDto;
-import DailyFootball.demo.domain.follow.domain.QFollow;
+import DailyFootball.demo.domain.follow.repository.FollowJpaRepository;
 import DailyFootball.demo.domain.follow.repository.FollowRepository;
-import DailyFootball.demo.domain.user.DTO.UserInfoDto;
-import DailyFootball.demo.domain.user.domain.User;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import DailyFootball.demo.global.util.CustomApiException;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static DailyFootball.demo.domain.follow.domain.QFollow.*;
-import static DailyFootball.demo.domain.user.domain.QUser.*;
 
 @Slf4j
 @Service
@@ -30,9 +31,7 @@ public class FollowService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    private final EntityManager em;
-    JPAQueryFactory queryFactory;
-
+    private final FollowJpaRepository followJpaRepository;
 
     /**
      * 팔로우 정보를 저장
@@ -56,25 +55,41 @@ public class FollowService {
      * userId를 toUser로 가지는 팔로워의 정보
      */
     @Transactional
-    public List<FollowDto> getFollower(Long userId, Long loginId) {
-        FollowDto followDto = new FollowDto();
+    public List<FollowDto> getFollower(Long userId, Long loginId){
+
         ArrayList<FollowDto> list = new ArrayList<>();
-        List<Long> followerList = queryFactory
-                .select(follow.fromUser.id)
-                .from(follow)
-                .where(follow.toUser.id.eq(userId))
-                .fetch();
+        List<Long> followerList = followJpaRepository.followerList(userId);
+
         // id: 팔로우한 user들 아이디(from_user_id)
-        for (Long id : followerList) {
-            log.info(String.valueOf(id));
-            followDto.setUserInfo(userRepository.findUserById(id).getNickname(), userRepository.findUserById(id).getProfileImg());
+        for (Long fromId : followerList) {
+            // Dto 초기화 꼭 시키기, 안그러면 마지막값으로 다 바뀜
+            FollowDto followDto = new FollowDto();
+            followDto.setUserInfo(userRepository.findUserById(fromId).getNickname(), userRepository.findUserById(fromId).getProfileImg());
             // 로그인한 유저가 팔로우 했는지 여부 확인
-            followDto.isFollow(followRepository.findFollowByFromUserIdAndToUserId(loginId ,id) != null);
+            followDto.isFollow(followRepository.findFollowByFromUserIdAndToUserId(loginId ,fromId) != null);
             list.add(followDto);
-            if(list.isEmpty()) throw new RuntimeException("아무도 " + userId +" 를 팔로워 하지 않았습니다.");
         }
         return list;
 
     }
 
+    /**
+     * 팔로잉 정보 가져오기
+     * userId가 fromUser 인 팔로잉 정보
+     */
+    @Transactional
+    public List<FollowDto> getFollowing(Long userId, Long loginId) {
+
+        ArrayList<FollowDto> list = new ArrayList<>();
+        List<Long> followingList = followJpaRepository.followingList(userId);
+
+        // id: 팔로잉 한 user 아이디(to_user_id)
+        for (Long toId : followingList) {
+            FollowDto followDto = new FollowDto();
+            followDto.setUserInfo(userRepository.findUserById(toId).getNickname(), userRepository.findUserById(toId).getProfileImg());
+            followDto.isFollow(followRepository.findFollowByFromUserIdAndToUserId(loginId, toId) != null);
+            list.add(followDto);
+        }
+        return list;
+    }
 }

@@ -1,11 +1,15 @@
 package DailyFootball.demo.domain.follow.repository;
 
 import DailyFootball.demo.domain.follow.domain.Follow;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
@@ -42,4 +46,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      * 팔로워 리스트 확인
      */
     void findByToUserId(Long userId);
+
+
 }
