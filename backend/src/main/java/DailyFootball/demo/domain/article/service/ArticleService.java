@@ -95,4 +95,12 @@ public class ArticleService {
     public int updateReadCount(Long articleId) {
         return articleRepository.updateReadCount(articleId);
     }
+
+    /**
+     * 글 삭제
+     */
+    @Transactional
+    public void deleteById(Long articleId) {
+        articleRepository.deleteById(articleId);
+    }
 }

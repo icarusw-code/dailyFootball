@@ -7,10 +7,12 @@ import DailyFootball.demo.domain.article.repository.ArticleRepository;
 import DailyFootball.demo.domain.article.service.ArticleService;
 import DailyFootball.demo.global.util.PageUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +42,23 @@ public class ArticleApiController {
         responseMap.put("articleId", articleId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
+
+    /**
+     * 글 삭제
+     */
+    @DeleteMapping("/article/delete/{articleId}")
+    public ResponseEntity deleteArticle(Model model, @PathVariable("articleId") Long articleId){
+        try {
+            articleService.deleteById(articleId);
+        }catch (EmptyResultDataAccessException e){
+            model.addAttribute("해당 글이 존재 하지 않습니다.", articleId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(model);
+        }
+        model.addAttribute("articleId", articleId);
+        return ResponseEntity.status(HttpStatus.OK).body(model);
+    }
+
+
 
     /**
      * 글 전체 조회(목록)
