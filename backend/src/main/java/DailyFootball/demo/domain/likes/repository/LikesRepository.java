@@ -22,4 +22,17 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
     @Query("update Article a set a.likesCount = a.likesCount + 1 where a.id = :id")
     int updateLikesCount(@Param("id") Long id);
 
+    /**
+     * 좋아요 취소
+     */
+    @Modifying
+    @Query(value = "DELETE FROM likes WHERE article_id = :articleId AND user_id = :userId", nativeQuery = true)
+    void unLikes(@Param("articleId") Long articleId, @Param("userId") Long userId);
+
+    /**
+     * 좋아요 카운트 제거
+     */
+    @Modifying
+    @Query("update Article a set a.likesCount = a.likesCount - 1 where a.id = :id")
+    int updateUnLikesCount(@Param("id") Long id);
 }

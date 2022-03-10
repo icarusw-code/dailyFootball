@@ -26,4 +26,13 @@ public class LikesService {
             throw new CustomApiException("이미 좋아요 한 게시글 입니다.");
         }
     }
+
+    /**
+     * 좋아요 취소
+     */
+    @Transactional
+    public void unlikes(Long articleId, Long loginId) {
+        likesRepository.unLikes(articleId, loginId);
+        likesRepository.updateUnLikesCount(articleId);
+    }
 }

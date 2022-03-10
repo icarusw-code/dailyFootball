@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +24,21 @@ public class LikesController {
     @PostMapping("/article/{articleId}/likes")
     public ResponseEntity likes(Model model, @PathVariable("articleId")Long articleId, @RequestParam Long loginId){
         likesService.likes(articleId, loginId);
+        model.addAttribute("좋아요 성공");
         model.addAttribute("articleId", articleId);
         model.addAttribute("userId", loginId);
         return ResponseEntity.status(HttpStatus.OK).body(model);
     }
 
+    /**
+     * 좋아요 취소
+     */
+    @DeleteMapping("article/{articleId}/likes")
+    public ResponseEntity unlikes(Model model, @PathVariable("articleId")Long articleId, @RequestParam Long loginId){
+        likesService.unlikes(articleId, loginId);
+        model.addAttribute("좋아요 취소 성공");
+        model.addAttribute("articleId", articleId);
+        model.addAttribute("userId", loginId);
+        return ResponseEntity.status(HttpStatus.OK).body(model);
+    }
 }
