@@ -43,7 +43,8 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-
+	// 파일 처리 관련 의존성
+	implementation 'commons-io:commons-io:2.6'
 
 	// jwt 관련 의존성
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'

@@ -14,17 +14,15 @@ public class ArticleImgDto {
 
     private String articleImg;
 
+    private String originFileName;
+
 
 
     @Builder
-    public ArticleImgDto(String articleImg){
+    public ArticleImgDto(String articleImg, String originFileName){
+        this.originFileName = originFileName;
         this.articleImg = articleImg;
     }
 
-    public ArticleImg toUploadImg(String articleImg){
-        return ArticleImg.builder()
-                .articleImg(articleImg)
-                .build();
-    }
 
 }

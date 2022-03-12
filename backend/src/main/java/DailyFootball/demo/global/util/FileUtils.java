@@ -1,6 +1,7 @@
 package DailyFootball.demo.global.util;
 
 import DailyFootball.demo.domain.article.DTO.ArticleImgDto;
+import DailyFootball.demo.domain.article.domain.Article;
 import DailyFootball.demo.domain.article.domain.ArticleImg;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -13,10 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static DailyFootball.demo.domain.article.domain.QArticle.article;
+
 @Component
 public class FileUtils {
 
-    public List<ArticleImg> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception{
+    public List<ArticleImg> parseFileInfo(Article article, List<MultipartFile> multipartFiles) throws Exception{
 
         // 반환할 파일 리스트
         List<ArticleImg> fileList = new ArrayList<>();
@@ -70,10 +73,16 @@ public class FileUtils {
                 String newFileName = System.nanoTime() + originalFileExtension;
 
                 ArticleImgDto articleImgDto = ArticleImgDto.builder()
+                        .originFileName(multipartFile.getOriginalFilename())
                         .articleImg(path + File.separator + newFileName)
                         .build();
 
-                ArticleImg articleImg = new ArticleImg(articleImgDto.getArticleImg());
+                ArticleImg articleImg = new ArticleImg(articleImgDto.getArticleImg(), articleImgDto.getOriginFileName());
+
+                // 게시글 정보 저장
+                if(article.getId() != null){
+                    articleImg.update(article);
+                }
 
                 // 생성 후 리스트에 추가
                 fileList.add(articleImg);
@@ -84,6 +93,7 @@ public class FileUtils {
 
             }
         }
+
         return fileList;
     }
 }

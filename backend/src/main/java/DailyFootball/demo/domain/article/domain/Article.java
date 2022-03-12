@@ -42,7 +42,7 @@ public class Article extends BaseTimeEntity {
     }
 
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<ArticleImg> articleImg = new ArrayList<>();
 
 //    @JsonIgnoreProperties({"article"})
@@ -70,4 +70,9 @@ public class Article extends BaseTimeEntity {
         this.likesCount = likesCount;
     }
 
+    @Builder
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

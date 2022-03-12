@@ -1,6 +1,7 @@
 package DailyFootball.demo.domain.article.service;
 
 import DailyFootball.demo.domain.article.DTO.ArticleFindDto;
+import DailyFootball.demo.domain.article.DTO.ArticleUpdateRequestDto;
 import DailyFootball.demo.domain.article.DTO.ArticleWriteResponseDto;
 import DailyFootball.demo.domain.article.domain.Article;
 import DailyFootball.demo.domain.article.domain.ArticleImg;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -45,7 +47,7 @@ public class ArticleService {
         // user 저장
         article.mapUser(user);
         // 이미지 처리
-        List<ArticleImg> articleImgList = fileUtils.parseFileInfo(files);
+        List<ArticleImg> articleImgList = fileUtils.parseFileInfo(article, files);
         if(!articleImgList.isEmpty()){
             for (ArticleImg articleImg : articleImgList) {
                 article.addArticleImg(articleImgRepository.save(articleImg));
@@ -102,5 +104,26 @@ public class ArticleService {
     @Transactional
     public void deleteById(Long articleId) {
         articleRepository.deleteById(articleId);
+    }
+
+    /**
+     * 글 수정
+     */
+    public Object update(Long articleId, ArticleUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception {
+
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("해달 게시글이 존재하지 않습니다."));
+
+        List<ArticleImg> imgList = fileUtils.parseFileInfo(article, files);
+
+        if(!imgList.isEmpty()){
+            for(ArticleImg image : imgList){
+                articleImgRepository.save(image);
+            }
+        }
+
+        article.update(requestDto.getTitle(), requestDto.getContent());
+
+        return articleId;
+
     }
 }
