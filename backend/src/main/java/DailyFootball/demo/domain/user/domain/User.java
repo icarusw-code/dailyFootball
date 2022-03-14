@@ -2,6 +2,7 @@ package DailyFootball.demo.domain.user.domain;
 
 
 import DailyFootball.demo.domain.article.domain.Article;
+import DailyFootball.demo.domain.articleComment.domain.ArticleComment;
 import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
 import DailyFootball.demo.domain.community.domain.Community;
 import DailyFootball.demo.domain.follow.domain.Follow;
@@ -65,6 +66,9 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    List<ArticleComment> articleComments = new ArrayList<>();
 
 
     // 회원 정보 업데이트

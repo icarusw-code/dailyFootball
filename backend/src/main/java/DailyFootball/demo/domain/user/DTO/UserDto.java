@@ -1,24 +1,24 @@
 package DailyFootball.demo.domain.user.DTO;
 
-import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
+import DailyFootball.demo.domain.user.domain.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
 
     private Long id;
     private String email;
-    private String password;
     private String nickname;
 
+    public static UserDto toDto(User user) {
+        return new UserDto(user.getId(), user.getEmail(), user.getNickname());
+    }
 
-    public UserDto(Long id, String email, String password, String nickname) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-
+    public static UserDto empty(){
+        return new UserDto(null, "", "");
     }
 }

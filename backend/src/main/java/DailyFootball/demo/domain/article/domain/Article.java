@@ -1,9 +1,9 @@
 package DailyFootball.demo.domain.article.domain;
 
+import DailyFootball.demo.domain.articleComment.domain.ArticleComment;
 import DailyFootball.demo.domain.base.doamin.BaseTimeEntity;
 import DailyFootball.demo.domain.likes.domain.Likes;
 import DailyFootball.demo.domain.user.domain.User;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +48,9 @@ public class Article extends BaseTimeEntity {
 //    @JsonIgnoreProperties({"article"})
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<ArticleComment> articleComments = new ArrayList<>();
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
