@@ -1,26 +1,27 @@
 package DailyFootball.demo.domain.user.controller;
 
+import DailyFootball.demo.domain.user.DTO.*;
+import DailyFootball.demo.domain.user.service.UserService;
 import DailyFootball.demo.global.jwt.DTO.TokenDto;
 import DailyFootball.demo.global.jwt.DTO.TokenRequestDto;
-import DailyFootball.demo.domain.user.DTO.*;
-import DailyFootball.demo.domain.user.domain.User;
-import DailyFootball.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserApiController {
@@ -78,6 +79,23 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(model);
     }
 
+    // 회원 정보 조회 -> 이미지
+    @CrossOrigin
+    @GetMapping(
+            value = "/account/image/{userId}",
+            produces =  {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
+    )
+    public ResponseEntity<byte[]> getImage(@PathVariable Long userId) throws IOException{
+        UserImgDto userImgDto = userService.findProfileImgById(userId);
+
+        InputStream imageStream = new FileInputStream(userImgDto.getProfileImg());
+        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+        imageStream.close();
+
+        return new ResponseEntity<>(imageByteArray, HttpStatus.OK);
+    }
+
+
     //로그인
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody UserRequestDto userRequestDto){
@@ -90,15 +108,6 @@ public class UserApiController {
         return ResponseEntity.ok(userService.reissue(tokenRequestDto));
     }
 
-//    /**
-//     * 회원 정보 수정
-//     */
-//    @PutMapping("/account/{userId}")
-//    public ResponseEntity updateProfile(@PathVariable Long userId, @RequestBody UserUpdateDto userUpdateDto){
-//        Map<String, Object> responseMap = new HashMap<>();
-//        responseMap.put("userId", userService.updateProfile(userId, userUpdateDto));
-//        return ResponseEntity.status(HttpStatus.OK).body(responseMap);
-//    }
     /**
      * 회원 정보 수정
      */

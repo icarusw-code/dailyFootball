@@ -1,7 +1,6 @@
 package DailyFootball.demo.domain.article.controller;
 
 import DailyFootball.demo.domain.article.DTO.*;
-import DailyFootball.demo.domain.article.domain.Article;
 import DailyFootball.demo.domain.article.service.ArticleImgService;
 import DailyFootball.demo.domain.article.service.ArticleService;
 import DailyFootball.demo.global.util.PageUtils;
@@ -24,8 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -83,13 +84,20 @@ public class ArticleApiController {
     @GetMapping("/article/{articleId}")
     public ResponseEntity<Map<String, Object>> viewArticle(@PathVariable("articleId") Long articleId) {
         Map<String, Object> responseMap = new HashMap<>();
+        // 조회수 올리기
         articleService.updateReadCount(articleId);
-        Optional<Article> articleInfos = articleService.findArticleInfo(articleId);
-        List<ArticleFindDto> articleFindDtoList = articleInfos.stream()
-                .map(m -> new ArticleFindDto(m.getTitle(), m.getContent(), m.getReadCount(), m.getLikesCount(), m.getUser().getId(), m.getModifiedDate()))
-                .collect(Collectors.toList());
+        // 글 id로 해당 게시글 첨부파일 전체 조회
+        List<ArticleImgResponseDto> articleImgResponseDtoList = articleImgService.findAllByArticle(articleId);
+        // 게시글 첨부파일 id를 담을 List 생성
+        List<Long> imageId = new ArrayList<>();
+        // 각 첨부파일 id 추가
+        for (ArticleImgResponseDto articleImgResponseDto : articleImgResponseDtoList) {
+            imageId.add(articleImgResponseDto.getFileId());
+        }
 
-        responseMap.put("articleInfo", articleFindDtoList);
+        ArticleFindDto articleInfos = articleService.findArticleInfo(articleId, imageId);
+
+        responseMap.put("articleInfo", articleInfos);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
 

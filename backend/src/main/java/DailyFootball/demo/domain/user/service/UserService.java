@@ -1,15 +1,15 @@
 package DailyFootball.demo.domain.user.service;
 
 import DailyFootball.demo.domain.follow.repository.FollowRepository;
+import DailyFootball.demo.domain.user.DTO.*;
+import DailyFootball.demo.domain.user.domain.User;
+import DailyFootball.demo.domain.user.repository.UserRepository;
 import DailyFootball.demo.global.jwt.DTO.TokenDto;
 import DailyFootball.demo.global.jwt.DTO.TokenRequestDto;
 import DailyFootball.demo.global.jwt.TokenProvider;
 import DailyFootball.demo.global.jwt.domain.RefreshToken;
 import DailyFootball.demo.global.jwt.repository.RefreshTokenRepository;
 import DailyFootball.demo.global.jwt.util.SecurityUtil;
-import DailyFootball.demo.domain.user.DTO.*;
-import DailyFootball.demo.domain.user.domain.User;
-import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -216,4 +216,18 @@ public class UserService {
         user.passwordUpdate(userPasswordUpdateDto.toUser(userPasswordUpdateDto, passwordEncoder).getPassword());
     }
 
+    /**
+     * 이미지 조회
+     */
+    @Transactional
+    public UserImgDto findProfileImgById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("파일이 없습니다."));
+
+        UserImgDto userImgDto = UserImgDto.builder()
+                .profileImg(user.getProfileImg())
+                .build();
+
+        return userImgDto;
+
+    }
 }

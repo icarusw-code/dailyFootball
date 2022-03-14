@@ -20,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -86,8 +84,10 @@ public class ArticleService {
      * 글 상세 조회
      */
     @Transactional
-    public Optional<Article> findArticleInfo(Long articleId) {
-        return articleRepository.findById(articleId);
+    public ArticleFindDto findArticleInfo(Long articleId, List<Long> fileId) {
+//        return articleRepository.findById(articleId);
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("해달 게시글이 존재하지 않습니다."));
+        return new ArticleFindDto(article, fileId);
     }
 
     /**
