@@ -12,6 +12,8 @@ import DailyFootball.demo.global.jwt.repository.RefreshTokenRepository;
 import DailyFootball.demo.global.jwt.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
+@Configuration
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -39,6 +42,9 @@ public class UserService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final FollowRepository followRepository;
+
+    @Value("${basic.img}")
+    private String basicImg;
 
     /**
      *  회원 가입
@@ -194,6 +200,7 @@ public class UserService {
             // 닉네임 저장
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. userId = " + userId));
+
             user.update(userUpdateDto.getNickname());
             user.profileUrl(userUpdateResponseDto.toUpdateProfile(filePath).getProfileImg());
 
@@ -236,8 +243,7 @@ public class UserService {
      */
     @Transactional
     public void setBasicImg(UserSignupRequestDto userSignupRequestDto) {
-        String basic = "H:\\DailyFootball_Project\\DailyFootball\\backend\\profileImg\\basic\\basic.jpg";
         User user = userRepository.findUserByEmail(userSignupRequestDto.getEmail());
-        user.profileUrl(basic);
+        user.profileUrl(basicImg);
     }
 }

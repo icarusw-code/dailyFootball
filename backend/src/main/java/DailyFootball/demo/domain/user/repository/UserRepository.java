@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(Long toUserId);
 
     UserImgDto findProfileImgById(Long userId);
+
 }
