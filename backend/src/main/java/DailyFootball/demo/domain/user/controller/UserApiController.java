@@ -34,6 +34,7 @@ public class UserApiController {
     public ResponseEntity signup(@RequestBody UserSignupRequestDto userSignupRequestDto){
         Map<String, Object> responseMap = new HashMap<>();
         Long userId = userService.signup(userSignupRequestDto);
+        userService.setBasicImg(userSignupRequestDto);
         responseMap.put("userId", userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
@@ -82,7 +83,7 @@ public class UserApiController {
     // 회원 정보 조회 -> 이미지
     @CrossOrigin
     @GetMapping(
-            value = "/account/image/{userId}",
+            value = "/image/{userId}",
             produces =  {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
     )
     public ResponseEntity<byte[]> getImage(@PathVariable Long userId) throws IOException{

@@ -5,10 +5,7 @@ import DailyFootball.demo.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -17,6 +14,7 @@ public class UserSignupRequestDto {
     private String email;
     private String nickname;
     private String password;
+
 
     @Builder
     public UserSignupRequestDto(String email, String nickname, String password){

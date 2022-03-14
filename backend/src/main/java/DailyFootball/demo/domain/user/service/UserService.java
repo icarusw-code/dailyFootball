@@ -230,4 +230,14 @@ public class UserService {
         return userImgDto;
 
     }
+
+    /**
+     * 기본 이미지 설정
+     */
+    @Transactional
+    public void setBasicImg(UserSignupRequestDto userSignupRequestDto) {
+        String basic = "H:\\DailyFootball_Project\\DailyFootball\\backend\\profileImg\\basic\\basic.jpg";
+        User user = userRepository.findUserByEmail(userSignupRequestDto.getEmail());
+        user.profileUrl(basic);
+    }
 }
