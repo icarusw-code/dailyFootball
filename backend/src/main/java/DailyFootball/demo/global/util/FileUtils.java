@@ -3,6 +3,7 @@ package DailyFootball.demo.global.util;
 import DailyFootball.demo.domain.article.DTO.ArticleImgDto;
 import DailyFootball.demo.domain.article.domain.Article;
 import DailyFootball.demo.domain.article.domain.ArticleImg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -14,8 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static DailyFootball.demo.domain.article.domain.QArticle.article;
-
+@Slf4j
 @Component
 public class FileUtils {
 
@@ -35,10 +35,12 @@ public class FileUtils {
             // 프로젝트 디렉터리 내의 저장을 위한 절대 경로 설정
             // 경로 구분자 File.separator 사용
             String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+            log.info("absolutePath = {}", absolutePath);
 
             // 파일을 저장할 세부 경로 지정
             String path = "articleImage" + File.separator + current_date;
             File file = new File(path);
+            log.info("path = {}", path);
 
             // 디렉터리가 존재하지 않을 경우
             if(!file.exists()) {

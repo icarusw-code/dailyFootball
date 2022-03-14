@@ -1,12 +1,8 @@
 package DailyFootball.demo.domain.article.DTO;
 
-import DailyFootball.demo.domain.article.domain.Article;
-import DailyFootball.demo.domain.article.domain.ArticleImg;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @NoArgsConstructor

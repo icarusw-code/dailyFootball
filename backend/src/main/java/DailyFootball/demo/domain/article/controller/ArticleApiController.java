@@ -7,10 +7,12 @@ import DailyFootball.demo.domain.article.service.ArticleService;
 import DailyFootball.demo.global.util.PageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,6 +20,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -86,6 +92,32 @@ public class ArticleApiController {
         responseMap.put("articleInfo", articleFindDtoList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMap);
     }
+
+    /**
+     * 글 상세보기 -> 이미지 조회
+     * 1. 클라이언트 -> 서버: 게시글 id를 전달하여 첨부된 이미지 전체 조회 요청
+     * 2. 서버 -> 클라이언트: 이미지 id를 리스트 형태로 반환
+     * 3. 클라이언트 -> 서버: 이미지 id를 전달하여 이미지 개별 조회 요청
+     * 4. 서버 -> 클라이언트: 이미지 반환
+     * 5. 클라이언트: 반환 받은 이미지를 <img> 태그를 이용하여 출력
+     */
+    @CrossOrigin
+    @GetMapping(
+            value = "/articleImage/{articleImageId}",
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
+    )
+    public ResponseEntity<byte[]> getImage(@PathVariable Long articleImageId) throws IOException{
+        ArticleImgDto articleImgDto = articleImgService.findByFileId(articleImageId);
+        String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+        String path = articleImgDto.getArticleImg();
+
+        InputStream imageStream = new FileInputStream(absolutePath + path);
+        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+        imageStream.close();
+
+        return new ResponseEntity<>(imageByteArray, HttpStatus.OK);
+    }
+
 
     /**
      * 글 수정
