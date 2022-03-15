@@ -2,17 +2,18 @@ package DailyFootball.demo.domain.articleComment.service;
 
 import DailyFootball.demo.domain.article.repository.ArticleRepository;
 import DailyFootball.demo.domain.articleComment.DTO.ArticleCommentDto;
-import DailyFootball.demo.domain.articleComment.DTO.ArticleCommentReadConditionDto;
 import DailyFootball.demo.domain.articleComment.DTO.ArticleCommentRequestDto;
 import DailyFootball.demo.domain.articleComment.domain.ArticleComment;
 import DailyFootball.demo.domain.articleComment.repository.ArticleCommentRepository;
 import DailyFootball.demo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -22,9 +23,9 @@ public class ArticleCommentService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
 
-    public List<ArticleCommentDto> readAll(ArticleCommentReadConditionDto cond){
+    public List<ArticleCommentDto> readAll(Long articleId){
         return ArticleCommentDto.toDtoList(
-                articleCommentRepository.findAllWithUserAndParentByArticleIdOrderByParentIdAscNullsFirstArticleCommentIdAsc(cond.getArticleId())
+                articleCommentRepository.findAllWithUserAndParentByArticleIdOrderByParentIdAscNullsFirstArticleCommentIdAsc(articleId)
         );
     }
 

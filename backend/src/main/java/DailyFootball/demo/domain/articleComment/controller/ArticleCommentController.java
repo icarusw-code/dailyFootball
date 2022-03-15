@@ -1,6 +1,5 @@
 package DailyFootball.demo.domain.articleComment.controller;
 
-import DailyFootball.demo.domain.articleComment.DTO.ArticleCommentReadConditionDto;
 import DailyFootball.demo.domain.articleComment.DTO.ArticleCommentRequestDto;
 import DailyFootball.demo.domain.articleComment.service.ArticleCommentService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +17,9 @@ public class ArticleCommentController {
     /**
      * 댓글 조회
      */
-    @GetMapping("/articleComments")
-    public ResponseEntity readAll(Model model, ArticleCommentReadConditionDto cond){
-        model.addAttribute(articleCommentService.readAll(cond));
+    @GetMapping("/articleComments/{articleId}")
+    public ResponseEntity readAll(Model model, @PathVariable Long articleId){
+        model.addAttribute(articleCommentService.readAll(articleId));
         return ResponseEntity.status(HttpStatus.OK).body(model);
     }
 
