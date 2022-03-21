@@ -1,7 +1,6 @@
 package DailyFootball.demo.domain.article.DTO;
 
 import DailyFootball.demo.domain.article.domain.Article;
-import DailyFootball.demo.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -112,13 +112,17 @@ public class ArticleApiController {
     @CrossOrigin
     @GetMapping(
             value = "/articleImage/{articleImageId}",
+            // 출력하고자 하는 데이터 포맷 정의
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
     )
     public ResponseEntity<byte[]> getImage(@PathVariable Long articleImageId) throws IOException{
         ArticleImgDto articleImgDto = articleImgService.findByFileId(articleImageId);
+        // 이미지가 저장된 절대 경로 추출
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
         String path = articleImgDto.getArticleImg();
 
+        // FileInputStream 객체를 생성
+        // 이미지가 저장된 경로를 byte[] 형태의 값으로 encoding
         InputStream imageStream = new FileInputStream(absolutePath + path);
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
         imageStream.close();

@@ -73,7 +73,6 @@ public class Article extends BaseTimeEntity {
         this.likesCount = likesCount;
     }
 
-    @Builder
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
