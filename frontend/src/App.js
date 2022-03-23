@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ReactQueryDevtools } from "react-query/devtools";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Home from "./routes/Home";
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" element={<Home />}></Route>
       </Routes>
       <Footer />
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
     </Router>
   );
 }
