@@ -16,6 +16,10 @@ const HomeLeftMain = styled.div`
   background-color: skyblue;
 `;
 
+const Loading = styled.div`
+  font-size: 30px;
+`;
+
 const FixutreList = styled.div`
   background-color: #252525;
 `;
@@ -51,44 +55,19 @@ function HomeLeft() {
   // // const visitorTeam = useQuery("visitorTeam", getTeamById);
   // // console.log(visitorTeam);
 
-  // const { isLoading: leagueLoading, data: leaguedata } = useQuery(
-  //   ["leagueId", leagueId]
-  //   // leagueId.map((id) => () => getLeagueById(id))
-  //   // leagueId.map((id) => console.log(id))
-  //   // leagueId.map((id) => getLeagueById(id))
-  //   // () => getLeagueById(leagueId)
-  // );
-
-  const leaguedata = useQueries([
-    {
-      queryKey: ["leagueId", leagueId[0]],
-      queryFn: () => getLeagueById(leagueId[0]),
-    },
-    {
-      queryKey: ["leagueId", leagueId[1]],
-      queryFn: () => getLeagueById(leagueId[1]),
-    },
-    {
-      queryKey: ["leagueId", leagueId[2]],
-      queryFn: () => getLeagueById(leagueId[2]),
-    },
-    {
-      queryKey: ["leagueId", leagueId[3]],
-      queryFn: () => getLeagueById(leagueId[3]),
-    },
-    {
-      queryKey: ["leagueId", leagueId[4]],
-      queryFn: () => getLeagueById(leagueId[4]),
-    },
-  ]);
+  const { isLoading: leagueLoading, data: leaguedata } = useQuery(
+    ["leaguIdList", leagueId],
+    () => Promise.all(leagueId.map((id) => getLeagueById(id)))
+  );
 
   const ListAll = () =>
+    leaguedata &&
     leaguedata.map((d) => (
       <FixutreList>
-        <LeagueList key={d.data}>
+        <LeagueList key={d.data.id}>
           <League>
-            <Img src={`${d.data.data.logo_path}`} />
-            {d.data.data.name}
+            <Img src={`${d.data.logo_path}`} />
+            {d.data.name}
           </League>
           <Fixutre>바르셀로나 4: 0 레알마드리드</Fixutre>
         </LeagueList>
@@ -98,14 +77,9 @@ function HomeLeft() {
   return (
     <HomeLeftMain>
       <DateBar>TODAY!</DateBar>
-      <ListAll />
+      {leagueLoading ? <Loading>Loading....</Loading> : <ListAll />}
     </HomeLeftMain>
   );
-  // return (
-  //   <HomeLeftMain>
-  //     <DateBar>TODAY!</DateBar>
-  //   </HomeLeftMain>
-  // );
 }
 
 export default HomeLeft;
