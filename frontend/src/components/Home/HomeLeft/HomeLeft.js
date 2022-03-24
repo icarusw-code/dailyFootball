@@ -5,10 +5,7 @@ import {
   getLeagueById,
   getTeamById,
   leagueId,
-  leagueIds,
 } from "../../../api";
-import { useEffect, useState } from "react";
-import { computeHeadingLevel } from "@testing-library/react";
 
 const HomeLeftMain = styled.div`
   width: 100%;
@@ -20,7 +17,7 @@ const Loading = styled.div`
   font-size: 30px;
 `;
 
-const FixutreList = styled.div`
+const FixutresList = styled.div`
   background-color: #252525;
 `;
 
@@ -48,36 +45,53 @@ const Img = styled.img`
 const DateBar = styled.div``;
 
 function HomeLeft() {
-  // const fixtures = useQuery("fixtures", getFixturesByDate).data;
-  // console.log(fixtures?.data);
-  // const visitorTeamId = fixtures?.data[0].visitorteam_id;
-  // console.log(visitorTeamId);
-  // // const visitorTeam = useQuery("visitorTeam", getTeamById);
-  // // console.log(visitorTeam);
-
   const { isLoading: leagueLoading, data: leaguedata } = useQuery(
     ["leaguIdList", leagueId],
     () => Promise.all(leagueId.map((id) => getLeagueById(id)))
   );
 
+  const { isLoading: fixturesLoading, data: fixturedata } = useQuery(
+    ["fixtures", leagueId],
+    () => Promise.all(leagueId.map((id) => getFixturesByDate(id))),
+    {
+      enabled: !!leagueId,
+      retry: true,
+    }
+  );
+
+  const Fresult = fixturedata?.map((f) => f.data).flat();
+  const Lresult = leaguedata?.map((d) => d.data);
+
   const ListAll = () =>
     leaguedata &&
     leaguedata.map((d) => (
-      <FixutreList>
+      <FixutresList>
         <LeagueList key={d.data.id}>
           <League>
             <Img src={`${d.data.logo_path}`} />
             {d.data.name}
           </League>
-          <Fixutre>바르셀로나 4: 0 레알마드리드</Fixutre>
+          {Fresult.map(
+            (f) =>
+              d.data.id === f.league_id && (
+                <Fixutre>
+                  [{f.localteam_id}] {f.scores.localteam_score}-{" "}
+                  {f.scores.visitorteam_score} [{f.visitorteam_id}]
+                </Fixutre>
+              )
+          )}
         </LeagueList>
-      </FixutreList>
+      </FixutresList>
     ));
 
   return (
     <HomeLeftMain>
       <DateBar>TODAY!</DateBar>
-      {leagueLoading ? <Loading>Loading....</Loading> : <ListAll />}
+      {leagueLoading || fixturesLoading ? (
+        <Loading>Loading....</Loading>
+      ) : (
+        <ListAll />
+      )}
     </HomeLeftMain>
   );
 }

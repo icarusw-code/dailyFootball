@@ -1,10 +1,10 @@
 const API_TOKEN =
   "NMbZwhYiIGRJ2zHZklgNFSRy8rIL0PzHR6ooj2PPNNW7CLs3S0KbJjiqkIOU";
 const BASE_PATH = "https://soccer.sportmonks.com/api/v2.0";
-const Date = "2022-03-20";
+export const Date = "2022-03-20";
+
 // EPL, LaLiga, Bun, Ser, Leg
 export const leagueId = [8, 564, 82, 384, 301];
-// export const leagueId = 8;
 
 export function getFixturesByDate(leagueId) {
   return fetch(
