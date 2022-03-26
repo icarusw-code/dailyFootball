@@ -6,6 +6,11 @@ import {
   getTeamById,
   leagueId,
 } from "../../../api";
+import { getValue } from "@testing-library/user-event/dist/utils";
+import { atom } from "recoil";
+import { useEffect } from "react";
+import { get } from "react-hook-form";
+import usePromise from "react-promise";
 
 const HomeLeftMain = styled.div`
   width: 100%;
@@ -55,12 +60,27 @@ function HomeLeft() {
     () => Promise.all(leagueId.map((id) => getFixturesByDate(id))),
     {
       enabled: !!leagueId,
-      retry: true,
     }
   );
 
   const Fresult = fixturedata?.map((f) => f.data).flat();
   const Lresult = leaguedata?.map((d) => d.data);
+
+  // console.log(getTeamById(42).then((i) => i));
+  // console.log(typeof JSON.stringify(getTeamById(42).then((i) => i.name)));
+  // console.log(getTeamById(42).then((i) => i.name));
+  // getTeamById(42).then((i) => console.log(i.name));
+  // console.log(getTeamById(42));
+
+  const { isLoading: localTeamLoading, data: localTeamData } = useQuery(
+    ["key", Fresult],
+    () => Promise.all(Fresult.map((f) => getTeamById(f.localteam_id))),
+    {
+      enabled: !!Fresult,
+    }
+  );
+
+  console.log(localTeamData.map((ltd) => ltd.name));
 
   const ListAll = () =>
     leaguedata &&
@@ -73,11 +93,16 @@ function HomeLeft() {
           </League>
           {Fresult.map(
             (f) =>
-              d.data.id === f.league_id && (
-                <Fixutre>
-                  [{f.localteam_id}] {f.scores.localteam_score}-{" "}
-                  {f.scores.visitorteam_score} [{f.visitorteam_id}]
-                </Fixutre>
+              d.data.id === f.league_id &&
+              localTeamData.map(
+                (ltd) =>
+                  ltd.id === f.localteam_id && (
+                    <Fixutre>
+                      [{ltd.name}] {f.scores.localteam_score}-{" "}
+                      {f.scores.visitorteam_score} [{f.visitorteam_id}]{" "}
+                      {f.time.status}
+                    </Fixutre>
+                  )
               )
           )}
         </LeagueList>

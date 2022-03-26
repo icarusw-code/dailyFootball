@@ -12,10 +12,16 @@ export function getFixturesByDate(leagueId) {
   ).then((response) => response.json());
 }
 
+// export function getTeamById(teamId) {
+//   return fetch(`${BASE_PATH}/teams/${teamId}?api_token=${API_TOKEN}`).then(
+//     (response) => response.json().then((result) => result.data)
+//   );
+// }
+
 export function getTeamById(teamId) {
-  return fetch(`${BASE_PATH}/teams/${teamId}?api_token=${API_TOKEN}`).then(
-    (response) => response.json()
-  );
+  return fetch(`${BASE_PATH}/teams/${teamId}?api_token=${API_TOKEN}`)
+    .then((response) => response.json())
+    .then((Object) => Object.data);
 }
 
 export function getLeagueById(leagueId) {
