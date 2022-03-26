@@ -6,11 +6,6 @@ import {
   getTeamById,
   leagueId,
 } from "../../../api";
-import { getValue } from "@testing-library/user-event/dist/utils";
-import { atom } from "recoil";
-import { useEffect } from "react";
-import { get } from "react-hook-form";
-import usePromise from "react-promise";
 
 const HomeLeftMain = styled.div`
   width: 100%;
@@ -49,6 +44,14 @@ const Img = styled.img`
 
 const DateBar = styled.div``;
 
+const Scores = styled.div`
+  width: 100px;
+`;
+
+const Test = styled.div`
+  display: flex;
+`;
+
 function HomeLeft() {
   const { isLoading: leagueLoading, data: leaguedata } = useQuery(
     ["leaguIdList", leagueId],
@@ -66,21 +69,21 @@ function HomeLeft() {
   const Fresult = fixturedata?.map((f) => f.data).flat();
   const Lresult = leaguedata?.map((d) => d.data);
 
-  // console.log(getTeamById(42).then((i) => i));
-  // console.log(typeof JSON.stringify(getTeamById(42).then((i) => i.name)));
-  // console.log(getTeamById(42).then((i) => i.name));
-  // getTeamById(42).then((i) => console.log(i.name));
-  // console.log(getTeamById(42));
-
   const { isLoading: localTeamLoading, data: localTeamData } = useQuery(
-    ["key", Fresult],
+    ["loaclTeam", Fresult],
     () => Promise.all(Fresult.map((f) => getTeamById(f.localteam_id))),
     {
       enabled: !!Fresult,
     }
   );
 
-  console.log(localTeamData.map((ltd) => ltd.name));
+  const { isLoading: visitorTeamLoading, data: visitorTeamData } = useQuery(
+    ["visitorTeam", Fresult],
+    () => Promise.all(Fresult.map((f) => getTeamById(f.visitorteam_id))),
+    {
+      enabled: !!Fresult,
+    }
+  );
 
   const ListAll = () =>
     leaguedata &&
@@ -91,20 +94,56 @@ function HomeLeft() {
             <Img src={`${d.data.logo_path}`} />
             {d.data.name}
           </League>
-          {Fresult.map(
-            (f) =>
-              d.data.id === f.league_id &&
-              localTeamData.map(
-                (ltd) =>
-                  ltd.id === f.localteam_id && (
-                    <Fixutre>
-                      [{ltd.name}] {f.scores.localteam_score}-{" "}
-                      {f.scores.visitorteam_score} [{f.visitorteam_id}]{" "}
-                      {f.time.status}
-                    </Fixutre>
+          <Test>
+            <div>
+              {Fresult.map(
+                (f) =>
+                  d.data.id === f.league_id &&
+                  localTeamData.map(
+                    (ltd) =>
+                      ltd.id === f.localteam_id && (
+                        <Fixutre>
+                          {ltd.name}
+                          <Img src={`${ltd.logo_path}`} />
+                        </Fixutre>
+                      )
                   )
-              )
-          )}
+              )}
+            </div>
+            <Scores>
+              {Fresult.map(
+                (f) =>
+                  d.data.id === f.league_id &&
+                  localTeamData.map(
+                    (ltd) =>
+                      ltd.id === f.localteam_id && (
+                        <Fixutre>
+                          <div>
+                            {f.scores.localteam_score}-
+                            {f.scores.visitorteam_score}
+                          </div>
+                          <div>{f.time.status}</div>
+                        </Fixutre>
+                      )
+                  )
+              )}
+            </Scores>
+            <div>
+              {Fresult.map(
+                (f) =>
+                  d.data.id === f.league_id &&
+                  visitorTeamData.map(
+                    (vtd) =>
+                      vtd.id === f.visitorteam_id && (
+                        <Fixutre>
+                          <Img src={`${vtd.logo_path}`} />
+                          {vtd.name}
+                        </Fixutre>
+                      )
+                  )
+              )}
+            </div>
+          </Test>
         </LeagueList>
       </FixutresList>
     ));
@@ -112,7 +151,10 @@ function HomeLeft() {
   return (
     <HomeLeftMain>
       <DateBar>TODAY!</DateBar>
-      {leagueLoading || fixturesLoading ? (
+      {leagueLoading ||
+      fixturesLoading ||
+      localTeamLoading ||
+      visitorTeamLoading ? (
         <Loading>Loading....</Loading>
       ) : (
         <ListAll />
