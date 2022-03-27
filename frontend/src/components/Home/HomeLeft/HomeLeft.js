@@ -122,7 +122,13 @@ function HomeLeft() {
                             {f.scores.localteam_score}-
                             {f.scores.visitorteam_score}
                           </div>
-                          <div>{f.time.status}</div>
+                          <div>
+                            {f.time.status === "NS" ? (
+                              <div>{f.time.starting_at.time.substr(0, 5)}</div>
+                            ) : (
+                              <div>{f.time.status} </div>
+                            )}
+                          </div>
                         </Fixutre>
                       )
                   )
