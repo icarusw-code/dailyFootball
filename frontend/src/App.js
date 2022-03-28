@@ -7,6 +7,7 @@ import Statistics from "./routes/Statistics";
 import Column from "./routes/Column";
 import News from "./routes/News";
 import Signup from "./routes/Signup";
+import League from "./routes/League";
 
 export const baseUrlNoApi = "http://localhost:8080";
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/column" element={<Column />}></Route>
         <Route path="/news" element={<News />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/:leagueName" element={<League />}></Route>
         <Route path="/" element={<Home />}></Route>
       </Routes>
       <Footer />

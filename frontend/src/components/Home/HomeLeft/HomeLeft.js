@@ -10,6 +10,7 @@ import {
   leagueId,
 } from "../../../api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomeLeftMain = styled.div`
   width: 100%;
@@ -31,6 +32,7 @@ const League = styled.ul`
   background-color: #323232;
   padding: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 `;
 
 const Fixutre = styled.li`
@@ -56,16 +58,26 @@ const Test = styled.div`
   display: flex;
 `;
 
+function padTo2Digits(num) {
+  return num.toString().padStart(2, "0");
+}
+
+function formatDate(date) {
+  return [
+    date.getFullYear(),
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+  ].join("-");
+}
+
 function HomeLeft() {
   const [date, setDate] = useState(new Date());
-  const customDate = date.toISOString().substr(0, 10);
+
+  const customDate = formatDate(date);
 
   const { isLoading: leagueLoading, data: leaguedata } = useQuery(
     ["leaguIdList", leagueId],
-    () => Promise.all(leagueId.map((id) => getLeagueById(id))),
-    {
-      refetchOnMount: "always",
-    }
+    () => Promise.all(leagueId.map((id) => getLeagueById(id)))
   );
 
   const {
@@ -105,12 +117,41 @@ function HomeLeft() {
     }
   );
 
+  const navigate = useNavigate();
+  const goToLeague = (
+    leagueName,
+    leagueId,
+    sessionId,
+    leagueLogo,
+    countryId
+  ) => {
+    navigate(`/${leagueName}`, {
+      state: {
+        leagueId: leagueId,
+        sessionId: sessionId,
+        leagueLogo: leagueLogo,
+        countryId: countryId,
+      },
+    });
+  };
+
   const ListAll = () =>
     leaguedata &&
     leaguedata.map((d) => (
       <FixutresList>
         <LeagueList key={d.data.id}>
-          <League>
+          <League
+            key={d.data.id}
+            onClick={() =>
+              goToLeague(
+                d.data.name,
+                d.data.id,
+                d.data.current_season_id,
+                d.data.logo_path,
+                d.data.country_id
+              )
+            }
+          >
             <Img src={`${d.data.logo_path}`} />
             {d.data.name}
           </League>
