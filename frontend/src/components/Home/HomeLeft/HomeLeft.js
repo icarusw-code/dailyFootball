@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { Calendar } from "react-calendar";
+// import formatDate from "dateFormatter.js";
+import "react-calendar/dist/Calendar.css";
 import { useQueries, useQuery } from "react-query";
 import {
   getFixturesByDate,
@@ -6,6 +9,7 @@ import {
   getTeamById,
   leagueId,
 } from "../../../api";
+import { useEffect, useState } from "react";
 
 const HomeLeftMain = styled.div`
   width: 100%;
@@ -53,18 +57,32 @@ const Test = styled.div`
 `;
 
 function HomeLeft() {
+  const [date, setDate] = useState(new Date());
+  const customDate = date.toISOString().substr(0, 10);
+
   const { isLoading: leagueLoading, data: leaguedata } = useQuery(
     ["leaguIdList", leagueId],
-    () => Promise.all(leagueId.map((id) => getLeagueById(id)))
+    () => Promise.all(leagueId.map((id) => getLeagueById(id))),
+    {
+      refetchOnMount: "always",
+    }
   );
 
-  const { isLoading: fixturesLoading, data: fixturedata } = useQuery(
+  const {
+    isLoading: fixturesLoading,
+    data: fixturedata,
+    refetch: dateRefetch,
+  } = useQuery(
     ["fixtures", leagueId],
-    () => Promise.all(leagueId.map((id) => getFixturesByDate(id))),
+    () => Promise.all(leagueId.map((id) => getFixturesByDate(id, customDate))),
     {
       enabled: !!leagueId,
     }
   );
+
+  useEffect(() => {
+    dateRefetch();
+  }, [dateRefetch, date]);
 
   const Fresult = fixturedata?.map((f) => f.data).flat();
   const Lresult = leaguedata?.map((d) => d.data);
@@ -74,6 +92,7 @@ function HomeLeft() {
     () => Promise.all(Fresult.map((f) => getTeamById(f.localteam_id))),
     {
       enabled: !!Fresult,
+      refetchOnMount: "always",
     }
   );
 
@@ -82,6 +101,7 @@ function HomeLeft() {
     () => Promise.all(Fresult.map((f) => getTeamById(f.visitorteam_id))),
     {
       enabled: !!Fresult,
+      refetchOnMount: "always",
     }
   );
 
@@ -157,6 +177,7 @@ function HomeLeft() {
   return (
     <HomeLeftMain>
       <DateBar>TODAY!</DateBar>
+      <Calendar onChange={setDate} value={date} />
       {leagueLoading ||
       fixturesLoading ||
       localTeamLoading ||
