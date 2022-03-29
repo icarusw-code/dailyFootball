@@ -37,3 +37,9 @@ export function getLeagueStatisticsById(sessionId) {
     `${BASE_PATH}/standings/season/${sessionId}?api_token=${API_TOKEN}&${TimeZone}`
   ).then((response) => response.json());
 }
+
+export function getSeasonsById(seasonId) {
+  return fetch(
+    `${BASE_PATH}/seasons/${seasonId}?api_token=${API_TOKEN}&${TimeZone}`
+  ).then((response) => response.json());
+}

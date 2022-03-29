@@ -1,9 +1,17 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { useLocation, useParams } from "react-router-dom";
-import { getCountryById, getLeagueStatisticsById, getTeamById } from "../api";
+import {
+  getCountryById,
+  getLeagueStatisticsById,
+  getSeasonsById,
+  getTeamById,
+} from "../api";
 import { useEffect } from "react";
 
+const Loading = styled.div`
+  font-size: 30px;
+`;
 const LeagueScreen = styled.div`
   width: 100%;
   height: 1200px;
@@ -11,8 +19,13 @@ const LeagueScreen = styled.div`
   background-color: #272a36;
 `;
 
-const Loading = styled.div`
-  font-size: 30px;
+const LeftScreen = styled.div``;
+
+const SessonBar = styled.div`
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 5px;
 `;
 
 const LeagueImg = styled.img`
@@ -30,12 +43,16 @@ const TeamImg = styled.img`
 
 const MainBanner = styled.div`
   display: flex;
-  font-size: 20px;
+  font-size: 30px;
 `;
 
 const LeagueName = styled.div``;
 
 const TeamBar = styled.div`
+  display: flex;
+`;
+
+const InfoBar = styled.div`
   display: flex;
 `;
 
@@ -46,7 +63,7 @@ const TeamName = styled.div`
 function League() {
   const { leagueName } = useParams();
   const {
-    state: { leagueId, sessionId, leagueLogo, countryId },
+    state: { leagueId, seasonId, leagueLogo, countryId },
   } = useLocation();
 
   const { isLoading: countryLoading, data: countrydata } = useQuery(
@@ -55,8 +72,8 @@ function League() {
   );
 
   const { isLoading: leagueStatisticsLoading, data: leagueStatisticsData } =
-    useQuery(["sessionId", sessionId], () =>
-      getLeagueStatisticsById(sessionId).then((response) => response.data)
+    useQuery(["seasonId", seasonId], () =>
+      getLeagueStatisticsById(seasonId).then((response) => response.data)
     );
 
   const { isLoading: TeamLoading, data: teamData } = useQuery(
@@ -72,6 +89,11 @@ function League() {
     }
   );
 
+  const { isLoading: seasonLoading, data: seasonData } = useQuery(
+    ["seasonId!", seasonId],
+    () => getSeasonsById(seasonId).then((response) => response.data)
+  );
+
   const LeagueStatistics = () =>
     leagueStatisticsData &&
     teamData &&
@@ -84,6 +106,16 @@ function League() {
               <TeamName>
                 <TeamImg src={`${t.logo_path}`} />
                 <div>{d.team_name}</div>
+                <div>{d.overall.games_palyed}</div>
+                <div>{d.overall.won}</div>
+                <div>{d.overall.draw}</div>
+                <div>{d.overall.lost}</div>
+                <div>
+                  {d.overall.goals_scored} - {d.overall.goals_against}
+                </div>
+                <div>{d.total.goal_difference}</div>
+                <div>{d.overall.points}</div>
+                <div>{d.recent_form}</div>
               </TeamName>
             </TeamBar>
           )
@@ -103,10 +135,20 @@ function League() {
           </LeagueName>
         </MainBanner>
       )}
-      {leagueStatisticsLoading || TeamLoading ? (
+      {leagueStatisticsLoading || TeamLoading || seasonLoading ? (
         <Loading>Loading...</Loading>
       ) : (
-        <LeagueStatistics />
+        <LeftScreen>
+          <SessonBar>
+            {leagueName}
+            {seasonData.name}
+          </SessonBar>
+          <InfoBar>
+            <div>순위</div>
+            <div>팀</div>
+          </InfoBar>
+          <LeagueStatistics />
+        </LeftScreen>
       )}
     </LeagueScreen>
   );

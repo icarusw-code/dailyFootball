@@ -121,14 +121,14 @@ function HomeLeft() {
   const goToLeague = (
     leagueName,
     leagueId,
-    sessionId,
+    seasonId,
     leagueLogo,
     countryId
   ) => {
     navigate(`/${leagueName}`, {
       state: {
         leagueId: leagueId,
-        sessionId: sessionId,
+        seasonId: seasonId,
         leagueLogo: leagueLogo,
         countryId: countryId,
       },
