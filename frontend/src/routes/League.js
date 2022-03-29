@@ -205,10 +205,19 @@ function League() {
 
   const navigate = useNavigate();
 
-  const goToPlayers = (seasonId) => {
+  const goToPlayers = (
+    leagueName,
+    leagueId,
+    seasonId,
+    leagueLogo,
+    countryId
+  ) => {
     navigate(`/${leagueName}/players`, {
       state: {
+        leagueId: leagueId,
         seasonId: seasonId,
+        leagueLogo: leagueLogo,
+        countryId: countryId,
       },
     });
   };
@@ -257,7 +266,12 @@ function League() {
         >
           전체보기
         </NavbarItem>
-        <NavbarItem key={leagueId} onClick={() => goToPlayers(seasonId)}>
+        <NavbarItem
+          key={leagueId}
+          onClick={() =>
+            goToPlayers(leagueName, leagueId, seasonId, leagueLogo, countryId)
+          }
+        >
           통계
         </NavbarItem>
       </Navbar>

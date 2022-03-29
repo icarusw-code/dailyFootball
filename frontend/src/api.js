@@ -49,3 +49,9 @@ export function getTopPlayersById(seasonId) {
     `${BASE_PATH}/topscorers/season/${seasonId}?api_token=${API_TOKEN}&${TimeZone}`
   ).then((response) => response.json());
 }
+
+export function getPlayerById(playerId) {
+  return fetch(
+    `${BASE_PATH}/players/${playerId}?api_token=${API_TOKEN}&${TimeZone}`
+  ).then((response) => response.json());
+}
