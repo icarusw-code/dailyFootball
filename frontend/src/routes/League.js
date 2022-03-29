@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   getCountryById,
   getLeagueStatisticsById,
   getSeasonsById,
   getTeamById,
 } from "../api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Loading = styled.div`
   font-size: 30px;
@@ -21,7 +21,7 @@ const LeagueScreen = styled.div`
 
 const LeftScreen = styled.div``;
 
-const SessonBar = styled.div`
+const SeasonBar = styled.div`
   font-size: 20px;
   margin-bottom: 10px;
   margin-top: 10px;
@@ -46,6 +46,10 @@ const MainBanner = styled.div`
   font-size: 30px;
 `;
 
+const TableButton = styled.div`
+  margin: 5px 10px;
+`;
+
 const LeagueName = styled.div``;
 
 const TeamBar = styled.div`
@@ -56,8 +60,29 @@ const InfoBar = styled.div`
   display: flex;
 `;
 
-const TeamName = styled.div`
+const TeamInfo = styled.div`
   display: flex;
+`;
+
+const Ranking = styled.div`
+  margin-left: 10px;
+  margin-right: 20px;
+  text-align: center;
+`;
+
+const TeamName = styled.div`
+  margin-right: 10px;
+`;
+
+const Navbar = styled.div`
+  display: flex;
+`;
+
+const NavbarItem = styled.div`
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 20px;
+  cursor: pointer;
 `;
 
 function League() {
@@ -68,12 +93,19 @@ function League() {
 
   const { isLoading: countryLoading, data: countrydata } = useQuery(
     ["countryId", countryId],
-    () => getCountryById(countryId)
+    () => getCountryById(countryId),
+    {
+      enabled: !!countryId,
+    }
   );
 
   const { isLoading: leagueStatisticsLoading, data: leagueStatisticsData } =
-    useQuery(["seasonId", seasonId], () =>
-      getLeagueStatisticsById(seasonId).then((response) => response.data)
+    useQuery(
+      ["seasonId", seasonId],
+      () => getLeagueStatisticsById(seasonId).then((response) => response.data),
+      {
+        enabled: !!seasonId,
+      }
     );
 
   const { isLoading: TeamLoading, data: teamData } = useQuery(
@@ -94,18 +126,29 @@ function League() {
     () => getSeasonsById(seasonId).then((response) => response.data)
   );
 
+  const [index, setIndex] = useState("All");
+
+  const roundCount =
+    leagueStatisticsData &&
+    (leagueStatisticsData[0]?.standings.data.length - 1) * 2;
+
+  const currentRound =
+    leagueStatisticsData && leagueStatisticsData[0]?.round_name;
+
   const LeagueStatistics = () =>
     leagueStatisticsData &&
     teamData &&
     leagueStatisticsData[0].standings.data.map((d) =>
       teamData.map(
         (t) =>
-          d.team_id === t.id && (
+          d.team_id === t.id &&
+          (index === "All" ? (
             <TeamBar>
-              <div>{d.position}</div>
-              <TeamName>
-                <TeamImg src={`${t.logo_path}`} />
-                <div>{d.team_name}</div>
+              <Ranking>{d.position}</Ranking>
+              <TeamInfo>
+                <TeamName>
+                  <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                </TeamName>
                 <div>{d.overall.games_palyed}</div>
                 <div>{d.overall.won}</div>
                 <div>{d.overall.draw}</div>
@@ -116,36 +159,124 @@ function League() {
                 <div>{d.total.goal_difference}</div>
                 <div>{d.overall.points}</div>
                 <div>{d.recent_form}</div>
-              </TeamName>
+              </TeamInfo>
             </TeamBar>
-          )
+          ) : index === "Home" ? (
+            <TeamBar>
+              <Ranking>{d.position}</Ranking>
+              <TeamInfo>
+                <TeamName>
+                  <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                </TeamName>
+                <div>{d.home.games_palyed}</div>
+                <div>{d.home.won}</div>
+                <div>{d.home.draw}</div>
+                <div>{d.home.lost}</div>
+                <div>
+                  {d.home.goals_scored} - {d.home.goals_against}
+                </div>
+                <div>{d.total.goal_difference}</div>
+                <div>{d.home.points}</div>
+                <div>{d.recent_form}</div>
+              </TeamInfo>
+            </TeamBar>
+          ) : (
+            <TeamBar>
+              <Ranking>{d.position}</Ranking>
+              <TeamInfo>
+                <TeamName>
+                  <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                </TeamName>
+                <div>{d.away.games_palyed}</div>
+                <div>{d.away.won}</div>
+                <div>{d.away.draw}</div>
+                <div>{d.away.lost}</div>
+                <div>
+                  {d.away.goals_scored} - {d.away.goals_against}
+                </div>
+                <div>{d.total.goal_difference}</div>
+                <div>{d.away.points}</div>
+                <div>{d.recent_form}</div>
+              </TeamInfo>
+            </TeamBar>
+          ))
       )
     );
 
+  const navigate = useNavigate();
+
+  const goToPlayers = (seasonId) => {
+    navigate(`/${leagueName}/players`, {
+      state: {
+        seasonId: seasonId,
+      },
+    });
+  };
+
+  const goToOverview = (
+    leagueName,
+    leagueId,
+    seasonId,
+    leagueLogo,
+    countryId
+  ) => {
+    navigate(`/${leagueName}`, {
+      state: {
+        leagueId: leagueId,
+        seasonId: seasonId,
+        leagueLogo: leagueLogo,
+        countryId: countryId,
+      },
+    });
+  };
+
   return (
     <LeagueScreen>
-      {countryLoading ? (
+      {countryLoading || leagueStatisticsLoading ? (
         <Loading>Loading...</Loading>
       ) : (
-        <MainBanner>
-          <LeagueImg src={`${leagueLogo}`} />
-          <LeagueName>
-            <div>{countrydata.data.name}</div>
-            <div>{leagueName}</div>
-          </LeagueName>
-        </MainBanner>
+        leagueStatisticsData && (
+          <MainBanner>
+            <LeagueImg src={`${leagueLogo}`} />
+            <LeagueName>
+              <div>{countrydata.data.name}</div>
+              <div>{leagueName}</div>
+              <div>{currentRound} 라운드</div>
+              <div>
+                진행도: {Math.round((currentRound / roundCount) * 100)}%
+              </div>
+            </LeagueName>
+          </MainBanner>
+        )
       )}
+      <Navbar>
+        <NavbarItem
+          onClick={() =>
+            goToOverview(leagueName, leagueId, seasonId, leagueLogo, countryId)
+          }
+        >
+          전체보기
+        </NavbarItem>
+        <NavbarItem key={leagueId} onClick={() => goToPlayers(seasonId)}>
+          통계
+        </NavbarItem>
+      </Navbar>
       {leagueStatisticsLoading || TeamLoading || seasonLoading ? (
         <Loading>Loading...</Loading>
       ) : (
         <LeftScreen>
-          <SessonBar>
+          <TableButton>
+            <button onClick={() => setIndex("All")}>All</button>
+            <button onClick={() => setIndex("Home")}>Home</button>
+            <button onClick={() => setIndex("Away")}>Away</button>
+          </TableButton>
+          <SeasonBar>
             {leagueName}
             {seasonData.name}
-          </SessonBar>
+          </SeasonBar>
           <InfoBar>
-            <div>순위</div>
-            <div>팀</div>
+            <Ranking>순위</Ranking>
+            <TeamName>팀</TeamName>
           </InfoBar>
           <LeagueStatistics />
         </LeftScreen>

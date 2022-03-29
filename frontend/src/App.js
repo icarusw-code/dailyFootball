@@ -8,6 +8,7 @@ import Column from "./routes/Column";
 import News from "./routes/News";
 import Signup from "./routes/Signup";
 import League from "./routes/League";
+import LeaguePlayerStatistics from "./routes/LeaguePlayerStatistics";
 
 export const baseUrlNoApi = "http://localhost:8080";
 
@@ -21,6 +22,10 @@ function App() {
         <Route path="/news" element={<News />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/:leagueName" element={<League />}></Route>
+        <Route
+          path="/:leagueName/players"
+          element={<LeaguePlayerStatistics />}
+        ></Route>
         <Route path="/" element={<Home />}></Route>
       </Routes>
       <Footer />
