@@ -139,7 +139,7 @@ function HomeLeft() {
     leaguedata &&
     leaguedata.map((d) => (
       <FixutresList>
-        <LeagueList key={d.data.id}>
+        <LeagueList>
           <League
             key={d.data.id}
             onClick={() =>

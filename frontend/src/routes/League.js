@@ -135,6 +135,14 @@ function League() {
   const currentRound =
     leagueStatisticsData && leagueStatisticsData[0]?.round_name;
 
+  // console.log(leagueStatisticsData[0].standings.data.map((d) => d.home.points));
+  const homeData =
+    leagueStatisticsData &&
+    leagueStatisticsData[0].standings.data
+      .map((d) => [d.home.points, d.team_id])
+      .sort((a, b) => b[0] - a[0]);
+
+  console.log(homeData);
   const LeagueStatistics = () =>
     leagueStatisticsData &&
     teamData &&

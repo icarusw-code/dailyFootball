@@ -5,8 +5,11 @@ import {
   getCountryById,
   getLeagueStatisticsById,
   getPlayerById,
+  getTeamById,
   getTopPlayersById,
 } from "../api";
+import Yellow_card from "../img/Yellow_card.png";
+import Red_card from "../img/Red_card.png";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -48,7 +51,8 @@ const Players = styled.div`
 
 const Ranking = styled.div`
   margin-left: 10px;
-  width: 450px;
+  margin-right: 30px;
+  width: 600px;
 `;
 
 const Title = styled.div`
@@ -62,8 +66,32 @@ const PlayerImg = styled.img`
   margin-right: 15px;
 `;
 
-const GoalRankingInfo = styled.div`
+const TeamImg = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const CardImg = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  margin-left: 20px;
+`;
+
+const RankingInfo = styled.div`
   display: flex;
+`;
+
+const StatisticsNavbar = styled.div`
+  display: flex;
+`;
+
+const StatisticsNavbarItem = styled.div`
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 20px;
+  cursor: pointer;
 `;
 
 function LeaguePlayerStatistics() {
@@ -91,36 +119,72 @@ function LeaguePlayerStatistics() {
 
   const { isLoading: playerRankLoading, data: playerRankData } = useQuery(
     ["players", seasonId],
-    () => getTopPlayersById(seasonId),
+    () => getTopPlayersById(seasonId).then((respnse) => respnse.data),
     {
       enabled: !!seasonId,
+      refetchOnMount: "always",
+    }
+  );
+
+  const allTeamId =
+    leagueStatisticsData &&
+    leagueStatisticsData[0].standings.data.map((d) => d.team_id);
+
+  const { isLoading: allTeamLoading, data: allTeamData } = useQuery(
+    ["allTeamId", allTeamId],
+    () => Promise.all(allTeamId.map((d) => getTeamById(d))),
+    {
+      enabled: !!allTeamId,
+      refetchOnMount: "always",
     }
   );
 
   const roundCount =
     leagueStatisticsData &&
-    (leagueStatisticsData[0]?.standings.data.length - 1) * 2;
+    (leagueStatisticsData[0].standings.data.length - 1) * 2;
 
   const currentRound =
-    leagueStatisticsData && leagueStatisticsData[0]?.round_name;
+    leagueStatisticsData && leagueStatisticsData[0].round_name;
 
   const goalPlayers =
-    playerRankData && playerRankData.data.goalscorers.data?.slice(0, 20);
+    playerRankData && playerRankData.goalscorers.data.slice(0, 20);
 
   const assistPlayers =
-    playerRankData && playerRankData.data.assistscorers.data?.slice(0, 20);
+    playerRankData && playerRankData.assistscorers.data.slice(0, 20);
 
   const cardPlayers =
-    playerRankData && playerRankData.data.cardscorers.data?.slice(0, 20);
+    playerRankData && playerRankData.cardscorers.data.slice(0, 20);
 
   const { isLoading: playerGoalLoading, data: playerGoalData } = useQuery(
-    ["players", goalPlayers],
+    ["goalPlayers", goalPlayers],
     () =>
       Promise.all(goalPlayers.map((d) => getPlayerById(d.player_id))).then(
-        (response) => response.map((response) => response.data)
+        (response) => response.map((d) => d.data)
       ),
     {
-      enabled: !!playerRankData,
+      enabled: !!goalPlayers,
+    }
+  );
+
+  const { isLoading: playerAssistLoading, data: playerAssistData } = useQuery(
+    ["assistPlayers", assistPlayers],
+    () =>
+      Promise.all(assistPlayers.map((d) => getPlayerById(d.player_id))).then(
+        (response) => response.map((d) => d.data)
+      ),
+    {
+      enabled: !!assistPlayers,
+    }
+  );
+
+  const { isLoading: playercardLoading, data: playerCardData } = useQuery(
+    ["cardPlayers", cardPlayers],
+    () =>
+      Promise.all(cardPlayers.map((d) => getPlayerById(d.player_id))).then(
+        (response) => response.map((d) => d.data)
+      ),
+    {
+      enabled: !!cardPlayers,
     }
   );
 
@@ -160,28 +224,109 @@ function LeaguePlayerStatistics() {
     });
   };
 
-  console.log(leagueStatisticsData[0].standings.data);
+  const goToTeams = (
+    leagueName,
+    leagueId,
+    seasonId,
+    leagueLogo,
+    countryId,
+    allTeamId
+  ) => {
+    navigate(`/${leagueName}/teams`, {
+      state: {
+        leagueId: leagueId,
+        seasonId: seasonId,
+        leagueLogo: leagueLogo,
+        countryId: countryId,
+        allTeamId: allTeamId,
+      },
+    });
+  };
+
   const GoalRanking = () =>
     playerGoalData &&
+    goalPlayers &&
+    allTeamData &&
     playerGoalData.map((d) =>
-      goalPlayers.map(
-        (g) =>
-          d.player_id === g.player_id &&
-          leagueStatisticsData[0].standings.data.map(
-            (t) =>
-              t.team_id === g.team_id && (
-                <GoalRankingInfo>
-                  <PlayerImg src={`${d.image_path}`} />
+      goalPlayers.map((g) =>
+        allTeamData.map(
+          (t) =>
+            t.id === g.team_id &&
+            d.player_id === g.player_id && (
+              <RankingInfo>
+                <PlayerImg src={`${d.image_path}`} />
+                <div>
+                  <div>{d.display_name}</div>
                   <div>
-                    <div>{d.display_name}</div>
-                    <div>{t.team_name}</div>
+                    <TeamImg src={`${t.logo_path}`} />
+                    {t.name}
+                  </div>
+                </div>
+                <div>
+                  {g.goals}({g.penalty_goals})
+                </div>
+              </RankingInfo>
+            )
+        )
+      )
+    );
+
+  const AssistRanking = () =>
+    playerAssistData &&
+    assistPlayers &&
+    allTeamData &&
+    playerAssistData.map((d) =>
+      assistPlayers.map((g) =>
+        allTeamData.map(
+          (t) =>
+            t.id === g.team_id &&
+            d.player_id === g.player_id && (
+              <RankingInfo>
+                <PlayerImg src={`${d.image_path}`} />
+                <div>
+                  <div>{d.display_name}</div>
+                  <div>
+                    <TeamImg src={`${t.logo_path}`} />
+                    {t.name}
+                  </div>
+                </div>
+                <div>{g.assists}</div>
+              </RankingInfo>
+            )
+        )
+      )
+    );
+
+  const CardRanking = () =>
+    playerCardData &&
+    cardPlayers &&
+    allTeamData &&
+    playerCardData.map((d) =>
+      cardPlayers.map((g) =>
+        allTeamData.map(
+          (t) =>
+            t.id === g.team_id &&
+            d.player_id === g.player_id && (
+              <RankingInfo>
+                <PlayerImg src={`${d.image_path}`} />
+                <div>
+                  <div>{d.display_name}</div>
+                  <div>
+                    <TeamImg src={`${t.logo_path}`} />
+                    {t.name}
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <CardImg src={Yellow_card} /> {g.yellowcards}
                   </div>
                   <div>
-                    {g.goals}({g.penalty_goals})
+                    <CardImg src={Red_card} /> {g.redcards}
                   </div>
-                </GoalRankingInfo>
-              )
-          )
+                </div>
+              </RankingInfo>
+            )
+        )
       )
     );
 
@@ -221,18 +366,53 @@ function LeaguePlayerStatistics() {
           통계
         </NavbarItem>
       </Navbar>
-      <Players>
-        <Ranking>
-          <Title>득점왕</Title>
-          <GoalRanking />
-        </Ranking>
-        <Ranking>
-          <Title>도움왕</Title>
-        </Ranking>
-        <Ranking>
-          <Title>경고</Title>
-        </Ranking>
-      </Players>
+      <StatisticsNavbar>
+        <StatisticsNavbarItem
+          key={leagueId}
+          onClick={() =>
+            goToPlayers(leagueName, leagueId, seasonId, leagueLogo, countryId)
+          }
+        >
+          선수
+        </StatisticsNavbarItem>
+        <StatisticsNavbarItem
+          key={leagueId}
+          onClick={() =>
+            goToTeams(
+              leagueName,
+              leagueId,
+              seasonId,
+              leagueLogo,
+              countryId,
+              allTeamId
+            )
+          }
+        >
+          팀
+        </StatisticsNavbarItem>
+      </StatisticsNavbar>
+      {playerGoalLoading ||
+      playerAssistLoading ||
+      playercardLoading ||
+      playerRankLoading ||
+      allTeamLoading ? (
+        <Loading>Loading...</Loading>
+      ) : (
+        <Players>
+          <Ranking>
+            <Title>득점순위</Title>
+            <GoalRanking />
+          </Ranking>
+          <Ranking>
+            <Title>도움순위</Title>
+            <AssistRanking />
+          </Ranking>
+          <Ranking>
+            <Title>경고</Title>
+            <CardRanking />
+          </Ranking>
+        </Players>
+      )}
     </LeagueScreen>
   );
 }

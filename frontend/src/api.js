@@ -55,3 +55,9 @@ export function getPlayerById(playerId) {
     `${BASE_PATH}/players/${playerId}?api_token=${API_TOKEN}&${TimeZone}`
   ).then((response) => response.json());
 }
+
+export function getTeamStatById(teamId, seasonId) {
+  return fetch(
+    `${BASE_PATH}/teams/${teamId}?api_token=${API_TOKEN}&include=stats&seasons=${seasonId}&${TimeZone}`
+  ).then((response) => response.json());
+}
