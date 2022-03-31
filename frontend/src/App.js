@@ -10,6 +10,7 @@ import Signup from "./routes/Signup";
 import League from "./routes/League";
 import LeaguePlayerStatistics from "./routes/LeaguePlayerStatistics";
 import LeagueTeamStatistics from "./routes/LeagueTeamStatisitc";
+import TeamInfo from "./routes/TeamInfo";
 
 export const baseUrlNoApi = "http://localhost:8080";
 
@@ -31,6 +32,7 @@ function App() {
           path="/:leagueName/teams"
           element={<LeagueTeamStatistics />}
         ></Route>
+        <Route path="/teams/:teamName" element={<TeamInfo />}></Route>
         <Route path="/" element={<Home />}></Route>
       </Routes>
       <Footer />

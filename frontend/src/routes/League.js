@@ -8,6 +8,7 @@ import {
   getTeamById,
 } from "../api";
 import { useEffect, useState } from "react";
+import { Button, ButtonGroup } from "react-bootstrap";
 
 const Loading = styled.div`
   font-size: 30px;
@@ -46,10 +47,6 @@ const MainBanner = styled.div`
   font-size: 30px;
 `;
 
-const TableButton = styled.div`
-  margin: 5px 10px;
-`;
-
 const LeagueName = styled.div``;
 
 const TeamBar = styled.div`
@@ -72,6 +69,7 @@ const Ranking = styled.div`
 
 const TeamName = styled.div`
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 const Navbar = styled.div`
@@ -147,112 +145,7 @@ function League() {
       .map((d) => [d.away.points, d.team_id])
       .sort((a, b) => b[0] - a[0]);
 
-  const LeagueStatistics = () =>
-    leagueStatisticsData && teamData && index === "All"
-      ? leagueStatisticsData[0].standings.data.map((d) =>
-          teamData.map(
-            (t) =>
-              d.team_id === t.id && (
-                <TeamBar>
-                  <Ranking>{d.position}</Ranking>
-                  <TeamInfo>
-                    <TeamName>
-                      <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-                    </TeamName>
-                    <div>{d.overall.games_palyed}</div>
-                    <div>{d.overall.won}</div>
-                    <div>{d.overall.draw}</div>
-                    <div>{d.overall.lost}</div>
-                    <div>
-                      {d.overall.goals_scored} - {d.overall.goals_against}
-                    </div>
-                    <div>{d.total.goal_difference}</div>
-                    <div>{d.overall.points}</div>
-                    <div>{d.recent_form}</div>
-                  </TeamInfo>
-                </TeamBar>
-              )
-          )
-        )
-      : index === "Home"
-      ? homeData.map((home, idx) =>
-          leagueStatisticsData[0].standings.data.map((d) =>
-            teamData.map(
-              (t) =>
-                d.team_id === home[1] &&
-                d.team_id === t.id && (
-                  <TeamBar>
-                    <Ranking>{idx + 1}</Ranking>
-                    <TeamInfo>
-                      <TeamName>
-                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-                      </TeamName>
-                      <div>{d.home.games_palyed}</div>
-                      <div>{d.home.won}</div>
-                      <div>{d.home.draw}</div>
-                      <div>{d.home.lost}</div>
-                      <div>
-                        {d.home.goals_scored} - {d.home.goals_against}
-                      </div>
-                      <div>{d.total.goal_difference}</div>
-                      <div>{d.home.points}</div>
-                      <div>{d.recent_form}</div>
-                    </TeamInfo>
-                  </TeamBar>
-                )
-            )
-          )
-        )
-      : awayData.map((away, idx) =>
-          leagueStatisticsData[0].standings.data.map((d) =>
-            teamData.map(
-              (t) =>
-                d.team_id === away[1] &&
-                d.team_id === t.id && (
-                  <TeamBar>
-                    <Ranking>{idx + 1}</Ranking>
-                    <TeamInfo>
-                      <TeamName>
-                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-                      </TeamName>
-                      <div>{d.away.games_palyed}</div>
-                      <div>{d.away.won}</div>
-                      <div>{d.away.draw}</div>
-                      <div>{d.away.lost}</div>
-                      <div>
-                        {d.away.goals_scored} - {d.away.goals_against}
-                      </div>
-                      <div>{d.total.goal_difference}</div>
-                      <div>{d.away.points}</div>
-                      <div>{d.recent_form}</div>
-                    </TeamInfo>
-                  </TeamBar>
-                )
-            )
-          )
-        );
-
-  //       <TeamBar>
-  //         <Ranking>{d.position}</Ranking>
-  //         <TeamInfo>
-  //           <TeamName>
-  //             <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-  //           </TeamName>
-  //           <div>{d.away.games_palyed}</div>
-  //           <div>{d.away.won}</div>
-  //           <div>{d.away.draw}</div>
-  //           <div>{d.away.lost}</div>
-  //           <div>
-  //             {d.away.goals_scored} - {d.away.goals_against}
-  //           </div>
-  //           <div>{d.total.goal_difference}</div>
-  //           <div>{d.away.points}</div>
-  //           <div>{d.recent_form}</div>
-  //         </TeamInfo>
-  //       </TeamBar>
-  //     ))
-  // )
-
+  //===============이동===============//
   const navigate = useNavigate();
 
   const goToPlayers = (
@@ -289,6 +182,150 @@ function League() {
     });
   };
 
+  const goToTeam = (
+    leagueName,
+    leagueId,
+    seasonId,
+    leagueLogo,
+    countryId,
+    teamId,
+    teamName
+  ) => {
+    navigate(`/teams/${teamName}`, {
+      state: {
+        leagueName: leagueName,
+        leagueId: leagueId,
+        seasonId: seasonId,
+        leagueLogo: leagueLogo,
+        countryId: countryId,
+        teamId: teamId,
+        teamName: teamName,
+      },
+    });
+  };
+
+  const LeagueStatistics = () =>
+    leagueStatisticsData && teamData && index === "All"
+      ? leagueStatisticsData[0].standings.data.map((d) =>
+          teamData.map(
+            (t) =>
+              d.team_id === t.id && (
+                <TeamBar>
+                  <Ranking>{d.position}</Ranking>
+                  <TeamInfo>
+                    <TeamName
+                      onClick={() => {
+                        goToTeam(
+                          leagueName,
+                          leagueId,
+                          seasonId,
+                          leagueLogo,
+                          countryId,
+                          d.team_id,
+                          d.team_name
+                        );
+                      }}
+                    >
+                      <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                    </TeamName>
+                    <div>{d.overall.games_palyed}</div>
+                    <div>{d.overall.won}</div>
+                    <div>{d.overall.draw}</div>
+                    <div>{d.overall.lost}</div>
+                    <div>
+                      {d.overall.goals_scored} - {d.overall.goals_against}
+                    </div>
+                    <div>{d.total.goal_difference}</div>
+                    <div>{d.overall.points}</div>
+                    <div>{d.recent_form}</div>
+                  </TeamInfo>
+                </TeamBar>
+              )
+          )
+        )
+      : index === "Home"
+      ? homeData.map((home, idx) =>
+          leagueStatisticsData[0].standings.data.map((d) =>
+            teamData.map(
+              (t) =>
+                d.team_id === home[1] &&
+                d.team_id === t.id && (
+                  <TeamBar>
+                    <Ranking>{idx + 1}</Ranking>
+                    <TeamInfo>
+                      <TeamName
+                        onClick={() => {
+                          goToTeam(
+                            leagueName,
+                            leagueId,
+                            seasonId,
+                            leagueLogo,
+                            countryId,
+                            d.team_id,
+                            d.team_name
+                          );
+                        }}
+                      >
+                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                      </TeamName>
+                      <div>{d.home.games_palyed}</div>
+                      <div>{d.home.won}</div>
+                      <div>{d.home.draw}</div>
+                      <div>{d.home.lost}</div>
+                      <div>
+                        {d.home.goals_scored} - {d.home.goals_against}
+                      </div>
+                      <div>{d.total.goal_difference}</div>
+                      <div>{d.home.points}</div>
+                      <div>{d.recent_form}</div>
+                    </TeamInfo>
+                  </TeamBar>
+                )
+            )
+          )
+        )
+      : awayData.map((away, idx) =>
+          leagueStatisticsData[0].standings.data.map((d) =>
+            teamData.map(
+              (t) =>
+                d.team_id === away[1] &&
+                d.team_id === t.id && (
+                  <TeamBar>
+                    <Ranking>{idx + 1}</Ranking>
+                    <TeamInfo>
+                      <TeamName
+                        onClick={() => {
+                          goToTeam(
+                            leagueName,
+                            leagueId,
+                            seasonId,
+                            leagueLogo,
+                            countryId,
+                            d.team_id,
+                            d.team_name
+                          );
+                        }}
+                      >
+                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                      </TeamName>
+                      <div>{d.away.games_palyed}</div>
+                      <div>{d.away.won}</div>
+                      <div>{d.away.draw}</div>
+                      <div>{d.away.lost}</div>
+                      <div>
+                        {d.away.goals_scored} - {d.away.goals_against}
+                      </div>
+                      <div>{d.total.goal_difference}</div>
+                      <div>{d.away.points}</div>
+                      <div>{d.recent_form}</div>
+                    </TeamInfo>
+                  </TeamBar>
+                )
+            )
+          )
+        );
+
+  //===============return===============//
   return (
     <LeagueScreen>
       {countryLoading || leagueStatisticsLoading ? (
@@ -329,11 +366,17 @@ function League() {
         <Loading>Loading...</Loading>
       ) : (
         <LeftScreen>
-          <TableButton>
-            <button onClick={() => setIndex("All")}>All</button>
-            <button onClick={() => setIndex("Home")}>Home</button>
-            <button onClick={() => setIndex("Away")}>Away</button>
-          </TableButton>
+          <ButtonGroup aria-label="Basic example">
+            <Button variant="secondary" onClick={() => setIndex("All")}>
+              All
+            </Button>
+            <Button variant="secondary" onClick={() => setIndex("Home")}>
+              Home
+            </Button>
+            <Button variant="secondary" onClick={() => setIndex("Away")}>
+              Away
+            </Button>
+          </ButtonGroup>
           <SeasonBar>
             {leagueName}
             {seasonData.name}
