@@ -135,20 +135,21 @@ function League() {
   const currentRound =
     leagueStatisticsData && leagueStatisticsData[0]?.round_name;
 
-  console.log(leagueStatisticsData[0].standings.data);
   const homeData =
     leagueStatisticsData &&
     leagueStatisticsData[0].standings.data
-      .map((d) => [d.home.points, d.team_id, d.logo_path])
+      .map((d) => [d.home.points, d.team_id])
       .sort((a, b) => b[0] - a[0]);
 
-  // console.log(homeData);
-  const LeagueStatistics = () =>
+  const awayData =
     leagueStatisticsData &&
-    teamData &&
-    leagueStatisticsData[0].standings.data.map(
-      (d, idx) =>
-        index === "All" ? (
+    leagueStatisticsData[0].standings.data
+      .map((d) => [d.away.points, d.team_id])
+      .sort((a, b) => b[0] - a[0]);
+
+  const LeagueStatistics = () =>
+    leagueStatisticsData && teamData && index === "All"
+      ? leagueStatisticsData[0].standings.data.map((d) =>
           teamData.map(
             (t) =>
               d.team_id === t.id && (
@@ -172,55 +173,85 @@ function League() {
                 </TeamBar>
               )
           )
-        ) : index === "Home" ? (
-          homeData.map(
-            (home) =>
-              home[1] === d.team_id && (
-                <TeamBar>
-                  <Ranking>{idx + 1}</Ranking>
-                  <TeamInfo>
-                    <TeamName>
-                      {/* <TeamImg src={`${t.logo_path}`} /> {d.team_name} */}
-                    </TeamName>
-                    <div>{d.home.games_palyed}</div>
-                    <div>{d.home.won}</div>
-                    <div>{d.home.draw}</div>
-                    <div>{d.home.lost}</div>
-                    <div>
-                      {d.home.goals_scored} - {d.home.goals_against}
-                    </div>
-                    <div>{d.total.goal_difference}</div>
-                    <div>{d.home.points}</div>
-                    <div>{d.recent_form}</div>
-                  </TeamInfo>
-                </TeamBar>
-              )
-          )
-        ) : (
-          <span>hello</span>
         )
+      : index === "Home"
+      ? homeData.map((home, idx) =>
+          leagueStatisticsData[0].standings.data.map((d) =>
+            teamData.map(
+              (t) =>
+                d.team_id === home[1] &&
+                d.team_id === t.id && (
+                  <TeamBar>
+                    <Ranking>{idx + 1}</Ranking>
+                    <TeamInfo>
+                      <TeamName>
+                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                      </TeamName>
+                      <div>{d.home.games_palyed}</div>
+                      <div>{d.home.won}</div>
+                      <div>{d.home.draw}</div>
+                      <div>{d.home.lost}</div>
+                      <div>
+                        {d.home.goals_scored} - {d.home.goals_against}
+                      </div>
+                      <div>{d.total.goal_difference}</div>
+                      <div>{d.home.points}</div>
+                      <div>{d.recent_form}</div>
+                    </TeamInfo>
+                  </TeamBar>
+                )
+            )
+          )
+        )
+      : awayData.map((away, idx) =>
+          leagueStatisticsData[0].standings.data.map((d) =>
+            teamData.map(
+              (t) =>
+                d.team_id === away[1] &&
+                d.team_id === t.id && (
+                  <TeamBar>
+                    <Ranking>{idx + 1}</Ranking>
+                    <TeamInfo>
+                      <TeamName>
+                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                      </TeamName>
+                      <div>{d.away.games_palyed}</div>
+                      <div>{d.away.won}</div>
+                      <div>{d.away.draw}</div>
+                      <div>{d.away.lost}</div>
+                      <div>
+                        {d.away.goals_scored} - {d.away.goals_against}
+                      </div>
+                      <div>{d.total.goal_difference}</div>
+                      <div>{d.away.points}</div>
+                      <div>{d.recent_form}</div>
+                    </TeamInfo>
+                  </TeamBar>
+                )
+            )
+          )
+        );
 
-      //       <TeamBar>
-      //         <Ranking>{d.position}</Ranking>
-      //         <TeamInfo>
-      //           <TeamName>
-      //             <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-      //           </TeamName>
-      //           <div>{d.away.games_palyed}</div>
-      //           <div>{d.away.won}</div>
-      //           <div>{d.away.draw}</div>
-      //           <div>{d.away.lost}</div>
-      //           <div>
-      //             {d.away.goals_scored} - {d.away.goals_against}
-      //           </div>
-      //           <div>{d.total.goal_difference}</div>
-      //           <div>{d.away.points}</div>
-      //           <div>{d.recent_form}</div>
-      //         </TeamInfo>
-      //       </TeamBar>
-      //     ))
-      // )
-    );
+  //       <TeamBar>
+  //         <Ranking>{d.position}</Ranking>
+  //         <TeamInfo>
+  //           <TeamName>
+  //             <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+  //           </TeamName>
+  //           <div>{d.away.games_palyed}</div>
+  //           <div>{d.away.won}</div>
+  //           <div>{d.away.draw}</div>
+  //           <div>{d.away.lost}</div>
+  //           <div>
+  //             {d.away.goals_scored} - {d.away.goals_against}
+  //           </div>
+  //           <div>{d.total.goal_difference}</div>
+  //           <div>{d.away.points}</div>
+  //           <div>{d.recent_form}</div>
+  //         </TeamInfo>
+  //       </TeamBar>
+  //     ))
+  // )
 
   const navigate = useNavigate();
 
