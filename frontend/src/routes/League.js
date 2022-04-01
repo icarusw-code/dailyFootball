@@ -8,11 +8,8 @@ import {
   getTeamById,
 } from "../api";
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup } from "react-bootstrap";
+import { Button, ButtonGroup, ProgressBar, Spinner } from "react-bootstrap";
 
-const Loading = styled.div`
-  font-size: 30px;
-`;
 const LeagueScreen = styled.div`
   width: 100%;
   height: 1200px;
@@ -86,7 +83,7 @@ const NavbarItem = styled.div`
 function League() {
   const { leagueName } = useParams();
   const {
-    state: { leagueId, seasonId, leagueLogo, countryId },
+    state: { leagueId, seasonId, leagueLogo, countryId, allTeamId },
   } = useLocation();
 
   const { isLoading: countryLoading, data: countrydata } = useQuery(
@@ -329,7 +326,7 @@ function League() {
   return (
     <LeagueScreen>
       {countryLoading || leagueStatisticsLoading ? (
-        <Loading>Loading...</Loading>
+        <Spinner animation="border" variant="secondary" />
       ) : (
         leagueStatisticsData && (
           <MainBanner>
@@ -338,9 +335,12 @@ function League() {
               <div>{countrydata.data.name}</div>
               <div>{leagueName}</div>
               <div>{currentRound} 라운드</div>
-              <div>
-                진행도: {Math.round((currentRound / roundCount) * 100)}%
-              </div>
+              <ProgressBar
+                striped
+                variant="warning"
+                now={Math.round((currentRound / roundCount) * 100)}
+                label={`${Math.round((currentRound / roundCount) * 100)}%`}
+              />
             </LeagueName>
           </MainBanner>
         )
@@ -363,7 +363,7 @@ function League() {
         </NavbarItem>
       </Navbar>
       {leagueStatisticsLoading || TeamLoading || seasonLoading ? (
-        <Loading>Loading...</Loading>
+        <Spinner animation="border" variant="secondary" />
       ) : (
         <LeftScreen>
           <ButtonGroup aria-label="Basic example">

@@ -11,15 +11,12 @@ import {
 } from "../../../api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 const HomeLeftMain = styled.div`
   width: 100%;
   height: 600px;
   background-color: skyblue;
-`;
-
-const Loading = styled.div`
-  font-size: 30px;
 `;
 
 const FixutresList = styled.div`
@@ -223,7 +220,7 @@ function HomeLeft() {
       fixturesLoading ||
       localTeamLoading ||
       visitorTeamLoading ? (
-        <Loading>Loading....</Loading>
+        <Spinner animation="border" variant="secondary" />
       ) : (
         <ListAll />
       )}

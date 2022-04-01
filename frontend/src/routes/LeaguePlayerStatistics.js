@@ -10,15 +10,13 @@ import {
 } from "../api";
 import Yellow_card from "../img/Yellow_card.png";
 import Red_card from "../img/Red_card.png";
+import { ProgressBar, Spinner } from "react-bootstrap";
 
 const LeagueScreen = styled.div`
   width: 100%;
   height: 1200px;
   color: white;
   background-color: #272a36;
-`;
-const Loading = styled.div`
-  font-size: 30px;
 `;
 
 const MainBanner = styled.div`
@@ -333,7 +331,7 @@ function LeaguePlayerStatistics() {
   return (
     <LeagueScreen>
       {countryLoading || leagueStatisticsLoading ? (
-        <Loading>Loading...</Loading>
+        <Spinner animation="border" variant="secondary" />
       ) : (
         leagueStatisticsData && (
           <MainBanner>
@@ -342,9 +340,12 @@ function LeaguePlayerStatistics() {
               <div>{countrydata.data.name}</div>
               <div>{leagueName}</div>
               <div>{currentRound} 라운드</div>
-              <div>
-                진행도: {Math.round((currentRound / roundCount) * 100)}%
-              </div>
+              <ProgressBar
+                striped
+                variant="warning"
+                now={Math.round((currentRound / roundCount) * 100)}
+                label={`${Math.round((currentRound / roundCount) * 100)}%`}
+              />
             </LeagueName>
           </MainBanner>
         )
@@ -396,7 +397,7 @@ function LeaguePlayerStatistics() {
       playercardLoading ||
       playerRankLoading ||
       allTeamLoading ? (
-        <Loading>Loading...</Loading>
+        <Spinner animation="border" variant="secondary" />
       ) : (
         <Players>
           <Ranking>

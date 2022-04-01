@@ -6,7 +6,7 @@ import {
   getLeagueStatisticsById,
   getTeamStatById,
 } from "../api";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, ProgressBar, Row } from "react-bootstrap";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -440,7 +440,8 @@ function LeagueTeamStatistics() {
     leagueId,
     seasonId,
     leagueLogo,
-    countryId
+    countryId,
+    allTeamId
   ) => {
     navigate(`/${leagueName}`, {
       state: {
@@ -448,6 +449,7 @@ function LeagueTeamStatistics() {
         seasonId: seasonId,
         leagueLogo: leagueLogo,
         countryId: countryId,
+        allTeamId: allTeamId,
       },
     });
   };
@@ -483,9 +485,12 @@ function LeagueTeamStatistics() {
               <div>{countrydata.data.name}</div>
               <div>{leagueName}</div>
               <div>{currentRound} 라운드</div>
-              <div>
-                진행도: {Math.round((currentRound / roundCount) * 100)}%
-              </div>
+              <ProgressBar
+                striped
+                variant="warning"
+                now={Math.round((currentRound / roundCount) * 100)}
+                label={`${Math.round((currentRound / roundCount) * 100)}%`}
+              />
             </LeagueName>
           </MainBanner>
         )
@@ -493,7 +498,14 @@ function LeagueTeamStatistics() {
       <Navbar>
         <NavbarItem
           onClick={() =>
-            goToOverview(leagueName, leagueId, seasonId, leagueLogo, countryId)
+            goToOverview(
+              leagueName,
+              leagueId,
+              seasonId,
+              leagueLogo,
+              countryId,
+              allTeamId
+            )
           }
         >
           전체보기
