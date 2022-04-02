@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import {
   getCountryById,
   getLeagueStatisticsById,
+  getSquadWithPlayerById,
   getTeamById,
   getTeamInfoById,
 } from "../api";
@@ -41,6 +42,29 @@ const TeamImg = styled.img`
 const NextMatchTitle = styled.div``;
 
 const NextMatchConents = styled.div`
+  display: flex;
+`;
+
+const Squads = styled.div``;
+
+const SquadsTab = styled.div``;
+
+const SquadsTitle = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+const SquadsContents = styled.div`
+  font-size: 15px;
+  display: flex;
+`;
+
+const PlayerImg = styled.img`
+  width: 50px;
+  height: 50px;
+`;
+
+const SquadsContent = styled.div`
   display: flex;
 `;
 
@@ -83,6 +107,22 @@ function TeamInfo() {
     () => getLeagueStatisticsById(seasonId).then((response) => response.data),
     {
       enabled: !!seasonId,
+      refetchOnMount: "always",
+    }
+  );
+
+  // 팀 스쿼드 정보
+  const { isLoading: squadLoading, data: squadsdata } = useQuery(
+    [
+      ["seasonId", "teamId"],
+      [seasonId, teamId],
+    ],
+    () =>
+      getSquadWithPlayerById(teamId, seasonId).then(
+        (response) => response.data
+      ),
+    {
+      enabled: !!seasonId && !!teamId,
       refetchOnMount: "always",
     }
   );
@@ -165,6 +205,84 @@ function TeamInfo() {
         )
     );
 
+  //   squadsdata &&
+  //     console.log(squadsdata.map((d) => d.minutes > 1 && d.player.data.fullname));
+
+  // 골키퍼 스쿼드 정보
+  const GoalKeepersContents = () =>
+    squadsdata &&
+    squadsdata.map(
+      (d) =>
+        d.player.data.position_id === 1 &&
+        d.minutes > 1 && (
+          <SquadsContents>
+            <PlayerImg src={`${d.player.data.image_path}`} />
+            <div>
+              <div>
+                {d.number} {d.player.data.fullname}
+              </div>
+              <div>{d.player.data.nationality}</div>
+            </div>
+          </SquadsContents>
+        )
+    );
+  // 수비수 스쿼드 정보
+  const DefendersContents = () =>
+    squadsdata &&
+    squadsdata.map(
+      (d) =>
+        d.player.data.position_id === 2 &&
+        d.minutes > 1 && (
+          <SquadsContents>
+            <PlayerImg src={`${d.player.data.image_path}`} />
+            <div>
+              <div>
+                {d.number} {d.player.data.fullname}
+              </div>
+              <div>{d.player.data.nationality}</div>
+            </div>
+          </SquadsContents>
+        )
+    );
+
+  // 미드필더 스쿼드 정보
+  const MidfieldersContents = () =>
+    squadsdata &&
+    squadsdata.map(
+      (d) =>
+        d.player.data.position_id === 3 &&
+        d.minutes > 1 && (
+          <SquadsContents>
+            <PlayerImg src={`${d.player.data.image_path}`} />
+            <div>
+              <div>
+                {d.number} {d.player.data.fullname}
+              </div>
+              <div>{d.player.data.nationality}</div>
+            </div>
+          </SquadsContents>
+        )
+    );
+
+  // 공격수 스쿼드 정보
+  const AttackersContents = () =>
+    squadsdata &&
+    squadsdata.map(
+      (d) =>
+        d.player.data.position_id === 4 &&
+        d.minutes > 1 && (
+          <SquadsContents>
+            <PlayerImg src={`${d.player.data.image_path}`} />
+            <div>
+              <div>
+                {d.number} {d.player.data.fullname}
+              </div>
+              <div>{d.player.data.nationality}</div>
+            </div>
+          </SquadsContents>
+        )
+    );
+
   //===============return===============//
   return (
     <LeagueScreen>
@@ -190,6 +308,36 @@ function TeamInfo() {
             </NextMatchConents>
           </NextMatch>
         </MainBanner>
+      )}
+      {squadLoading ? (
+        <Spinner animation="border" variant="secondary" />
+      ) : (
+        <Squads>
+          <SquadsTab>
+            <SquadsTitle>골키퍼</SquadsTitle>
+            <SquadsContent>
+              <GoalKeepersContents />
+            </SquadsContent>
+          </SquadsTab>
+          <SquadsTab>
+            <SquadsTitle>수비수</SquadsTitle>
+            <SquadsContent>
+              <DefendersContents />
+            </SquadsContent>
+          </SquadsTab>
+          <SquadsTab>
+            <SquadsTitle>미드필더</SquadsTitle>
+            <SquadsContent>
+              <MidfieldersContents />
+            </SquadsContent>
+          </SquadsTab>
+          <SquadsTab>
+            <SquadsTitle>공격수</SquadsTitle>
+            <SquadsContent>
+              <AttackersContents />
+            </SquadsContent>
+          </SquadsTab>
+        </Squads>
       )}
     </LeagueScreen>
   );

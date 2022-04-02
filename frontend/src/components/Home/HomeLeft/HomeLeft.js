@@ -183,8 +183,13 @@ function HomeLeft() {
                           <div>
                             {f.time.status === "NS" ? (
                               <div>{f.time.starting_at.time.substr(0, 5)}</div>
+                            ) : f.time.status === "FT" ||
+                              f.time.status === "POSTP" ? (
+                              <div>{f.time.status}</div>
                             ) : (
-                              <div>{f.time.status} </div>
+                              <div style={{ color: "#44bd32" }}>
+                                {f.time.minute}'
+                              </div>
                             )}
                           </div>
                         </Fixutre>
