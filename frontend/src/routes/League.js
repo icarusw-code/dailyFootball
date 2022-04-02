@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
+import Table from "react-bootstrap/Table";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   getCountryById,
@@ -207,10 +208,49 @@ function League() {
           teamData.map(
             (t) =>
               d.team_id === t.id && (
-                <TeamBar>
-                  <Ranking>{d.position}</Ranking>
-                  <TeamInfo>
-                    <TeamName
+                <tr>
+                  <td>{d.position}</td>
+
+                  <td
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      goToTeam(
+                        leagueName,
+                        leagueId,
+                        seasonId,
+                        leagueLogo,
+                        countryId,
+                        d.team_id,
+                        d.team_name
+                      );
+                    }}
+                  >
+                    <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                  </td>
+                  <td>{d.overall.games_played}</td>
+                  <td>{d.overall.won}</td>
+                  <td>{d.overall.draw}</td>
+                  <td>{d.overall.lost}</td>
+                  <td>
+                    {d.overall.goals_scored} - {d.overall.goals_against}
+                  </td>
+                  <td>{d.total.goal_difference}</td>
+                  <td>{d.overall.points}</td>
+                  <td>{d.recent_form}</td>
+                </tr>
+              )
+          )
+        )
+      : index === "Home"
+      ? homeData.map((home, idx) =>
+          leagueStatisticsData[0].standings.data.map((d) =>
+            teamData.map(
+              (t) =>
+                d.team_id === home[1] &&
+                d.team_id === t.id && (
+                  <tr>
+                    <td>{idx + 1}</td>
+                    <td
                       onClick={() => {
                         goToTeam(
                           leagueName,
@@ -224,59 +264,18 @@ function League() {
                       }}
                     >
                       <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-                    </TeamName>
-                    <div>{d.overall.games_palyed}</div>
-                    <div>{d.overall.won}</div>
-                    <div>{d.overall.draw}</div>
-                    <div>{d.overall.lost}</div>
-                    <div>
-                      {d.overall.goals_scored} - {d.overall.goals_against}
-                    </div>
-                    <div>{d.total.goal_difference}</div>
-                    <div>{d.overall.points}</div>
-                    <div>{d.recent_form}</div>
-                  </TeamInfo>
-                </TeamBar>
-              )
-          )
-        )
-      : index === "Home"
-      ? homeData.map((home, idx) =>
-          leagueStatisticsData[0].standings.data.map((d) =>
-            teamData.map(
-              (t) =>
-                d.team_id === home[1] &&
-                d.team_id === t.id && (
-                  <TeamBar>
-                    <Ranking>{idx + 1}</Ranking>
-                    <TeamInfo>
-                      <TeamName
-                        onClick={() => {
-                          goToTeam(
-                            leagueName,
-                            leagueId,
-                            seasonId,
-                            leagueLogo,
-                            countryId,
-                            d.team_id,
-                            d.team_name
-                          );
-                        }}
-                      >
-                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-                      </TeamName>
-                      <div>{d.home.games_palyed}</div>
-                      <div>{d.home.won}</div>
-                      <div>{d.home.draw}</div>
-                      <div>{d.home.lost}</div>
-                      <div>
-                        {d.home.goals_scored} - {d.home.goals_against}
-                      </div>
-                      <div>{d.total.goal_difference}</div>
-                      <div>{d.home.points}</div>
-                      <div>{d.recent_form}</div>
-                    </TeamInfo>
-                  </TeamBar>
+                    </td>
+                    <td>{d.home.games_played}</td>
+                    <td>{d.home.won}</td>
+                    <td>{d.home.draw}</td>
+                    <td>{d.home.lost}</td>
+                    <td>
+                      {d.home.goals_scored} - {d.home.goals_against}
+                    </td>
+                    <td>{d.total.goal_difference}</td>
+                    <td>{d.home.points}</td>
+                    <td>{d.recent_form}</td>
+                  </tr>
                 )
             )
           )
@@ -287,36 +286,34 @@ function League() {
               (t) =>
                 d.team_id === away[1] &&
                 d.team_id === t.id && (
-                  <TeamBar>
-                    <Ranking>{idx + 1}</Ranking>
-                    <TeamInfo>
-                      <TeamName
-                        onClick={() => {
-                          goToTeam(
-                            leagueName,
-                            leagueId,
-                            seasonId,
-                            leagueLogo,
-                            countryId,
-                            d.team_id,
-                            d.team_name
-                          );
-                        }}
-                      >
-                        <TeamImg src={`${t.logo_path}`} /> {d.team_name}
-                      </TeamName>
-                      <div>{d.away.games_palyed}</div>
-                      <div>{d.away.won}</div>
-                      <div>{d.away.draw}</div>
-                      <div>{d.away.lost}</div>
-                      <div>
-                        {d.away.goals_scored} - {d.away.goals_against}
-                      </div>
-                      <div>{d.total.goal_difference}</div>
-                      <div>{d.away.points}</div>
-                      <div>{d.recent_form}</div>
-                    </TeamInfo>
-                  </TeamBar>
+                  <tr>
+                    <td>{idx + 1}</td>
+                    <td
+                      onClick={() => {
+                        goToTeam(
+                          leagueName,
+                          leagueId,
+                          seasonId,
+                          leagueLogo,
+                          countryId,
+                          d.team_id,
+                          d.team_name
+                        );
+                      }}
+                    >
+                      <TeamImg src={`${t.logo_path}`} /> {d.team_name}
+                    </td>
+                    <td>{d.away.games_played}</td>
+                    <td>{d.away.won}</td>
+                    <td>{d.away.draw}</td>
+                    <td>{d.away.lost}</td>
+                    <td>
+                      {d.away.goals_scored} - {d.away.goals_against}
+                    </td>
+                    <td>{d.total.goal_difference}</td>
+                    <td>{d.away.points}</td>
+                    <td>{d.recent_form}</td>
+                  </tr>
                 )
             )
           )
@@ -381,11 +378,25 @@ function League() {
             {leagueName}
             {seasonData.name}
           </SeasonBar>
-          <InfoBar>
-            <Ranking>순위</Ranking>
-            <TeamName>팀</TeamName>
-          </InfoBar>
-          <LeagueStatistics />
+          <Table striped bordered hover variant="dark">
+            <thread>
+              <tr>
+                <th>순위</th>
+                <th>팀</th>
+                <th>경기수</th>
+                <th>승리</th>
+                <th>무승부</th>
+                <th>패배</th>
+                <th>+/-</th>
+                <th>골득실</th>
+                <th>승점</th>
+                <th>최근경기</th>
+              </tr>
+            </thread>
+            <tbody>
+              <LeagueStatistics />
+            </tbody>
+          </Table>
         </LeftScreen>
       )}
     </LeagueScreen>
