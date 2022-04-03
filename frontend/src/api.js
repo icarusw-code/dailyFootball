@@ -64,7 +64,7 @@ export function getTeamStatById(teamId, seasonId) {
 
 export function getTeamInfoById(teamId, seasonId) {
   return fetch(
-    `${BASE_PATH}/teams/${teamId}?api_token=${API_TOKEN}&include=stats,upcoming&seasons=${seasonId}&${TimeZone}`
+    `${BASE_PATH}/teams/${teamId}?api_token=${API_TOKEN}&include=stats,upcoming,latest&seasons=${seasonId}&${TimeZone}`
   )
     .then((response) => response.json())
     .then((response) => response.data);

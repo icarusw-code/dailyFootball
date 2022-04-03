@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   getCountryById,
   getLeagueStatisticsById,
@@ -9,6 +10,7 @@ import {
   getTeamInfoById,
 } from "../api";
 import { Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -68,6 +70,29 @@ const SquadsContent = styled.div`
   display: flex;
 `;
 
+const Slider = styled.div`
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 140px;
+`;
+
+const Row = styled(motion.div)`
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
+`;
+
+const Box = styled(motion.div)`
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  font-size: 20px;
+`;
+
 function TeamInfo() {
   const {
     state: {
@@ -78,9 +103,11 @@ function TeamInfo() {
       countryId,
       teamId,
       teamName,
+      currentRound,
     },
   } = useLocation();
 
+  console.log(currentRound);
   // 팀 상세 정보
   const { isLoading: teamInfoLoading, data: teamInfoData } = useQuery(
     ["teamInfo", { teamId, seasonId }],
@@ -205,9 +232,6 @@ function TeamInfo() {
         )
     );
 
-  //   squadsdata &&
-  //     console.log(squadsdata.map((d) => d.minutes > 1 && d.player.data.fullname));
-
   // 골키퍼 스쿼드 정보
   const GoalKeepersContents = () =>
     squadsdata &&
@@ -283,6 +307,54 @@ function TeamInfo() {
         )
     );
 
+  // 첫경기 ~ 마지막 경기
+  const allFixture = teamInfoData && [
+    ...teamInfoData.latest.data.sort((a, b) => a.round_id - b.round_id),
+    ...teamInfoData.upcoming.data,
+  ];
+
+  //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
+  const allTeamDataInfo =
+    allFixture &&
+    allFixture.map((d) => [
+      d.localteam_id,
+      d.visitorteam_id,
+      d.time.status,
+      d.time.starting_at.date,
+      d.time.starting_at.time,
+      d.scores.ft_score,
+      d.winner_team_id,
+    ]);
+
+  // =============== 경기리스트 Slider 구현 ===============//
+  // 한번에 보여질 개수
+  const offset = 6;
+
+  const [index, setIndex] = useState(Math.floor(currentRound / offset) - 1);
+
+  const increaeIndex = () => {
+    if (leaving) return;
+    toggleLeaving(true);
+    const totalFixtures = allFixture && allFixture.length;
+    const maxIndex = Math.ceil(totalFixtures / offset) - 1;
+    setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+  };
+  const [leaving, setLeaving] = useState(false);
+  const toggleLeaving = () => setLeaving((prev) => !prev);
+
+  const rowVariants = {
+    hidden: {
+      x: window.outerWidth + 10,
+    },
+    visible: {
+      x: 0,
+    },
+    exit: {
+      x: -window.outerWidth - 10,
+    },
+  };
+  //======================================================//
+
   //===============return===============//
   return (
     <LeagueScreen>
@@ -290,7 +362,7 @@ function TeamInfo() {
         <Spinner animation="border" variant="secondary" />
       ) : (
         <MainBanner>
-          <TeamBanner>
+          <TeamBanner onClick={increaeIndex}>
             <div>
               <TeamImg src={`${teamInfoData.logo_path}`} />
             </div>
@@ -309,6 +381,56 @@ function TeamInfo() {
           </NextMatch>
         </MainBanner>
       )}
+      <Slider>
+        <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+          <Row
+            variants={rowVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={{ type: "tween", duration: 0.8 }}
+            key={index}
+          >
+            {allTeamDataInfo &&
+              allTeamData &&
+              allTeamDataInfo
+                .slice(offset * index, offset * index + offset)
+                .map((fixture) => (
+                  //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
+                  <Box key={fixture}>
+                    {allTeamData.map(
+                      (d) =>
+                        d.id === fixture[0] && (
+                          <TeamImg src={`${d.logo_path}`} />
+                        )
+                    )}
+                    {fixture[2] === "FT" ? (
+                      <div>
+                        <div>{fixture[3]}</div>
+                        <div>{fixture[5]}</div>
+                      </div>
+                    ) : fixture[2] === "NS" ? (
+                      <div>
+                        <div>{fixture[3]}</div>
+                        <div>{fixture[4].substr(0, 5)}</div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div>{fixture[3]}</div>
+                        <div>{fixture[2]}</div>
+                      </div>
+                    )}
+                    {allTeamData.map(
+                      (d) =>
+                        d.id === fixture[1] && (
+                          <TeamImg src={`${d.logo_path}`} />
+                        )
+                    )}
+                  </Box>
+                ))}
+          </Row>
+        </AnimatePresence>
+      </Slider>
       {squadLoading ? (
         <Spinner animation="border" variant="secondary" />
       ) : (

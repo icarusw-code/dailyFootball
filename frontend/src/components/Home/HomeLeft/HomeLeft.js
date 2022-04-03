@@ -86,6 +86,7 @@ function HomeLeft() {
     () => Promise.all(leagueId.map((id) => getFixturesByDate(id, customDate))),
     {
       enabled: !!leagueId,
+      refetchInterval: 1000 * 60, // 1분마다 불러오기
     }
   );
 

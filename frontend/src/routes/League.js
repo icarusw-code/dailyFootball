@@ -187,7 +187,8 @@ function League() {
     leagueLogo,
     countryId,
     teamId,
-    teamName
+    teamName,
+    currentRound
   ) => {
     navigate(`/teams/${teamName}`, {
       state: {
@@ -198,6 +199,7 @@ function League() {
         countryId: countryId,
         teamId: teamId,
         teamName: teamName,
+        currentRound: currentRound,
       },
     });
   };
@@ -221,7 +223,8 @@ function League() {
                         leagueLogo,
                         countryId,
                         d.team_id,
-                        d.team_name
+                        d.team_name,
+                        currentRound
                       );
                     }}
                   >
