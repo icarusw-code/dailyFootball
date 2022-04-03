@@ -309,10 +309,13 @@ function TeamInfo() {
 
   // 첫경기 ~ 마지막 경기
   const allFixture = teamInfoData && [
-    ...teamInfoData.latest.data.sort((a, b) => a.round_id - b.round_id),
+    ...teamInfoData.latest.data.sort(
+      (a, b) => a.time.starting_at.timestamp - b.time.starting_at.timestamp
+    ),
     ...teamInfoData.upcoming.data,
   ];
 
+  console.log(allFixture);
   //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
   const allTeamDataInfo =
     allFixture &&
