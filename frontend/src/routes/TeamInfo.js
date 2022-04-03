@@ -11,6 +11,11 @@ import {
 } from "../api";
 import { Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import {
+  faCircleArrowLeft,
+  faCircleArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -21,7 +26,9 @@ const LeagueScreen = styled.div`
 
 const MainBanner = styled.div`
   display: flex;
+  justify-content: space-between;
   font-size: 30px;
+  margin-bottom: 40px;
 `;
 
 const TeamBanner = styled.div`
@@ -30,7 +37,7 @@ const TeamBanner = styled.div`
 
 const NextMatch = styled.div`
   font-size: 20px;
-  margin-left: 400px;
+  margin-right: 20px;
 `;
 
 const TeamImg = styled.img`
@@ -107,7 +114,6 @@ function TeamInfo() {
     },
   } = useLocation();
 
-  console.log(currentRound);
   // 팀 상세 정보
   const { isLoading: teamInfoLoading, data: teamInfoData } = useQuery(
     ["teamInfo", { teamId, seasonId }],
@@ -231,6 +237,17 @@ function TeamInfo() {
           </div>
         )
     );
+  // 감독 정보
+  const CoachContents = () =>
+    teamInfoData && (
+      <SquadsContents>
+        <PlayerImg src={`${teamInfoData.coach.data.image_path}`} />
+        <div style={{ marginLeft: "10px" }}>
+          <div>{teamInfoData.coach.data.fullname}</div>
+          <div>{teamInfoData.coach.data.nationality}</div>
+        </div>
+      </SquadsContents>
+    );
 
   // 골키퍼 스쿼드 정보
   const GoalKeepersContents = () =>
@@ -241,9 +258,9 @@ function TeamInfo() {
         d.minutes > 1 && (
           <SquadsContents>
             <PlayerImg src={`${d.player.data.image_path}`} />
-            <div>
+            <div style={{ marginLeft: "10px" }}>
               <div>
-                {d.number} {d.player.data.fullname}
+                {d.number} {d.player.data.display_name}
               </div>
               <div>{d.player.data.nationality}</div>
             </div>
@@ -259,9 +276,9 @@ function TeamInfo() {
         d.minutes > 1 && (
           <SquadsContents>
             <PlayerImg src={`${d.player.data.image_path}`} />
-            <div>
+            <div style={{ marginLeft: "10px" }}>
               <div>
-                {d.number} {d.player.data.fullname}
+                {d.number} {d.player.data.display_name}
               </div>
               <div>{d.player.data.nationality}</div>
             </div>
@@ -278,9 +295,9 @@ function TeamInfo() {
         d.minutes > 1 && (
           <SquadsContents>
             <PlayerImg src={`${d.player.data.image_path}`} />
-            <div>
+            <div style={{ marginLeft: "10px" }}>
               <div>
-                {d.number} {d.player.data.fullname}
+                {d.number} {d.player.data.display_name}
               </div>
               <div>{d.player.data.nationality}</div>
             </div>
@@ -297,9 +314,9 @@ function TeamInfo() {
         d.minutes > 1 && (
           <SquadsContents>
             <PlayerImg src={`${d.player.data.image_path}`} />
-            <div>
+            <div style={{ marginLeft: "10px" }}>
               <div>
-                {d.number} {d.player.data.fullname}
+                {d.number} {d.player.data.display_name}
               </div>
               <div>{d.player.data.nationality}</div>
             </div>
@@ -315,7 +332,6 @@ function TeamInfo() {
     ...teamInfoData.upcoming.data,
   ];
 
-  console.log(allFixture);
   //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
   const allTeamDataInfo =
     allFixture &&
@@ -335,13 +351,23 @@ function TeamInfo() {
 
   const [index, setIndex] = useState(Math.floor(currentRound / offset) - 1);
 
-  const increaeIndex = () => {
+  const increaseIndex = () => {
     if (leaving) return;
     toggleLeaving(true);
     const totalFixtures = allFixture && allFixture.length;
     const maxIndex = Math.ceil(totalFixtures / offset) - 1;
     setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
   };
+
+  const decreaseIndex = () => {
+    if (leaving) return;
+    toggleLeaving(true);
+    const totalFixtures = allFixture && allFixture.length;
+    const maxIndex = Math.ceil(totalFixtures / offset) - 1;
+    const minIndex = 0;
+    setIndex((prev) => (prev === minIndex ? maxIndex : prev - 1));
+  };
+
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
 
@@ -365,7 +391,7 @@ function TeamInfo() {
         <Spinner animation="border" variant="secondary" />
       ) : (
         <MainBanner>
-          <TeamBanner onClick={increaeIndex}>
+          <TeamBanner>
             <div>
               <TeamImg src={`${teamInfoData.logo_path}`} />
             </div>
@@ -384,8 +410,23 @@ function TeamInfo() {
           </NextMatch>
         </MainBanner>
       )}
+
       <Slider>
         <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "15px",
+            }}
+          >
+            <div style={{ cursor: "pointer" }} onClick={decreaseIndex}>
+              <FontAwesomeIcon icon={faCircleArrowLeft} /> 이전
+            </div>
+            <div style={{ cursor: "pointer" }} onClick={increaseIndex}>
+              다음 <FontAwesomeIcon icon={faCircleArrowRight} />
+            </div>
+          </div>
           <Row
             variants={rowVariants}
             initial="hidden"
@@ -400,6 +441,7 @@ function TeamInfo() {
                 .slice(offset * index, offset * index + offset)
                 .map((fixture) => (
                   //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
+
                   <Box key={fixture}>
                     {allTeamData.map(
                       (d) =>
@@ -434,10 +476,16 @@ function TeamInfo() {
           </Row>
         </AnimatePresence>
       </Slider>
-      {squadLoading ? (
+      {squadLoading || teamInfoLoading ? (
         <Spinner animation="border" variant="secondary" />
       ) : (
         <Squads>
+          <SquadsTab>
+            <SquadsTitle>감독</SquadsTitle>
+            <SquadsContent>
+              <CoachContents />
+            </SquadsContent>
+          </SquadsTab>
           <SquadsTab>
             <SquadsTitle>골키퍼</SquadsTitle>
             <SquadsContent>

@@ -254,6 +254,7 @@ function League() {
                   <tr>
                     <td>{idx + 1}</td>
                     <td
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
                         goToTeam(
                           leagueName,
@@ -292,6 +293,7 @@ function League() {
                   <tr>
                     <td>{idx + 1}</td>
                     <td
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
                         goToTeam(
                           leagueName,
