@@ -16,6 +16,7 @@ import {
   faCircleArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Accordion from "react-bootstrap/Accordion";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -51,6 +52,10 @@ const TeamImg = styled.img`
 const NextMatchTitle = styled.div``;
 
 const NextMatchConents = styled.div`
+  display: flex;
+`;
+
+const SquadScreen = styled.div`
   display: flex;
 `;
 
@@ -98,6 +103,17 @@ const Box = styled(motion.div)`
   justify-content: center;
   height: 100px;
   font-size: 20px;
+`;
+
+const Best = styled.div``;
+
+const StatisticsScreen = styled.div`
+  margin-top: 40px;
+`;
+
+const PlayerStatistics = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 function TeamInfo() {
@@ -375,6 +391,48 @@ function TeamInfo() {
   };
   //======================================================//
 
+  console.log(squadsdata);
+  //===============선수 기록===============//
+  // 득점순위 //
+  const PlayerGoalStatistics = () =>
+    teamInfoData &&
+    squadsdata &&
+    teamInfoData.goalscorers.data
+      .sort((a, b) => a.position - b.position)
+      .map((d) =>
+        squadsdata.map(
+          (s) =>
+            d.player_id === s.player_id && (
+              <div style={{ display: "flex" }}>
+                <PlayerImg src={`${s.player.data.image_path}`} />
+                <div>{s.player.data.display_name}</div>
+                <div>
+                  {d.goals}({d.penalty_goals})
+                </div>
+              </div>
+            )
+        )
+      );
+
+  // 어시스트 순위 //
+  const PlayerAssistStatistics = () =>
+    teamInfoData &&
+    squadsdata &&
+    teamInfoData.assistscorers.data
+      .sort((a, b) => a.position - b.position)
+      .map((d) =>
+        squadsdata.map(
+          (s) =>
+            d.player_id === s.player_id && (
+              <div style={{ display: "flex" }}>
+                <PlayerImg src={`${s.player.data.image_path}`} />
+                <div>{s.player.data.display_name}</div>
+                <div>{d.assists}</div>
+              </div>
+            )
+        )
+      );
+
   //===============return===============//
   return (
     <LeagueScreen>
@@ -432,7 +490,6 @@ function TeamInfo() {
                 .slice(offset * index, offset * index + offset)
                 .map((fixture) => (
                   //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
-
                   <Box key={fixture}>
                     {allTeamData.map(
                       (d) =>
@@ -470,38 +527,58 @@ function TeamInfo() {
       {squadLoading || teamInfoLoading ? (
         <Spinner animation="border" variant="secondary" />
       ) : (
-        <Squads>
-          <SquadsTab>
-            <SquadsTitle>감독</SquadsTitle>
-            <SquadsContent>
-              <CoachContents />
-            </SquadsContent>
-          </SquadsTab>
-          <SquadsTab>
-            <SquadsTitle>골키퍼</SquadsTitle>
-            <SquadsContent>
-              <GoalKeepersContents />
-            </SquadsContent>
-          </SquadsTab>
-          <SquadsTab>
-            <SquadsTitle>수비수</SquadsTitle>
-            <SquadsContent>
-              <DefendersContents />
-            </SquadsContent>
-          </SquadsTab>
-          <SquadsTab>
-            <SquadsTitle>미드필더</SquadsTitle>
-            <SquadsContent>
-              <MidfieldersContents />
-            </SquadsContent>
-          </SquadsTab>
-          <SquadsTab>
-            <SquadsTitle>공격수</SquadsTitle>
-            <SquadsContent>
-              <AttackersContents />
-            </SquadsContent>
-          </SquadsTab>
-        </Squads>
+        <SquadScreen>
+          <Squads>
+            <SquadsTab>
+              <SquadsTitle>감독</SquadsTitle>
+              <SquadsContent>
+                <CoachContents />
+              </SquadsContent>
+            </SquadsTab>
+            <SquadsTab>
+              <SquadsTitle>골키퍼</SquadsTitle>
+              <SquadsContent>
+                <GoalKeepersContents />
+              </SquadsContent>
+            </SquadsTab>
+            <SquadsTab>
+              <SquadsTitle>수비수</SquadsTitle>
+              <SquadsContent>
+                <DefendersContents />
+              </SquadsContent>
+            </SquadsTab>
+            <SquadsTab>
+              <SquadsTitle>미드필더</SquadsTitle>
+              <SquadsContent>
+                <MidfieldersContents />
+              </SquadsContent>
+            </SquadsTab>
+            <SquadsTab>
+              <SquadsTitle>공격수</SquadsTitle>
+              <SquadsContent>
+                <AttackersContents />
+              </SquadsContent>
+            </SquadsTab>
+          </Squads>
+          <Best>베스트 스쿼드</Best>
+        </SquadScreen>
+      )}
+      {squadLoading || teamInfoLoading ? (
+        <Spinner animation="border" variant="secondary" />
+      ) : (
+        <StatisticsScreen>
+          <PlayerStatistics>
+            <div>평점</div>
+            <div>
+              득점 순위
+              <PlayerGoalStatistics />
+            </div>
+            <div>
+              어시스트 순위
+              <PlayerAssistStatistics />
+            </div>
+          </PlayerStatistics>
+        </StatisticsScreen>
       )}
     </LeagueScreen>
   );

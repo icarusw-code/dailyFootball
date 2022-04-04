@@ -128,6 +128,7 @@ function LeagueTeamStatistics() {
       .map((d) => [d.stats.data[0].avg_goals_per_game_scored.total, d.name])
       .sort((a, b) => b[0] - a[0]);
 
+  console.log(teamStatsData);
   const AvgGoalsPerGameScoredContents = () =>
     avgGoalsPerGameScored &&
     teamStatsData &&
@@ -135,7 +136,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -158,7 +171,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -181,7 +206,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -204,7 +241,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -236,7 +285,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -259,7 +320,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -282,7 +355,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -305,7 +390,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -328,7 +425,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -360,7 +469,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -383,7 +504,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -406,7 +539,19 @@ function LeagueTeamStatistics() {
       teamStatsData.map(
         (d) =>
           d.name === t[1] && (
-            <Contents>
+            <Contents
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                goToTeam(
+                  leagueId,
+                  seasonId,
+                  countryId,
+                  d.id,
+                  d.name,
+                  currentRound
+                );
+              }}
+            >
               <ContentsInfo>{index + 1}.</ContentsInfo>
               <TeamImg src={`${d.logo_path}`} />
               <ContentsInfo>{d.name}</ContentsInfo>
@@ -469,6 +614,26 @@ function LeagueTeamStatistics() {
         leagueLogo: leagueLogo,
         countryId: countryId,
         allTeamId: allTeamId,
+      },
+    });
+  };
+
+  const goToTeam = (
+    leagueId,
+    seasonId,
+    countryId,
+    teamId,
+    teamName,
+    currentRound
+  ) => {
+    navigate(`/teams/${teamName}`, {
+      state: {
+        leagueId: leagueId,
+        seasonId: seasonId,
+        countryId: countryId,
+        teamId: teamId,
+        teamName: teamName,
+        currentRound: currentRound,
       },
     });
   };
