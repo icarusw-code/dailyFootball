@@ -6,6 +6,7 @@ import { useQueries, useQuery } from "react-query";
 import {
   getFixturesByDate,
   getLeagueById,
+  getLeagueStatisticsById,
   getTeamById,
   leagueId,
 } from "../../../api";
@@ -47,13 +48,15 @@ const Img = styled.img`
 
 const DateBar = styled.div``;
 
-const Scores = styled.div`
+const FixtureScores = styled.div`
   width: 100px;
 `;
 
-const Test = styled.div`
+const FixtureBox = styled.div`
   display: flex;
 `;
+
+const FixtureTeam = styled.div``;
 
 function padTo2Digits(num) {
   return num.toString().padStart(2, "0");
@@ -97,6 +100,8 @@ function HomeLeft() {
   const Fresult = fixturedata?.map((f) => f.data).flat();
   const Lresult = leaguedata?.map((d) => d.data);
 
+  const seasonList = Lresult && Lresult.map((d) => d.current_season_id);
+
   const { isLoading: localTeamLoading, data: localTeamData } = useQuery(
     ["loaclTeam", Fresult],
     () => Promise.all(Fresult.map((f) => getTeamById(f.localteam_id))),
@@ -114,6 +119,24 @@ function HomeLeft() {
       refetchOnMount: "always",
     }
   );
+
+  const { isLoading: leagueStatisticsLoading, data: leagueStatisticsData } =
+    useQuery(
+      ["seasonId", seasonList],
+      () =>
+        Promise.all(
+          seasonList.map((d) =>
+            getLeagueStatisticsById(d).then((response) => response.data)
+          )
+        ),
+      {
+        enabled: !!seasonList,
+      }
+    );
+
+  // console.log(leagueStatisticsData.map((d) => d[0]));
+  const roundList =
+    leagueStatisticsData && leagueStatisticsData.map((d) => d[0]);
 
   const navigate = useNavigate();
   const goToLeague = (
@@ -133,8 +156,32 @@ function HomeLeft() {
     });
   };
 
+  const goToTeam = (
+    leagueId,
+    seasonId,
+    countryId,
+    teamId,
+    teamName,
+    currentRound
+  ) => {
+    navigate(`/teams/${teamName}`, {
+      state: {
+        leagueId: leagueId,
+        seasonId: seasonId,
+        countryId: countryId,
+        teamId: teamId,
+        teamName: teamName,
+        currentRound: currentRound,
+      },
+    });
+  };
+
   const ListAll = () =>
     leaguedata &&
+    Fresult &&
+    localTeamData &&
+    visitorTeamData &&
+    roundList &&
     leaguedata.map((d) => (
       <FixutresList>
         <LeagueList>
@@ -153,23 +200,39 @@ function HomeLeft() {
             <Img src={`${d.data.logo_path}`} />
             {d.data.name}
           </League>
-          <Test>
-            <div>
+          <FixtureBox>
+            <FixtureTeam>
               {Fresult.map(
                 (f) =>
                   d.data.id === f.league_id &&
                   localTeamData.map(
                     (ltd) =>
-                      ltd.id === f.localteam_id && (
-                        <Fixutre>
-                          {ltd.name}
-                          <Img src={`${ltd.logo_path}`} />
-                        </Fixutre>
+                      ltd.id === f.localteam_id &&
+                      roundList.map(
+                        (r) =>
+                          f.league_id === r.league_id && (
+                            <Fixutre
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                goToTeam(
+                                  f.league_id,
+                                  f.season_id,
+                                  ltd.country_id,
+                                  ltd.id,
+                                  ltd.name,
+                                  r.round_name
+                                );
+                              }}
+                            >
+                              {ltd.name}
+                              <Img src={`${ltd.logo_path}`} />
+                            </Fixutre>
+                          )
                       )
                   )
               )}
-            </div>
-            <Scores>
+            </FixtureTeam>
+            <FixtureScores>
               {Fresult.map(
                 (f) =>
                   d.data.id === f.league_id &&
@@ -197,23 +260,39 @@ function HomeLeft() {
                       )
                   )
               )}
-            </Scores>
-            <div>
+            </FixtureScores>
+            <FixtureTeam>
               {Fresult.map(
                 (f) =>
                   d.data.id === f.league_id &&
                   visitorTeamData.map(
                     (vtd) =>
-                      vtd.id === f.visitorteam_id && (
-                        <Fixutre>
-                          <Img src={`${vtd.logo_path}`} />
-                          {vtd.name}
-                        </Fixutre>
+                      vtd.id === f.visitorteam_id &&
+                      roundList.map(
+                        (r) =>
+                          f.league_id === r.league_id && (
+                            <Fixutre
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                goToTeam(
+                                  f.league_id,
+                                  f.season_id,
+                                  vtd.country_id,
+                                  vtd.id,
+                                  vtd.name,
+                                  r.round_name
+                                );
+                              }}
+                            >
+                              <Img src={`${vtd.logo_path}`} />
+                              {vtd.name}
+                            </Fixutre>
+                          )
                       )
                   )
               )}
-            </div>
-          </Test>
+            </FixtureTeam>
+          </FixtureBox>
         </LeagueList>
       </FixutresList>
     ));
@@ -225,7 +304,8 @@ function HomeLeft() {
       {leagueLoading ||
       fixturesLoading ||
       localTeamLoading ||
-      visitorTeamLoading ? (
+      visitorTeamLoading ||
+      leagueStatisticsLoading ? (
         <Spinner animation="border" variant="secondary" />
       ) : (
         <ListAll />

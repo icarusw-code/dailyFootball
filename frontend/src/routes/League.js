@@ -181,10 +181,8 @@ function League() {
   };
 
   const goToTeam = (
-    leagueName,
     leagueId,
     seasonId,
-    leagueLogo,
     countryId,
     teamId,
     teamName,
@@ -192,10 +190,8 @@ function League() {
   ) => {
     navigate(`/teams/${teamName}`, {
       state: {
-        leagueName: leagueName,
         leagueId: leagueId,
         seasonId: seasonId,
-        leagueLogo: leagueLogo,
         countryId: countryId,
         teamId: teamId,
         teamName: teamName,
@@ -217,10 +213,8 @@ function League() {
                     style={{ cursor: "pointer" }}
                     onClick={() => {
                       goToTeam(
-                        leagueName,
                         leagueId,
                         seasonId,
-                        leagueLogo,
                         countryId,
                         d.team_id,
                         d.team_name,
@@ -257,13 +251,12 @@ function League() {
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         goToTeam(
-                          leagueName,
                           leagueId,
                           seasonId,
-                          leagueLogo,
                           countryId,
                           d.team_id,
-                          d.team_name
+                          d.team_name,
+                          currentRound
                         );
                       }}
                     >
@@ -296,13 +289,12 @@ function League() {
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         goToTeam(
-                          leagueName,
                           leagueId,
                           seasonId,
-                          leagueLogo,
                           countryId,
                           d.team_id,
-                          d.team_name
+                          d.team_name,
+                          currentRound
                         );
                       }}
                     >

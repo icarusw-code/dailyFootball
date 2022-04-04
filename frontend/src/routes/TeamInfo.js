@@ -102,16 +102,7 @@ const Box = styled(motion.div)`
 
 function TeamInfo() {
   const {
-    state: {
-      leagueName,
-      leagueId,
-      seasonId,
-      leagueLogo,
-      countryId,
-      teamId,
-      teamName,
-      currentRound,
-    },
+    state: { leagueId, seasonId, countryId, teamId, teamName, currentRound },
   } = useLocation();
 
   // 팀 상세 정보
