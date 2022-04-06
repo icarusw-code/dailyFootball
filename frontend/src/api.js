@@ -52,7 +52,7 @@ export function getTopPlayersById(seasonId) {
 
 export function getPlayerById(playerId) {
   return fetch(
-    `${BASE_PATH}/players/${playerId}?api_token=${API_TOKEN}&${TimeZone}`
+    `${BASE_PATH}/players/${playerId}?api_token=${API_TOKEN}&include=position,team,stats,trophies,sidelined,transfers,lineups,country&${TimeZone}`
   ).then((response) => response.json());
 }
 
@@ -73,5 +73,11 @@ export function getTeamInfoById(teamId, seasonId) {
 export function getSquadWithPlayerById(teamId, seasonId) {
   return fetch(
     `${BASE_PATH}/squad/season/${seasonId}/team/${teamId}?api_token=${API_TOKEN}&include=player&${TimeZone}`
+  ).then((response) => response.json());
+}
+
+export function getFixturesById(fixtureId) {
+  return fetch(
+    `${BASE_PATH}/fixtures/${fixtureId}?api_token=${API_TOKEN}&include=stats,loaclTeam,visitorTeam,lineup.player,bench&${TimeZone}`
   ).then((response) => response.json());
 }

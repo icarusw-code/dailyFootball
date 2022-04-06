@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   getCountryById,
@@ -244,6 +244,34 @@ function TeamInfo() {
           </div>
         )
     );
+
+  //===============이동 ===============//
+  const navigate = useNavigate();
+  const goToPlayer = (
+    teamId,
+    teamName,
+    seasonId,
+    playerId,
+    playerName,
+    leagueId,
+    countryId,
+    currentRound
+  ) => {
+    navigate(`/player/${playerId}/${playerName}`, {
+      state: {
+        teamId: teamId,
+        teamName: teamName,
+        seasonId: seasonId,
+        playerId: playerId,
+        playerName: playerName,
+        leagueId: leagueId,
+        countryId: countryId,
+        currentRound: currentRound,
+      },
+    });
+  };
+
+  //======================================================//
   // 감독 정보
   const CoachContents = () =>
     teamInfoData && (
@@ -312,6 +340,7 @@ function TeamInfo() {
         )
     );
 
+  //   console.log(squadsdata);
   // 공격수 스쿼드 정보
   const AttackersContents = () =>
     squadsdata &&
@@ -319,7 +348,21 @@ function TeamInfo() {
       (d) =>
         d.player.data.position_id === 4 &&
         d.minutes > 1 && (
-          <SquadsContents>
+          <SquadsContents
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              goToPlayer(
+                teamId,
+                teamName,
+                seasonId,
+                d.player.data.player_id,
+                d.player.data.display_name,
+                leagueId,
+                countryId,
+                currentRound
+              );
+            }}
+          >
             <PlayerImg src={`${d.player.data.image_path}`} />
             <div style={{ marginLeft: "10px" }}>
               <div>
@@ -391,7 +434,6 @@ function TeamInfo() {
   };
   //======================================================//
 
-  console.log(squadsdata);
   //===============선수 기록===============//
   // 득점순위 //
   const PlayerGoalStatistics = () =>
@@ -432,6 +474,7 @@ function TeamInfo() {
             )
         )
       );
+  //======================================================//
 
   //===============return===============//
   return (
