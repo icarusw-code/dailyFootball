@@ -424,7 +424,7 @@ function TeamInfo() {
     ...teamInfoData.upcoming.data,
   ];
 
-  //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
+  //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id, fixtureId] 리스트
   const allTeamDataInfo =
     allFixture &&
     allFixture.map((d) => [
@@ -435,7 +435,10 @@ function TeamInfo() {
       d.time.starting_at.time,
       d.scores.ft_score,
       d.winner_team_id,
+      d.id,
     ]);
+
+  //   console.log(allTeamDataInfo);
 
   // =============== 경기리스트 Slider 구현 ===============//
   // 한번에 보여질 개수
@@ -602,7 +605,7 @@ function TeamInfo() {
               allTeamDataInfo
                 .slice(offset * index, offset * index + offset)
                 .map((fixture) => (
-                  //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id] 리스트
+                  //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id, fixtureId] 리스트
                   <Box key={fixture}>
                     {allTeamData.map(
                       (d) =>
@@ -613,7 +616,49 @@ function TeamInfo() {
                     {fixture[2] === "FT" ? (
                       <div>
                         <div>{fixture[3]}</div>
-                        <div>{fixture[5]}</div>
+                        {fixture[6] === teamId ? (
+                          <div
+                            style={{
+                              width: "42px",
+                              height: "32px",
+                              display: "flex",
+                              borderRadius: "10px",
+                              backgroundColor: "#15985f",
+                            }}
+                          >
+                            <span style={{ marginLeft: "5px" }}>
+                              {fixture[5]}
+                            </span>
+                          </div>
+                        ) : fixture[6] === null ? (
+                          <div
+                            style={{
+                              width: "42px",
+                              height: "32px",
+                              display: "flex",
+                              borderRadius: "10px",
+                              backgroundColor: "rgb(141, 148, 153)",
+                            }}
+                          >
+                            <span style={{ marginLeft: "5px" }}>
+                              {fixture[5]}
+                            </span>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              width: "42px",
+                              height: "32px",
+                              display: "flex",
+                              borderRadius: "10px",
+                              backgroundColor: "#e55e5b",
+                            }}
+                          >
+                            <span style={{ marginLeft: "5px" }}>
+                              {fixture[5]}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     ) : fixture[2] === "NS" ? (
                       <div>
