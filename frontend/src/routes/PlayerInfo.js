@@ -264,14 +264,38 @@ function PlayerInfo() {
                     {allTeamData.map((all) =>
                       d.localteam_id !== teamId
                         ? all.id === d.localteam_id && (
-                            <td>
+                            <td
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                goToTeam(
+                                  leagueId,
+                                  seasonId,
+                                  countryId,
+                                  teamId,
+                                  teamName,
+                                  currentRound
+                                );
+                              }}
+                            >
                               <TeamImg src={`${all.logo_path}`} />
                               {all.name}
                             </td>
                           )
                         : all.id === d.visitorteam_id &&
                           d.visitorteam_id !== teamId && (
-                            <td>
+                            <td
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                goToTeam(
+                                  leagueId,
+                                  seasonId,
+                                  countryId,
+                                  teamId,
+                                  teamName,
+                                  currentRound
+                                );
+                              }}
+                            >
                               <TeamImg src={`${all.logo_path}`} />
                               {all.name}
                             </td>
@@ -367,7 +391,7 @@ function PlayerInfo() {
       </div>
     );
 
-  // playerInfoData && console.log(playerInfoData.stats.data);
+  // playerInfoData && console.log(playerInfoData);
 
   // 시즌 통계
   const Statistics = () =>

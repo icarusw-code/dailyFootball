@@ -487,7 +487,21 @@ function TeamInfo() {
         squadsdata.map(
           (s) =>
             d.player_id === s.player_id && (
-              <div style={{ display: "flex" }}>
+              <div
+                style={{ display: "flex", cursor: "pointer" }}
+                onClick={() => {
+                  goToPlayer(
+                    teamId,
+                    teamName,
+                    seasonId,
+                    d.player_id,
+                    d.display_name,
+                    leagueId,
+                    countryId,
+                    currentRound
+                  );
+                }}
+              >
                 <PlayerImg src={`${s.player.data.image_path}`} />
                 <div>{s.player.data.display_name}</div>
                 <div>
@@ -508,7 +522,21 @@ function TeamInfo() {
         squadsdata.map(
           (s) =>
             d.player_id === s.player_id && (
-              <div style={{ display: "flex" }}>
+              <div
+                style={{ display: "flex", cursor: "pointer" }}
+                onClick={() => {
+                  goToPlayer(
+                    teamId,
+                    teamName,
+                    seasonId,
+                    d.player_id,
+                    d.display_name,
+                    leagueId,
+                    countryId,
+                    currentRound
+                  );
+                }}
+              >
                 <PlayerImg src={`${s.player.data.image_path}`} />
                 <div>{s.player.data.display_name}</div>
                 <div>{d.assists}</div>
