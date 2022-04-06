@@ -167,6 +167,7 @@ function PlayerInfo() {
       )
   );
 
+  // 경기 아이디 리스트
   const fixtureIdList =
     teamInfoData &&
     teamInfoData.latest.data.map((d) => d.time.status === "FT" && d.id);
@@ -192,7 +193,8 @@ function PlayerInfo() {
           .flat()
           .map((f) => (f.player_id === playerId ? f : (f[0] = r.id)))
       )
-      .map((r) => Array.from(new Set(r)));
+      .map((a) => Array.from(new Set(a)))
+      .map((response) => response.sort());
 
   // 선수 신체 정보
   const PlayerPhysical = () => (
@@ -227,6 +229,7 @@ function PlayerInfo() {
     </PlayerPhysicalContents>
   );
 
+  // 최근 경기 기록
   const FixtureResult = () =>
     latestFixtureData &&
     teamInfoData &&
@@ -364,6 +367,76 @@ function PlayerInfo() {
       </div>
     );
 
+  // playerInfoData && console.log(playerInfoData.stats.data);
+
+  // 시즌 통계
+  const Statistics = () =>
+    playerInfoData && (
+      <Container>
+        <div>
+          <TeamImg src={`${leagueData.logo_path}`} />
+          {leagueData.name}
+          {"  "}
+          {currentSeasonData.name}
+        </div>
+        {playerInfoData.position_id === 1
+          ? playerInfoData.stats.data.map(
+              (d) =>
+                d.season_id === seasonId && (
+                  <>
+                    <Row>
+                      <Col>
+                        <div>경기수</div>
+                        <div>{d.appearences}</div>
+                      </Col>
+                      <Col>
+                        <div>클린시트</div>
+                        <div>{d.cleansheets}</div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div>세이브</div>
+                        <div>{d.saves}</div>
+                      </Col>
+                      <Col>
+                        <div>평균평점</div>
+                        <div>-</div>
+                      </Col>
+                    </Row>
+                  </>
+                )
+            )
+          : playerInfoData.stats.data.map(
+              (d) =>
+                d.season_id === seasonId && (
+                  <>
+                    <Row>
+                      <Col>
+                        <div>경기수</div>
+                        <div>{d.appearences}</div>
+                      </Col>
+                      <Col>
+                        <div>골</div>
+                        <div>{d.goals}</div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div>어시스트</div>
+                        <div>{d.assists}</div>
+                      </Col>
+                      <Col>
+                        <div>평균평점</div>
+                        <div>-</div>
+                      </Col>
+                    </Row>
+                  </>
+                )
+            )}
+      </Container>
+    );
+
   return (
     <LeagueScreen>
       {leagueLoading ||
@@ -410,7 +483,10 @@ function PlayerInfo() {
           </Container>
           <SummaryBar>
             <FixtureResult />
-            <div>Stat</div>
+            <div>
+              <Statistics />
+              <div>커리어</div>
+            </div>
           </SummaryBar>
         </>
       )}

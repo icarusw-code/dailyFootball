@@ -208,7 +208,6 @@ function League() {
               d.team_id === t.id && (
                 <tr>
                   <td>{d.position}</td>
-
                   <td
                     style={{ cursor: "pointer" }}
                     onClick={() => {
@@ -376,7 +375,7 @@ function League() {
             {seasonData.name}
           </SeasonBar>
           <Table striped bordered hover variant="dark">
-            <thread>
+            <thead>
               <tr>
                 <th>순위</th>
                 <th>팀</th>
@@ -389,7 +388,7 @@ function League() {
                 <th>승점</th>
                 <th>최근경기</th>
               </tr>
-            </thread>
+            </thead>
             <tbody>
               <LeagueStatistics />
             </tbody>

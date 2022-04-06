@@ -291,7 +291,21 @@ function TeamInfo() {
       (d) =>
         d.player.data.position_id === 1 &&
         d.minutes > 1 && (
-          <SquadsContents>
+          <SquadsContents
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              goToPlayer(
+                teamId,
+                teamName,
+                seasonId,
+                d.player.data.player_id,
+                d.player.data.display_name,
+                leagueId,
+                countryId,
+                currentRound
+              );
+            }}
+          >
             <PlayerImg src={`${d.player.data.image_path}`} />
             <div style={{ marginLeft: "10px" }}>
               <div>
@@ -309,7 +323,21 @@ function TeamInfo() {
       (d) =>
         d.player.data.position_id === 2 &&
         d.minutes > 1 && (
-          <SquadsContents>
+          <SquadsContents
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              goToPlayer(
+                teamId,
+                teamName,
+                seasonId,
+                d.player.data.player_id,
+                d.player.data.display_name,
+                leagueId,
+                countryId,
+                currentRound
+              );
+            }}
+          >
             <PlayerImg src={`${d.player.data.image_path}`} />
             <div style={{ marginLeft: "10px" }}>
               <div>
@@ -328,7 +356,21 @@ function TeamInfo() {
       (d) =>
         d.player.data.position_id === 3 &&
         d.minutes > 1 && (
-          <SquadsContents>
+          <SquadsContents
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              goToPlayer(
+                teamId,
+                teamName,
+                seasonId,
+                d.player.data.player_id,
+                d.player.data.display_name,
+                leagueId,
+                countryId,
+                currentRound
+              );
+            }}
+          >
             <PlayerImg src={`${d.player.data.image_path}`} />
             <div style={{ marginLeft: "10px" }}>
               <div>
