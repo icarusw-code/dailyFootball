@@ -12,6 +12,7 @@ import LeaguePlayerStatistics from "./routes/LeaguePlayerStatistics";
 import LeagueTeamStatistics from "./routes/LeagueTeamStatisitc";
 import TeamInfo from "./routes/TeamInfo";
 import PlayerInfo from "./routes/PlayerInfo";
+import FixtureInfo from "./routes/FixtureInfo";
 
 export const baseUrlNoApi = "http://localhost:8080";
 
@@ -38,6 +39,7 @@ function App() {
           path="/player/:playerId/:playerName"
           element={<PlayerInfo />}
         ></Route>
+        <Route path="/fixture/:fixtureId" element={<FixtureInfo />}></Route>
         <Route path="/" element={<Home />}></Route>
       </Routes>
       <Footer />

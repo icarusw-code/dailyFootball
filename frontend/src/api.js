@@ -81,3 +81,9 @@ export function getFixturesById(fixtureId) {
     `${BASE_PATH}/fixtures/${fixtureId}?api_token=${API_TOKEN}&include=stats,loaclTeam,visitorTeam,lineup.player,bench&${TimeZone}`
   ).then((response) => response.json());
 }
+
+export function getFixturesDetailById(fixtureId) {
+  return fetch(
+    `${BASE_PATH}/fixtures/${fixtureId}?api_token=${API_TOKEN}&include=localTeam,visitorTeam, substitutions, goals, cards,  events, corners, lineup.player, bench, sidelined ,comments , highlights, round, stage, referee, venue, localCoach, visitorCoach ,group,  stats, league, stats&${TimeZone}`
+  ).then((response) => response.json());
+}

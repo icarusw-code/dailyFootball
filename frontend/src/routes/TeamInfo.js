@@ -271,6 +271,14 @@ function TeamInfo() {
     });
   };
 
+  const goToFixture = (fixtureId) => {
+    navigate(`/fixture/${fixtureId}`, {
+      state: {
+        fixtureId: fixtureId,
+      },
+    });
+  };
+
   //======================================================//
   // 감독 정보
   const CoachContents = () =>
@@ -606,7 +614,13 @@ function TeamInfo() {
                 .slice(offset * index, offset * index + offset)
                 .map((fixture) => (
                   //   모든 경기 [localteam_id, visitorteam_id, status, date, time, scores, winner_team_id, fixtureId] 리스트
-                  <Box key={fixture}>
+                  <Box
+                    key={fixture}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      goToFixture(fixture[7]);
+                    }}
+                  >
                     {allTeamData.map(
                       (d) =>
                         d.id === fixture[0] && (
