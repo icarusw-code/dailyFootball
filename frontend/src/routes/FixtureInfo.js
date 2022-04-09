@@ -258,6 +258,45 @@ function FixtureInfo() {
       </div>
     );
 
+  const homeFormation = fixtureData && [
+    1,
+    ...fixtureData.formations.localteam_formation.split("-").map(Number),
+  ];
+
+  //   홈팀 라인업
+  //   const homeLineup = homeFormation.map((k) =>
+  //     fixtureData.lineup.data
+  //       .sort((a, b) => a.formation_position - b.formation_position)
+  //       .map((d) => d.team_id === fixtureData.localTeam.data.id && d)
+  //       .filter((e) => e !== false)
+  //   );
+  // 홈팀 라인업
+
+  const homeLineupInfo =
+    fixtureData &&
+    fixtureData.lineup.data
+      .sort((a, b) => a.formation_position - b.formation_position)
+      .map((d) => d.team_id === fixtureData.localTeam.data.id && d)
+      .filter((e) => e !== false);
+
+  var homeLineup = [];
+
+  //   for (const i of homeFormation) {
+  //     homeLineup.push(homeLineupInfo.splice(0, i));
+  //   }
+
+  homeFormation &&
+    homeFormation.map((d) =>
+      homeLineup.push(
+        homeLineupInfo
+          .splice(0, d)
+          .sort((a, b) => b.formation_position - a.formation_position)
+      )
+    );
+
+  homeLineup && console.log(homeLineup);
+
+  // 라인업
   const LineupBar = () => (
     <div>
       <LineupBarTeam>
@@ -276,7 +315,7 @@ function FixtureInfo() {
       <hr />
       <LineupBarSquad>
         {/*홈팀 스쿼드*/}
-        <TeamContainer>
+        {/* <TeamContainer>
           <RowContainer>
             {fixtureData.lineup.data
               .sort((a, b) => b.formation_position - a.formation_position)
@@ -313,6 +352,16 @@ function FixtureInfo() {
                   d.position === "A" && <div>{d.player_name}</div>
               )}
           </RowContainer>
+        </TeamContainer> */}
+        <TeamContainer>
+          {homeLineup.map((d) => (
+            <RowContainer>
+              {d.map((response) => (
+                <div>{response.player_name}</div>
+              ))}
+            </RowContainer>
+          ))}
+          <RowContainer></RowContainer>
         </TeamContainer>
         {/*어웨이팀 스쿼드*/}
         <TeamContainer>
