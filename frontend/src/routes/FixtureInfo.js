@@ -5,6 +5,7 @@ import { getFixturesDetailById } from "../api";
 import { Spinner } from "react-bootstrap";
 import { faFutbol, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -270,8 +271,9 @@ function FixtureInfo() {
   //       .map((d) => d.team_id === fixtureData.localTeam.data.id && d)
   //       .filter((e) => e !== false)
   //   );
-  // 홈팀 라인업
 
+  //================= 홈팀 라인업 =================//
+  const [index, setIndex] = useState([]);
   const homeLineupInfo =
     fixtureData &&
     fixtureData.lineup.data
@@ -280,10 +282,6 @@ function FixtureInfo() {
       .filter((e) => e !== false);
 
   var homeLineup = [];
-
-  //   for (const i of homeFormation) {
-  //     homeLineup.push(homeLineupInfo.splice(0, i));
-  //   }
 
   homeFormation &&
     homeFormation.map((d) =>
@@ -295,6 +293,8 @@ function FixtureInfo() {
     );
 
   homeLineup && console.log(homeLineup);
+
+  //=============================================//
 
   // 라인업
   const LineupBar = () => (
@@ -315,53 +315,19 @@ function FixtureInfo() {
       <hr />
       <LineupBarSquad>
         {/*홈팀 스쿼드*/}
-        {/* <TeamContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => b.formation_position - a.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.localTeam.data.id &&
-                  d.position === "G" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => b.formation_position - a.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.localTeam.data.id &&
-                  d.position === "D" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => b.formation_position - a.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.localTeam.data.id &&
-                  d.position === "M" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => b.formation_position - a.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.localTeam.data.id &&
-                  d.position === "A" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-        </TeamContainer> */}
         <TeamContainer>
-          {homeLineup.map((d) => (
+          {homeLineup.map((d, formIndex) => (
             <RowContainer>
-              {d.map((response) => (
-                <div>{response.player_name}</div>
+              {d.map((response, detailIndex) => (
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setIndex([formIndex, detailIndex])}
+                >
+                  {response.player_name}
+                </div>
               ))}
             </RowContainer>
           ))}
-          <RowContainer></RowContainer>
         </TeamContainer>
         {/*어웨이팀 스쿼드*/}
         <TeamContainer>
@@ -406,6 +372,7 @@ function FixtureInfo() {
       </LineupBarSquad>
     </div>
   );
+  console.log(index);
 
   return (
     <LeagueScreen>
