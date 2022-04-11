@@ -5,7 +5,7 @@ import { getFixturesDetailById } from "../api";
 import { Spinner } from "react-bootstrap";
 import { faFutbol, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LeagueScreen = styled.div`
   width: 100%;
@@ -292,8 +292,102 @@ function FixtureInfo() {
       )
     );
 
-  homeLineup && console.log(homeLineup);
+  //   homeFormation && console.log(homeFormation[1]);
+  //   console.log(homeLineup[1]);
 
+  // 골키퍼 설정
+  homeLineup.length > 0 && (homeLineup[0][0].detail_position = "GK");
+
+  // 수비수 설정
+  homeLineup.length > 0 &&
+    (homeLineup[1].length === 3
+      ? homeLineup[1].map((d) => (d.detail_position = "CB"))
+      : homeLineup[1].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "LB")
+            : idx === homeLineup[1].length - 1
+            ? (d.detail_position = "RB")
+            : (d.detail_position = "CB")
+        ));
+
+  // 미드필더 설정
+  homeLineup.length > 0 &&
+    (homeLineup[2].length < 4
+      ? homeLineup[2].map((d) => (d.detail_position = "M"))
+      : homeLineup[1].length === 3
+      ? homeLineup[2].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "LB")
+            : idx === homeLineup[2].length - 1
+            ? (d.detail_position = "RB")
+            : (d.detail_position = "M")
+        )
+      : homeLineup[2].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "LW")
+            : idx === homeLineup[2].length - 1
+            ? (d.detail_position = "RW")
+            : (d.detail_position = "M")
+        ));
+
+  // 공격수 설정(5칸인 경우)
+  homeLineup.length > 4 &&
+    (homeLineup[3].length === 1
+      ? homeLineup[3].map((d) => (d.detail_position = "ST"))
+      : homeLineup[3].length === 2
+      ? homeLineup[4].length > 0 &&
+        homeLineup[3].map((d, idx) =>
+          idx === 0 ? (d.detail_position = "LW") : (d.detailIndex = "RW")
+        ) &&
+        homeLineup[4].map((d) => (d.detail_position = "ST"))
+      : homeLineup[4].length > 0 &&
+        homeLineup[3].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "LW")
+            : idx === homeLineup[3].length - 1
+            ? (d.detail_position = "RW")
+            : (d.detail_position = "M")
+        ) &&
+        homeLineup[4].map((d) => (d.detail_position = "ST")));
+
+  // 공격수 설정(4칸인경우)
+  homeLineup.length === 4 &&
+    (homeLineup[3].length > 2
+      ? homeLineup[3].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "LW")
+            : idx === homeLineup[3].length - 1
+            ? (d.detail_position = "RW")
+            : (d.detail_position = "ST")
+        )
+      : homeLineup[3].map((d) => (d.detail_position = "ST")));
+
+  // homeLineup.length > 0 &&
+  //   (homeLineup[3].length === 1
+  //     ? homeLineup[3].map((d) => (d.detail_position = "ST"))
+  //     : homeLineup[3].length === 2
+  //     ? homeLineup[4].length > 0
+  //       ? homeLineup[3].map((d, idx) =>
+  //           idx === 0 ? (d.detail_position = "LW") : (d.detailIndex = "RW")
+  //         )
+  //       : homeLineup[3].map((d) => (d.detail_position = "ST"))
+  //     : homeLineup[4].length > 0
+  //     ? homeLineup[3].map((d, idx) =>
+  //         idx === 0
+  //           ? (d.detail_position = "LW")
+  //           : idx === homeLineup[3].length - 1
+  //           ? (d.detail_position = "RW")
+  //           : (d.detail_position = "M")
+  //       )
+  //     : homeLineup[3].map((d, idx) =>
+  //         idx === 0
+  //           ? (d.detail_position = "LW")
+  //           : idx === homeLineup[3].length - 1
+  //           ? (d.detail_position = "RW")
+  //           : (d.detail_position = "ST")
+  //       ));
+
+  homeLineup && console.log(homeLineup);
   //=============================================//
 
   // 라인업
@@ -372,7 +466,6 @@ function FixtureInfo() {
       </LineupBarSquad>
     </div>
   );
-  console.log(index);
 
   return (
     <LeagueScreen>
