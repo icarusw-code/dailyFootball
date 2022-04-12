@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { getFixturesDetailById } from "../api";
-import { Spinner } from "react-bootstrap";
+import { Container, Row, Spinner } from "react-bootstrap";
 import { faFutbol, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -66,9 +66,16 @@ const TeamContainer = styled.div`
 `;
 
 const RowContainer = styled.div`
+  height: 100%;
+  display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+`;
+
+const PlayerImg = styled.img`
+  width: 40px;
+  height: 40px;
 `;
 
 function FixtureInfo() {
@@ -264,16 +271,7 @@ function FixtureInfo() {
     ...fixtureData.formations.localteam_formation.split("-").map(Number),
   ];
 
-  //   홈팀 라인업
-  //   const homeLineup = homeFormation.map((k) =>
-  //     fixtureData.lineup.data
-  //       .sort((a, b) => a.formation_position - b.formation_position)
-  //       .map((d) => d.team_id === fixtureData.localTeam.data.id && d)
-  //       .filter((e) => e !== false)
-  //   );
-
   //================= 홈팀 라인업 =================//
-  const [index, setIndex] = useState([]);
   const homeLineupInfo =
     fixtureData &&
     fixtureData.lineup.data
@@ -333,7 +331,10 @@ function FixtureInfo() {
   // 공격수 설정(5칸인 경우)
   homeLineup.length > 4 &&
     (homeLineup[3].length === 1
-      ? homeLineup[3].map((d) => (d.detail_position = "ST"))
+      ? homeLineup[4].length > 0
+        ? homeLineup[3].map((d) => (d.detail_position = "M")) &&
+          homeLineup[4].map((d) => (d.detail_position = "ST"))
+        : homeLineup[3].map((d) => (d.detail_position = "ST"))
       : homeLineup[3].length === 2
       ? homeLineup[4].length > 0 &&
         homeLineup[3].map((d, idx) =>
@@ -362,33 +363,104 @@ function FixtureInfo() {
         )
       : homeLineup[3].map((d) => (d.detail_position = "ST")));
 
-  // homeLineup.length > 0 &&
-  //   (homeLineup[3].length === 1
-  //     ? homeLineup[3].map((d) => (d.detail_position = "ST"))
-  //     : homeLineup[3].length === 2
-  //     ? homeLineup[4].length > 0
-  //       ? homeLineup[3].map((d, idx) =>
-  //           idx === 0 ? (d.detail_position = "LW") : (d.detailIndex = "RW")
-  //         )
-  //       : homeLineup[3].map((d) => (d.detail_position = "ST"))
-  //     : homeLineup[4].length > 0
-  //     ? homeLineup[3].map((d, idx) =>
-  //         idx === 0
-  //           ? (d.detail_position = "LW")
-  //           : idx === homeLineup[3].length - 1
-  //           ? (d.detail_position = "RW")
-  //           : (d.detail_position = "M")
-  //       )
-  //     : homeLineup[3].map((d, idx) =>
-  //         idx === 0
-  //           ? (d.detail_position = "LW")
-  //           : idx === homeLineup[3].length - 1
-  //           ? (d.detail_position = "RW")
-  //           : (d.detail_position = "ST")
-  //       ));
-
-  homeLineup && console.log(homeLineup);
+  //   homeLineup && console.log(homeLineup);
   //=============================================//
+
+  //================= 어웨이팀 라인업 =================//
+  const awayFormation = fixtureData && [
+    1,
+    ...fixtureData.formations.visitorteam_formation.split("-").map(Number),
+  ];
+
+  const awayLineupInfo =
+    fixtureData &&
+    fixtureData.lineup.data
+      .sort((a, b) => a.formation_position - b.formation_position)
+      .map((d) => d.team_id === fixtureData.visitorTeam.data.id && d)
+      .filter((e) => e !== false);
+
+  var awayLineup = [];
+
+  awayFormation &&
+    awayFormation.map((d) =>
+      awayLineup.push(
+        awayLineupInfo
+          .splice(0, d)
+          .sort((a, b) => a.formation_position - b.formation_position)
+      )
+    );
+
+  // 골키퍼 설정
+  awayLineup.length > 0 && (awayLineup[0][0].detail_position = "GK");
+
+  // 수비수 설정
+  awayLineup.length > 0 &&
+    (awayLineup[1].length === 3
+      ? awayLineup[1].map((d) => (d.detail_position = "CB"))
+      : awayLineup[1].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "RB")
+            : idx === awayLineup[1].length - 1
+            ? (d.detail_position = "LB")
+            : (d.detail_position = "CB")
+        ));
+
+  // 미드필더 설정
+  awayLineup.length > 0 &&
+    (awayLineup[2].length < 4
+      ? awayLineup[2].map((d) => (d.detail_position = "M"))
+      : awayLineup[1].length === 3
+      ? awayLineup[2].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "RB")
+            : idx === awayLineup[2].length - 1
+            ? (d.detail_position = "LB")
+            : (d.detail_position = "M")
+        )
+      : awayLineup[2].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "RW")
+            : idx === awayLineup[2].length - 1
+            ? (d.detail_position = "LW")
+            : (d.detail_position = "M")
+        ));
+  // 공격수 설정(5칸인 경우)
+  awayLineup.length > 4 &&
+    (awayLineup[3].length === 1
+      ? awayLineup[4].length > 0
+        ? awayLineup[3].map((d) => (d.detail_position = "M")) &&
+          awayLineup[4].map((d) => (d.detail_position = "ST"))
+        : awayLineup[3].map((d) => (d.detail_position = "ST"))
+      : awayLineup[3].length === 2
+      ? awayLineup[4].length > 0 &&
+        awayLineup[3].map((d, idx) =>
+          idx === 0 ? (d.detail_position = "RW") : (d.detailIndex = "LW")
+        ) &&
+        awayLineup[4].map((d) => (d.detail_position = "ST"))
+      : awayLineup[4].length > 0 &&
+        awayLineup[3].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "RW")
+            : idx === awayLineup[3].length - 1
+            ? (d.detail_position = "LW")
+            : (d.detail_position = "M")
+        ) &&
+        awayLineup[4].map((d) => (d.detail_position = "ST")));
+
+  // 공격수 설정(4칸인경우)
+  awayLineup.length === 4 &&
+    (awayLineup[3].length > 2
+      ? awayLineup[3].map((d, idx) =>
+          idx === 0
+            ? (d.detail_position = "RW")
+            : idx === awayLineup[3].length - 1
+            ? (d.detail_position = "LW")
+            : (d.detail_position = "ST")
+        )
+      : awayLineup[3].map((d) => (d.detail_position = "ST")));
+
+  //   console.log(awayLineup);
+  //=====================================================//
 
   // 라인업
   const LineupBar = () => (
@@ -410,58 +482,40 @@ function FixtureInfo() {
       <LineupBarSquad>
         {/*홈팀 스쿼드*/}
         <TeamContainer>
-          {homeLineup.map((d, formIndex) => (
+          {homeLineup.map((d) => (
             <RowContainer>
-              {d.map((response, detailIndex) => (
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setIndex([formIndex, detailIndex])}
-                >
-                  {response.player_name}
+              {d.map((response) => (
+                <div style={{ cursor: "pointer" }}>
+                  <PlayerImg src={`${response.player.data.image_path}`} />
+                  <div>
+                    {response.number}
+                    {"   "}
+                    {response.player.data.display_name}
+                  </div>
                 </div>
               ))}
             </RowContainer>
           ))}
         </TeamContainer>
+        <div style={{ width: "4px", backgroundColor: "black" }}></div>
         {/*어웨이팀 스쿼드*/}
-        <TeamContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => a.formation_position - b.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.visitorTeam.data.id &&
-                  d.position === "A" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => a.formation_position - b.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.visitorTeam.data.id &&
-                  d.position === "M" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => a.formation_position - b.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.visitorTeam.data.id &&
-                  d.position === "D" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
-
-          <RowContainer>
-            {fixtureData.lineup.data
-              .sort((a, b) => a.formation_position - b.formation_position)
-              .map(
-                (d) =>
-                  d.team_id === fixtureData.visitorTeam.data.id &&
-                  d.position === "G" && <div>{d.player_name}</div>
-              )}
-          </RowContainer>
+        <TeamContainer
+          style={{ display: "flex", flexDirection: "row-reverse" }}
+        >
+          {awayLineup.map((d) => (
+            <RowContainer>
+              {d.map((response) => (
+                <div style={{ cursor: "pointer" }}>
+                  <PlayerImg src={`${response.player.data.image_path}`} />
+                  <div>
+                    {response.number}
+                    {"   "}
+                    {response.player.data.display_name}
+                  </div>
+                </div>
+              ))}
+            </RowContainer>
+          ))}
         </TeamContainer>
       </LineupBarSquad>
     </div>
