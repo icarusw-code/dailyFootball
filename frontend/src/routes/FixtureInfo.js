@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { getFixturesDetailById } from "../api";
-import { Container, Row, Spinner } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { faFutbol, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -77,6 +77,8 @@ const PlayerImg = styled.img`
   width: 40px;
   height: 40px;
 `;
+
+const CoachBar = styled.div``;
 
 function FixtureInfo() {
   const {
@@ -290,8 +292,7 @@ function FixtureInfo() {
       )
     );
 
-  //   homeFormation && console.log(homeFormation[1]);
-  //   console.log(homeLineup[1]);
+  console.log(fixtureData);
 
   // 골키퍼 설정
   homeLineup.length > 0 && (homeLineup[0][0].detail_position = "GK");
@@ -521,6 +522,27 @@ function FixtureInfo() {
     </div>
   );
 
+  // 감독
+  const CoachBar = () => (
+    <Container>
+      <Row>
+        <Col>
+          <PlayerImg src={`${fixtureData.localCoach.data.image_path}`} />
+          <span style={{ marginLeft: "10px" }}>
+            {fixtureData.localCoach.data.fullname}
+          </span>
+        </Col>
+        <Col>감독</Col>
+        <Col>
+          <span style={{ marginRight: "10px" }}>
+            {fixtureData.visitorCoach.data.fullname}
+          </span>
+          <PlayerImg src={`${fixtureData.visitorCoach.data.image_path}`} />
+        </Col>
+      </Row>
+    </Container>
+  );
+
   return (
     <LeagueScreen>
       {fixtureLoading ? (
@@ -531,6 +553,7 @@ function FixtureInfo() {
           <CommentBar />
           <hr />
           <LineupBar />
+          <CoachBar />
         </>
       )}
     </LeagueScreen>

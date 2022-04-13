@@ -452,7 +452,7 @@ function TeamInfo() {
   // 한번에 보여질 개수
   const offset = 6;
 
-  const [index, setIndex] = useState(Math.floor(currentRound / offset) - 1);
+  const [index, setIndex] = useState(Math.floor(currentRound / offset));
 
   const increaseIndex = () => {
     if (leaving) return;
