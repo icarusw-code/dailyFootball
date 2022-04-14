@@ -5,6 +5,10 @@ import { getFixturesDetailById } from "../api";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { faFutbol, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleArrowLeft,
+  faCircleArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
 const LeagueScreen = styled.div`
@@ -49,6 +53,10 @@ const LineupBarTeam = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+const CoachBarTeam = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const LineupBarSquad = styled.div`
   background-color: yellowgreen;
@@ -78,7 +86,16 @@ const PlayerImg = styled.img`
   height: 40px;
 `;
 
-const CoachBar = styled.div``;
+const BenchTitle = styled.div``;
+
+const BenchContents = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const BenchContent = styled.div`
+  display: flex;
+`;
 
 function FixtureInfo() {
   const {
@@ -524,24 +541,136 @@ function FixtureInfo() {
 
   // 감독
   const CoachBar = () => (
-    <Container>
-      <Row>
-        <Col>
-          <PlayerImg src={`${fixtureData.localCoach.data.image_path}`} />
-          <span style={{ marginLeft: "10px" }}>
-            {fixtureData.localCoach.data.fullname}
-          </span>
-        </Col>
-        <Col>감독</Col>
-        <Col>
-          <span style={{ marginRight: "10px" }}>
-            {fixtureData.visitorCoach.data.fullname}
-          </span>
-          <PlayerImg src={`${fixtureData.visitorCoach.data.image_path}`} />
-        </Col>
-      </Row>
-    </Container>
+    <CoachBarTeam>
+      <div>
+        <PlayerImg src={`${fixtureData.localCoach.data.image_path}`} />
+        <span style={{ marginLeft: "10px" }}>
+          {fixtureData.localCoach.data.fullname}
+        </span>
+      </div>
+      <div>감독</div>
+      <div>
+        <span style={{ marginRight: "10px" }}>
+          {fixtureData.visitorCoach.data.fullname}
+        </span>
+        <PlayerImg src={`${fixtureData.visitorCoach.data.image_path}`} />
+      </div>
+    </CoachBarTeam>
   );
+
+  // 교체 / 부상 명단
+  const BenchBar = () =>
+    fixtureData && (
+      <>
+        <BenchTitle>교체/부상 명단</BenchTitle>
+        <BenchContents>
+          <div>
+            <div>
+              {fixtureData.bench.data.map(
+                (d) =>
+                  d.team_id === fixtureData.localTeam.data.id &&
+                  d.stats.other.minutes_played > 0 && (
+                    <BenchContent>
+                      <PlayerImg src={`${d.player.data.image_path}`} />
+                      <div>평점</div>
+                      <div>
+                        <span>{d.number}</span>
+                        <span>{d.player.data.display_name}</span>
+                      </div>
+                      <div style={{ color: "rgba(201,221,3,1)" }}>
+                        {fixtureData.time.minute - d.stats.other.minutes_played}
+                        '
+                        <FontAwesomeIcon icon={faCircleArrowRight} />
+                      </div>
+                    </BenchContent>
+                  )
+              )}
+            </div>
+            <div>
+              {fixtureData.bench.data.map(
+                (d) =>
+                  d.team_id === fixtureData.localTeam.data.id &&
+                  d.stats.other.minutes_played === null && (
+                    <BenchContent>
+                      <PlayerImg src={`${d.player.data.image_path}`} />
+                      <div>
+                        <span>{d.number}</span>
+                        <span>{d.player.data.display_name}</span>
+                      </div>
+                    </BenchContent>
+                  )
+              )}
+            </div>
+            <div>
+              {fixtureData.sidelined.data.map(
+                (d) =>
+                  d.team_id === fixtureData.localTeam.data.id && (
+                    <BenchContent>
+                      <PlayerImg src={`${d.player.data.image_path}`} />
+                      <div>
+                        <div>{d.player.data.display_name}</div>
+                        <div>{d.reason}</div>
+                      </div>
+                    </BenchContent>
+                  )
+              )}
+            </div>
+          </div>
+          <div>
+            <div>
+              {fixtureData.bench.data.map(
+                (d) =>
+                  d.team_id === fixtureData.visitorTeam.data.id &&
+                  d.stats.other.minutes_played > 0 && (
+                    <BenchContent>
+                      <PlayerImg src={`${d.player.data.image_path}`} />
+                      <div>평점</div>
+                      <div>
+                        <span>{d.number}</span>
+                        <span>{d.player.data.display_name}</span>
+                      </div>
+                      <div style={{ color: "rgba(201,221,3,1)" }}>
+                        {fixtureData.time.minute - d.stats.other.minutes_played}
+                        '
+                        <FontAwesomeIcon icon={faCircleArrowRight} />
+                      </div>
+                    </BenchContent>
+                  )
+              )}
+            </div>
+            <div>
+              {fixtureData.bench.data.map(
+                (d) =>
+                  d.team_id === fixtureData.visitorTeam.data.id &&
+                  d.stats.other.minutes_played === null && (
+                    <BenchContent>
+                      <PlayerImg src={`${d.player.data.image_path}`} />
+                      <div>
+                        <span>{d.number}</span>
+                        <span>{d.player.data.display_name}</span>
+                      </div>
+                    </BenchContent>
+                  )
+              )}
+            </div>
+            <div>
+              {fixtureData.sidelined.data.map(
+                (d) =>
+                  d.team_id === fixtureData.visitorTeam.data.id && (
+                    <BenchContent>
+                      <PlayerImg src={`${d.player.data.image_path}`} />
+                      <div>
+                        <div>{d.player.data.display_name}</div>
+                        <div>{d.reason}</div>
+                      </div>
+                    </BenchContent>
+                  )
+              )}
+            </div>
+          </div>
+        </BenchContents>
+      </>
+    );
 
   return (
     <LeagueScreen>
@@ -554,6 +683,7 @@ function FixtureInfo() {
           <hr />
           <LineupBar />
           <CoachBar />
+          <BenchBar />
         </>
       )}
     </LeagueScreen>
