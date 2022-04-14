@@ -3,12 +3,13 @@ import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { getFixturesDetailById } from "../api";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
-import { faFutbol, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleArrowLeft,
+  faFutbol,
+  faCalendarDay,
+  faCirclePlus,
   faCircleArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
 const LeagueScreen = styled.div`
@@ -565,6 +566,7 @@ function FixtureInfo() {
         <BenchTitle>교체/부상 명단</BenchTitle>
         <BenchContents>
           <div>
+            {/* 교체 명단 */}
             <div>
               {fixtureData.bench.data.map(
                 (d) =>
@@ -586,6 +588,7 @@ function FixtureInfo() {
                   )
               )}
             </div>
+            {/* 벤치명단 */}
             <div>
               {fixtureData.bench.data.map(
                 (d) =>
@@ -601,6 +604,7 @@ function FixtureInfo() {
                   )
               )}
             </div>
+            {/* 부상명단 */}
             <div>
               {fixtureData.sidelined.data.map(
                 (d) =>
@@ -608,7 +612,20 @@ function FixtureInfo() {
                     <BenchContent>
                       <PlayerImg src={`${d.player.data.image_path}`} />
                       <div>
-                        <div>{d.player.data.display_name}</div>
+                        <div>
+                          <FontAwesomeIcon
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              borderRadius: "50%",
+                              color: "white",
+                              backgroundColor: "red",
+                              marginRight: "5px",
+                            }}
+                            icon={faCirclePlus}
+                          />
+                          {d.player.data.display_name}
+                        </div>
                         <div>{d.reason}</div>
                       </div>
                     </BenchContent>
@@ -616,7 +633,9 @@ function FixtureInfo() {
               )}
             </div>
           </div>
+          {/* 원정팀 */}
           <div>
+            {/* 교체명단 */}
             <div>
               {fixtureData.bench.data.map(
                 (d) =>
@@ -638,6 +657,7 @@ function FixtureInfo() {
                   )
               )}
             </div>
+            {/* 벤치명단 */}
             <div>
               {fixtureData.bench.data.map(
                 (d) =>
@@ -653,6 +673,7 @@ function FixtureInfo() {
                   )
               )}
             </div>
+            {/* 부상명단 */}
             <div>
               {fixtureData.sidelined.data.map(
                 (d) =>
@@ -660,7 +681,20 @@ function FixtureInfo() {
                     <BenchContent>
                       <PlayerImg src={`${d.player.data.image_path}`} />
                       <div>
-                        <div>{d.player.data.display_name}</div>
+                        <div>
+                          <FontAwesomeIcon
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              borderRadius: "50%",
+                              color: "white",
+                              backgroundColor: "red",
+                              marginRight: "5px",
+                            }}
+                            icon={faCirclePlus}
+                          />
+                          {d.player.data.display_name}
+                        </div>
                         <div>{d.reason}</div>
                       </div>
                     </BenchContent>
@@ -684,6 +718,7 @@ function FixtureInfo() {
           <LineupBar />
           <CoachBar />
           <BenchBar />
+          <hr />
         </>
       )}
     </LeagueScreen>
