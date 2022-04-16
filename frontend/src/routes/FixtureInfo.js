@@ -706,6 +706,8 @@ function FixtureInfo() {
       </>
     );
 
+  // 경기 통계
+
   return (
     <LeagueScreen>
       {fixtureLoading ? (
